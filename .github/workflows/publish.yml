@@ -19,6 +19,13 @@ jobs:
         with:
           version: 1.7.32
 
+      - name: Setup Python with Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          activate-environment: quarto_template
+          auto-activate-base: false      
+
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:

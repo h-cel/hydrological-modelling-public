@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 9540092c-1aad-4a48-a5ee-b6c2a9f2529e
+      url: https://obonte.quarto.pub/quarto_template_ugent

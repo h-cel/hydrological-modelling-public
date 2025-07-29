@@ -25,13 +25,14 @@ jobs:
           environment-file: environment.yml
           activate-environment: quarto_template
           auto-activate-base: false 
+
       - name: Conda info
         shell: bash -el {0}
         run: conda info     
 
       - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2
         shell: bash -el {0}
-        with:
-          target: quarto-pub
+        env:
           QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
+        run: |
+          quarto publish quarto-pub

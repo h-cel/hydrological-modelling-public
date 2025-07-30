@@ -21,11 +21,6 @@ jobs:
         with:
           version: 1.7.32
           tinytex: true
-
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v2
-        with:
-          install-dependencies: true
           
       - name: Setup Python with Miniconda
         uses: conda-incubator/setup-miniconda@v3
@@ -37,6 +32,10 @@ jobs:
       - name: Conda info
         shell: bash -el {0}
         run: conda info     
+      
+      - name: Chromium install available to conda
+        shell: bash -el {0}
+        run: quarto install chromium #conda install -c conda-forge -y chromium
 
       - name: Render and Publish
         shell: bash -el {0}

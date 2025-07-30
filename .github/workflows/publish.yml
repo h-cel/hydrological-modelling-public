@@ -52,11 +52,3 @@ jobs:
           path: _book/quarto_template_ugent.pdf
           retention-days: 90
           name: rendered_pdf_artifact
-
-      # - name: Publish
-      #   uses: quarto-dev/quarto-actions/publish@v2
-      #   env:
-      #     QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
-      #   with: 
-      #     target: quarto-pub
-      #     render: false

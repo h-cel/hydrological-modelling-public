@@ -29,16 +29,21 @@ jobs:
           activate-environment: quarto_template
           auto-activate-base: false 
       
-      - name: Chromium install available to conda
-        shell: bash -el {0}
-        run: quarto install chromium #conda install -c conda-forge -y chromium
+      - name: Install Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-dependencies: true
 
       - name: Check Quarto and dependencies
         shell: bash -el {0}
+        env:
+          QUARTO_CHROMIUM: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: quarto check
 
       - name: Render and Publish
         shell: bash -el {0}
         env:
           QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
+          QUARTO_CHROMIUM: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: quarto publish quarto-pub --no-browser --no-prompt

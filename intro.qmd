@@ -26,7 +26,7 @@ plt.show()
 
 We can also make feedback diagrams. 
 
-```{mermaid}
+<!-- ```{mermaid}
 flowchart TD
   A(["$$\frac{\partial h}{\partial t}$$"])
   B["$$\Delta \theta$$"]
@@ -41,4 +41,4 @@ flowchart TD
 
   classDef largeFontSize font-size:22px;
   class A,B,C,D,E largeFontSize;
-```
+``` -->

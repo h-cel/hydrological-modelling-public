@@ -39,11 +39,12 @@ jobs:
           QUARTO_CHROMIUM: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: quarto check
 
-      - name: Render
+      - name: Render and Publish 
         shell: bash -el {0}
         env:
           QUARTO_CHROMIUM: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: quarto render 
+          QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
+        run: quarto publish quarto-pub --no-browser --no-prompt
 
       - name: Save PDF as artifact
         uses: actions/upload-artifact@v4
@@ -52,10 +53,10 @@ jobs:
           retention-days: 90
           name: rendered_pdf_artifact
 
-      - name: Publish
-        uses: quarto-dev/quarto-actions/publish@v2
-        env:
-          QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
-        with: 
-          target: quarto-pub
-          render: false
+      # - name: Publish
+      #   uses: quarto-dev/quarto-actions/publish@v2
+      #   env:
+      #     QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
+      #   with: 
+      #     target: quarto-pub
+      #     render: false

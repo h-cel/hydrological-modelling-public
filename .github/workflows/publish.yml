@@ -28,14 +28,14 @@ jobs:
           environment-file: environment.yml
           activate-environment: quarto_template
           auto-activate-base: false 
-
-      - name: Conda info
-        shell: bash -el {0}
-        run: conda info     
       
       - name: Chromium install available to conda
         shell: bash -el {0}
         run: quarto install chromium #conda install -c conda-forge -y chromium
+
+      - name: Check Quarto and dependencies
+        shell: bash -el {0}
+        run: quarto check
 
       - name: Render and Publish
         shell: bash -el {0}

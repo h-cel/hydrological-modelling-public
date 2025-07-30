@@ -22,9 +22,11 @@ jobs:
           version: 1.7.32
           tinytex: true
 
-      - name: Install chromium
-        run: quarto install chromium 
-
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-dependencies: true
+          
       - name: Setup Python with Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:

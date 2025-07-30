@@ -22,6 +22,9 @@ jobs:
           version: 1.7.32
           tinytex: true
 
+      - name: Install chromium
+        run: quarto install chromium 
+
       - name: Setup Python with Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:

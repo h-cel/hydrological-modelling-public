@@ -2,3 +2,28 @@
 
 ::: {#refs}
 :::
+
+&nbsp;
+
+Below, you find information about the computational environment that was used to generate the rendered version of this document.
+
+```{python}
+#| echo: false
+#| output: false
+import os
+import subprocess
+import tempfile
+temp_file = tempfile.NamedTemporaryFile(mode="w",delete=False, encoding="utf-8")
+subprocess.run(f"quarto check --log {temp_file.name}", shell=True)
+with open(temp_file.name, encoding="utf-8") as f:
+    lines = f.readlines()
+```
+
+```{python}
+# | echo: false
+clean_lines = [
+    line.replace("\x1b[G", "]").replace("2K", "✓").replace("\x1b[", "[")
+    for line in lines
+]
+print("".join(clean_lines))
+```

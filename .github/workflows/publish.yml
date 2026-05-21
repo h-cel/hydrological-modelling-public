@@ -38,10 +38,11 @@ jobs:
         run: quarto check
 
       - name: Render and Publish 
-        shell: bash -el {0}
+        uses: quarto-dev/quarto-actions/publish@v2
         env:
           QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
-        run: quarto publish quarto-pub --no-browser --no-prompt
+        with:
+          target: quarto-pub
 
       - name: Save PDF as artifact
         uses: actions/upload-artifact@v4

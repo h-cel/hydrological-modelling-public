@@ -17,7 +17,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          version: 1.7.32
+          version: 1.9.37
           tinytex: true
           
       - name: Setup Python with Miniconda

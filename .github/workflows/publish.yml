@@ -45,7 +45,10 @@ jobs:
         shell: bash -el {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: quarto publish gh-pages --no-browser --no-prompt
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          quarto publish gh-pages --no-browser --no-prompt
 
       - name: Get book title from _quarto.yml
         id: get-book-title

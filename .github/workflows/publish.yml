@@ -22,11 +22,15 @@ jobs:
           version: 1.9.37
           tinytex: true
           
+      - name: Get environment name from environment.yml
+        id: get-env-name
+        run: echo "ENV_NAME=$(yq '.name' environment.yml)" >> "$GITHUB_OUTPUT" #echo "ENV_NAME=$(grep '^name:' environment.yml | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
       - name: Setup Python with Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
           environment-file: environment.yml
-          activate-environment: quarto_template
+          activate-environment: ${{ steps.get-env-name.outputs.ENV_NAME }}
           auto-activate-base: false 
       
       - name: Install Chrome Headless Shell

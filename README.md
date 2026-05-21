@@ -41,24 +41,25 @@ for LaTex and
 ```
 for Chrome. 
 
-## Hosting as a website with Github Actions and Quarto Pub
+## Hosting as a website with Github Actions and GitHub Pages
+
+For this purpose, your clone or fork of this repository should be on GitHub. 
 
 ### Activating Quarto Pub
 
-For this template, the website is hosted using [Quarto Pub](https://quartopub.com/). 
+For this template, the website is hosted using [GitHub Pages](https://quarto.org/docs/publishing/github-pages.html). 
 
-For your own use, start by deleting the `_publish.yml` file. In this way, you can create a new url for your website related to your own Quarto Pub account 
+For your own use, start by running
 ```
-quarto publish quarto-pub
+quarto publish gh-pages. 
 ```
-This wil automatically open a browser window for the needed actions. For more general info, see the [Quarto documentation](https://quarto.org/docs/publishing/quarto-pub.html).
+This wil automate the process of setting up a `gh-pages` branch from which the website is hosted. 
 
 ### Automating the publishing with Github Actions
 
-Although you could publish every change manually with the command above, it is more convenient to automate this process with Github Actions. This is also eliminates the need to have rendered versions of your Quarto Book checked in to version control. 
+Although you could publish every change manually with the command above, it is more convenient to automate this process with [Github Actions](https://github.com/features/actions). This is also eliminates the need to have rendered versions of your Quarto Book checked in to version control. 
 
-The workflow to automate the publishing (including rendering) of this book is defined in [`.github/workflows/publish.yml`](.github/workflows/publish.yml). Also the installation of the needed dependencies (similar to what is described [above](#installation-instructions-local-setup)) is included here. 
-
+The workflow to automate the publishing (including rendering) of this book is defined in [`.github/workflows/publish.yml`](.github/workflows/publish.yml). Also the installation of the needed dependencies (similar to what is described [above](#installation-instructions-local-setup)) is included here. For your own repository, you might need to change the *Read and write permissions* of your repo for this work, for more info please see the [corresponding Quarto documentation](https://quarto.org/docs/publishing/github-pages.html#publish-action). 
 
 
 

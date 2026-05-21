@@ -24,7 +24,7 @@ jobs:
           
       - name: Get environment name from environment.yml
         id: get-env-name
-        run: echo "ENV_NAME=$(yq '.name' environment.yml)" >> "$GITHUB_OUTPUT" #echo "ENV_NAME=$(grep '^name:' environment.yml | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+        run: echo "ENV_NAME=$(yq '.name' environment.yml)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Python with Miniconda
         uses: conda-incubator/setup-miniconda@v3

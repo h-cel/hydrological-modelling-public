@@ -47,9 +47,13 @@ jobs:
           QUARTO_PUB_AUTH_TOKEN: ${{ secrets.QUARTO_PUB_AUTH_TOKEN }}
         run: quarto publish quarto-pub --no-browser --no-prompt
 
+      - name: Get book title from _quarto.yml
+        id: get-book-title
+        run: echo "BOOK_TITLE=$(yq '.book.title' _quarto.yml)" >> "$GITHUB_OUTPUT"
+
       - name: Save PDF as artifact
         uses: actions/upload-artifact@v4
         with:
-          path: _book/quarto_template_ugent.pdf
+          path: _book/${{ steps.get-book-title.outputs.BOOK_TITLE }}.pdf
           retention-days: 90
           name: rendered_pdf_artifact

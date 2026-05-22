@@ -14,3 +14,4 @@ dependencies:
   - pip
   - pip:
     - rootutils==1.0.*
+    - pywaterinfo[cache]==0.9.*

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import numpy as np
@@ -90,9 +91,14 @@ if elements:
     da_merged = merge_arrays(elements, nodata=NO_DATA_VALUE)
     da_merged.rio.to_raster(output_file)
     print(f"Successfully merged DTM tiles into: {output_file}")
+    da_merged.close()
 
     # Test if opening the merged file works
     ds = rioxarray.open_rasterio(output_file)
     print(ds)
 else:
     print("No valid tiles to merge.")
+
+# Cleanup tile files
+for f in tile_files:
+    os.remove(f)

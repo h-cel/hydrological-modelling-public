@@ -1,21 +1,20 @@
+from pathlib import Path
+
 import numpy as np
 import rioxarray
-import rootutils
+from conf import DATASET_DTM, dtm_raw_dir
 from owslib.wcs import WebCoverageService
 from rioxarray.merge import merge_arrays
 
-path = rootutils.find_root(search_from=__file__, indicator=".git")
-output_dir = path / "data" / "raw" / "dtm_1m"
-output_dir.mkdir(parents=True, exist_ok=True)
+dtm_raw_dir.mkdir(parents=True, exist_ok=True)
 
 # Full metadata at https://metadata.vlaanderen.be/srv/dut/catalog.search#/metadata/f52b1a13-86bc-4b64-8256-88cc0d1a8735
 wcs_url = "https://geo.api.vlaanderen.be/DHMV/wcs"
 wcs = WebCoverageService(wcs_url, version="2.0.1")
-COVERAGE_ID = "DHMVII_DTM_1m"  # DHMVI_DTM_5m (outdated)
 CRS = "http://www.opengis.net/def/crs/EPSG/0/31370"
-FORMAT = wcs.contents[COVERAGE_ID].supportedFormats[-1]
+FORMAT = wcs.contents[DATASET_DTM].supportedFormats[-1]
 NO_DATA_VALUE = -9999.0
-output_file = output_dir / f"{COVERAGE_ID}.tif"
+output_file = dtm_raw_dir / f"{DATASET_DTM}.tif"
 
 # Target extent
 global_minx, global_maxx = 98_000, 116_000
@@ -35,13 +34,12 @@ def download_wcs_subset(
     maxx: float,
     miny: float,
     maxy: float,
-    out_file: str,
+    out_file: Path,
 ):
-
     print(f"Downloading subset {minx:.1f}-{maxx:.1f}, {miny:.1f}-{maxy:.1f}...")
     try:
         response = wcs.getCoverage(
-            identifier=COVERAGE_ID,
+            identifier=DATASET_DTM,
             crs=CRS,
             format=FORMAT,
             subsets=[("x", minx, maxx), ("y", miny, maxy)],
@@ -74,7 +72,7 @@ for i in range(len(x_edges) - 1):
         xmin, xmax = x_edges[i].item(), x_edges[i + 1].item()
         ymin, ymax = y_edges[j].item(), y_edges[j + 1].item()
 
-        tile_file = output_dir / f"tile_{i}_{j}.tif"
+        tile_file = dtm_raw_dir / f"tile_{i}_{j}.tif"
         download_wcs_subset(wcs, xmin, xmax, ymin, ymax, tile_file)
         tile_files.append(tile_file)
 

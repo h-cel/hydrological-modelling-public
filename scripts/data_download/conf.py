@@ -16,6 +16,7 @@ POTENTIAL_EVAPOTRANSPIRATION_PROCESSED_DIR = (
     PROCESSED_DATA_DIR / "potential_evapotranspiration"
 )
 VLAAMSE_HYDROGRAFISCHE_ATLAS_RAW_DIR = RAW_DATA_DIR / "vlaamse_hydrografische_atlas"
+AFSTROOMGEBIED_RAW_DIR = RAW_DATA_DIR / "afstroomgebied"
 
 # DTM info
 DATASET_DTM = "DHMVII_DTM_1m"  # DHMVI_DTM_5m (outdated)
@@ -30,7 +31,14 @@ EPSG_LAMBERT_72 = 31370
 # Vlaamse Hydrografishe Atlas (VHA)
 WFS_ENDPOINT_VHA = "https://geo.api.vlaanderen.be/VHAWaterlopen/wfs"
 DATASET_VHA = "VHAWaterlopen:VHAG"
-BBOX_VHA = (XMIN, YMIN, XMAX, YMAX)  # in m (EPSG:31370)
+BBOX = (XMIN, YMIN, XMAX, YMAX)  # in m (EPSG:31370)
+
+# Afstroomgebied
+WFS_ENDPOINT_AFSTROOMGEBIED = (
+    "https://geo.api.vlaanderen.be/Oppervlaktewaterlichamen/wfs"
+)
+DATASET_AFSTROOMGEBIED = "Oppervlaktewaterlichamen:AfstrZonA0"
+
 
 # Waterinfo variables
 TIMESPACING_DICT = {"P1D": "daily"}

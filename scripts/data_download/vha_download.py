@@ -3,7 +3,7 @@ import json
 
 import geopandas as gpd
 from conf import (
-    BBOX_VHA,
+    BBOX,
     DATASET_VHA,
     EPSG_LAMBERT_72,
     VLAAMSE_HYDROGRAFISCHE_ATLAS_RAW_DIR,
@@ -21,7 +21,7 @@ crs_string = [
 ][0]
 response = wfs.getfeature(
     typename=DATASET_VHA,
-    bbox=BBOX_VHA,
+    bbox=BBOX,
     outputFormat="json",
     srsname=crs_string,
 )

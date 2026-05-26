@@ -11,3 +11,9 @@ conf_module = SourceFileLoader(
 
 # DTM info
 DTM_SPATIAL_RESOLUTION_UPSCALED = 10.0  # in meters
+
+# Meteorological data info
+EP_MINIMUM = -1.0  # mm/day, below this value is not realistic data
+EP_TRESHOLD = (
+    0.0  # mm/day, for simplicity set data below threshold (above minimum) to zero
+)

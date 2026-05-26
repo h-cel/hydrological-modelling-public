@@ -21,7 +21,6 @@ AFSTROOMGEBIED_RAW_DIR = RAW_DATA_DIR / "afstroomgebied"
 # DTM info
 DATASET_DTM = "DHMVII_DTM_1m"  # DHMVI_DTM_5m (outdated)
 DTM_SPATIAL_RESOLUTION = 1.0  # in meters
-DTM_SPATIAL_RESOLUTION_UPSCALED = 10.0  # in meters
 CRS = "http://www.opengis.net/def/crs/EPSG/0/31370"
 XMIN, XMAX, YMIN, YMAX = 98_000, 116_000, 160_000, 180_000  # extent in m (EPSG:31370)
 NO_DATA_VALUE_DTM = -9999.0

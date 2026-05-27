@@ -32,17 +32,20 @@ NO_DATA_VALUE_DTM = -9999.0
 WCS_ENDPOINT_DTM = "https://geo.api.vlaanderen.be/dhmv/wcs"
 EPSG_LAMBERT_72 = 31370
 TILE_SIZE = 2000  # in meters, one side of the requested tile
+FILENAME_DTM = f"{DATASET_DTM}.tif"
 
 # Vlaamse Hydrografishe Atlas (VHA)
 WFS_ENDPOINT_VHA = "https://geo.api.vlaanderen.be/VHAWaterlopen/wfs"
 DATASET_VHA = "VHAWaterlopen:VHAG"
 BBOX = (XMIN, YMIN, XMAX, YMAX)  # in m (EPSG:31370)
+FILENAME_VHA = "vlaamse_hydrografische_atlas.shp"
 
 # Afstroomgebied
 WFS_ENDPOINT_AFSTROOMGEBIED = (
     "https://geo.api.vlaanderen.be/Oppervlaktewaterlichamen/wfs"
 )
 DATASET_AFSTROOMGEBIED = "Oppervlaktewaterlichamen:AfstrZonA0"
+FILENAME_AFSTROOMGEBIED = "afstroomgebied.shp"
 
 
 # Waterinfo variables
@@ -50,6 +53,8 @@ TIMESPACING_DICT = {"P1D": "daily"}
 DAILY_AGG = "Day"
 TOTAL_AGG = "Total"
 MEAN_AGG = "Mean"
+FILENAME_WATERINFO_TEMPLATE = "{variable}_{station_id}_{time_spacing}.csv"
+FILENAME_WATERINFO_META_TEMPLATE = "{variable}_meta_{station_id}_{time_spacing}.csv"
 
 # Pluvio station info
 STATION_ID_MAARKE_KERKEM = "P06_014"

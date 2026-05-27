@@ -4,6 +4,8 @@ from conf import (
     DAILY_AGG,
     DISCHARGE_LONGNAME,
     DISCHARGE_RAW_DIR,
+    FILENAME_WATERINFO_META_TEMPLATE,
+    FILENAME_WATERINFO_TEMPLATE,
     MEAN_AGG,
     POTENTIAL_EVAPOTRANSPIRATION_LONGNAME,
     POTENTIAL_EVAPOTRANSPIRATION_RAW_DIR,
@@ -65,11 +67,22 @@ def _write_timeseries(
     """Write timeseries data and its metadata to CSV files in output_dir."""
     time_spacing = TIMESPACING_DICT[station_info["ts_spacing"].values[0]]
     variable_longname = variable_longname.replace(" ", "_").lower()
-    df.to_csv(output_dir / f"{variable_longname}_{station_id}_{time_spacing}.csv")
-    station_info.to_csv(
-        output_dir / f"{variable_longname}_meta_{station_id}_{time_spacing}.csv",
-        index=False,
+
+    data_filename = FILENAME_WATERINFO_TEMPLATE.format(
+        variable=variable_longname, station_id=station_id, time_spacing=time_spacing
     )
+    meta_filename = FILENAME_WATERINFO_META_TEMPLATE.format(
+        variable=variable_longname, station_id=station_id, time_spacing=time_spacing
+    )
+
+    data_path = output_dir / data_filename
+    meta_path = output_dir / meta_filename
+
+    df.to_csv(data_path)
+    logger.info(f"Timeseries data saved to {data_path}")
+
+    station_info.to_csv(meta_path, index=False)
+    logger.info(f"Timeseries metadata saved to {meta_path}")
 
 
 def main():

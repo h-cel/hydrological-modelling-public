@@ -7,6 +7,7 @@ from conf import (
     CRS,
     DATASET_DTM,
     DTM_RAW_DIR,
+    FILENAME_DTM,
     NO_DATA_VALUE_DTM,
     TILE_SIZE,
     WCS_ENDPOINT_DTM,
@@ -68,7 +69,7 @@ def main():
     wcs = WebCoverageService(WCS_ENDPOINT_DTM, version="2.0.1")
     global FORMAT
     FORMAT = wcs.contents[DATASET_DTM].supportedFormats[-1]
-    output_file = DTM_RAW_DIR / f"{DATASET_DTM}.tif"
+    output_path = DTM_RAW_DIR / FILENAME_DTM
 
     # Note: extent too large for a single request, so we split it into tiles and merge later
     tile_files = []
@@ -97,8 +98,8 @@ def main():
 
     if elements:
         da_merged = merge_arrays(elements, nodata=NO_DATA_VALUE_DTM)
-        da_merged.rio.to_raster(output_file)
-        logger.info(f"Successfully merged DTM tiles into: {output_file}")
+        da_merged.rio.to_raster(output_path)
+        logger.info(f"Successfully merged DTM tiles into: {output_path}")
         da_merged.close()
 
         # Close all individual opened files to prevent sys.excepthook errors on exit

@@ -6,6 +6,7 @@ from conf import (
     BBOX,
     DATASET_VHA,
     EPSG_LAMBERT_72,
+    FILENAME_VHA,
     VLAAMSE_HYDROGRAFISCHE_ATLAS_RAW_DIR,
     WFS_ENDPOINT_VHA,
     logger,
@@ -31,7 +32,9 @@ def main():
     )
     data_vha = json.loads(response.read())
     gdf_vha = gpd.GeoDataFrame.from_features(data_vha["features"], crs=EPSG_LAMBERT_72)
-    gdf_vha.to_file(VLAAMSE_HYDROGRAFISCHE_ATLAS_RAW_DIR / "VHA.shp")
+    out_path = VLAAMSE_HYDROGRAFISCHE_ATLAS_RAW_DIR / FILENAME_VHA
+    gdf_vha.to_file(out_path)
+    logger.info(f"{DATASET_VHA} saved to {out_path}")
 
 
 if __name__ == "__main__":

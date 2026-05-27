@@ -7,6 +7,7 @@ from conf import (
     BBOX,
     DATASET_AFSTROOMGEBIED,
     EPSG_LAMBERT_72,
+    FILENAME_AFSTROOMGEBIED,
     WFS_ENDPOINT_AFSTROOMGEBIED,
     logger,
 )
@@ -36,7 +37,9 @@ def main():
     gdf_afstroomgebied = gpd.GeoDataFrame.from_features(
         data_afstroomgebied["features"], crs=EPSG_LAMBERT_72
     )
-    gdf_afstroomgebied.to_file(AFSTROOMGEBIED_RAW_DIR / "afstroomgebied.shp")
+    out_path = AFSTROOMGEBIED_RAW_DIR / FILENAME_AFSTROOMGEBIED
+    gdf_afstroomgebied.to_file(out_path)
+    logger.info(f"{DATASET_AFSTROOMGEBIED} saved to {out_path}")
 
 
 if __name__ == "__main__":

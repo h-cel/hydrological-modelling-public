@@ -1,0 +1,6 @@
+[tool.ruff]
+preview = true
+extension = {qmd = "markdown" }
+
+[tool.ruff.lint]
+extend-select = ["I"]

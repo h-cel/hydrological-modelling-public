@@ -44,7 +44,8 @@ def _download_daily_timeseries(vmm, station_info: pd.DataFrame) -> pd.DataFrame:
         )
     ts_id = station_info["ts_id"].values[0]
     return (
-        vmm.get_timeseries_values(
+        vmm
+        .get_timeseries_values(
             ts_id=ts_id,
             start=station_info["from"].dt.date.values[0],
             end=station_info["to"].dt.date.values[0],

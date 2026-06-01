@@ -174,7 +174,8 @@ def main():
         index=WINDOW_SIZE_CLIMATOLOGY // 2, mode="wrap"
     )
     ep_climatology_daily_smoothed = (
-        ep_climatology_daily_padded.rolling(
+        ep_climatology_daily_padded
+        .rolling(
             index=WINDOW_SIZE_CLIMATOLOGY,
             center=True,
             min_periods=WINDOW_SIZE_CLIMATOLOGY,

@@ -15,14 +15,15 @@ from scripts.data_process.conf import (
     FILENAME_FORCINGS_DISCHARGE,
     FILENAME_FORCINGS_DISCHARGE_META,
     FORCINGS_DISCHARGE_PROCESSED_DIR,
+    WINDOW_SIZE_CLIMATOLOGY,
 )
 from scripts.data_download.conf import (
     FILENAME_AFSTROOMGEBIED,
-    FILENAME_VHA, 
+    FILENAME_VHA,
 )
 from great_tables import GT
-from shapely.geometry import box
 
+from shapely.geometry import box
 
 root_path = rootutils.find_root()
 processed_data_dir = root_path / "data" / "processed"
@@ -43,16 +44,7 @@ start_year = int(df_fd.index.year.min())
 end_year = int(df_fd.index.year.max())
 ```
 
-For these exercises, a hydrological dataset of the Zwalm catchment will be used.
-The Zwalm catchment is located in the center of Belgium and can be considered a
-medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in
-@fig-zwalmbeek. During the period `{python} start_year`-`{python} end_year`, a
-dataset of daily precipitation, potential evapotranspiration and discharge is at
-your disposal (see @sec-study-area-forcings-discharge for more information). The
-average annual rainfall and potential evapotranspiration of the catchment are
-`{python} f"{yearly_mean.precipitation:.0f}"` mm and
-`{python} f"{yearly_mean.potential_evapotranspiration:.0f}"` mm respectively,
-typical values for Belgium.
+For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the center of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in @fig-zwalmbeek. During the period `{python} start_year`-`{python} end_year`, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see @sec-study-area-forcings-discharge for more information). The average annual rainfall and potential evapotranspiration of the catchment are `{python} f"{yearly_mean.precipitation:.0f}"` mm and `{python} f"{yearly_mean.potential_evapotranspiration:.0f}"` mm respectively, typical values for Belgium.
 
 ```{python}
 # | echo: false
@@ -64,7 +56,7 @@ typical values for Belgium.
 gdf_vha = gpd.read_file(CATCHMENT_INFO_PROCESSED_DIR / FILENAME_VHA)
 gdf_zwalmbeek = gdf_vha[gdf_vha["NAAM"] == "Zwalmbeek"]
 
-fig, ax = plt.subplots(figsize=(6.5, 5), constrained_layout=True)
+fig, ax = plt.subplots(figsize=(4, 5), constrained_layout=True)
 gdf_zwalmbeek.plot(ax=ax)
 cx.add_basemap(ax, source=cx.providers.CartoDB.Positron, crs=gdf_zwalmbeek.crs, zoom=12)
 ax.set_xlabel("x [m]")
@@ -87,74 +79,64 @@ bbox_zwalm = gpd.GeoSeries([box(minx, miny, maxx, maxy)], crs=gdf_zwalmbeek.crs)
 bbox_zwalm.plot(ax=iax, color="none", edgecolor="red", linewidth=1.5)
 ```
 
-As mentioned in @sec-practical-info, all the processed data is available at
-`data/processed`. If interested, you can inspect (and execute) all downloading
-and processing steps yourself by following the instructions in
-`scripts/data_download/README.md` and `scripts/data_process/README.md`.
+As mentioned in @sec-practical-info, all the processed data is available at `data/processed`. If interested, you can inspect (and execute) all downloading
+and processing steps yourself by following the instructions in `scripts/data_download/README.md` and `scripts/data_process/README.md`.
 
-In the next section, more information is given on the data sources and
-processing steps for the different types of provided data. Note that all
-geographic data is provided in the [Belgian Lambert 72](https://epsg.io/31370)
-(BD72, EPSG:31370) coordinate reference system (CRS).
+In the next section, more information is given on the data sources and processing steps for the different types of provided data. Note that all geographic data is provided in the [Belgian Lambert 72](https://epsg.io/31370) (BD72, EPSG:31370) coordinate reference system (CRS).
 
 ## Catchment data
 
-The data in the `data/processed/catchment_info` folder contains information on
-the river network and the catchment boundaries in the broad vicinity of the
-Zwalm catchment. The source of the river network is the *Vlaamse Hydrografische
-Atlas* [@vmm2026]. The catchment boundaries come from the
-*Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027* dataset
-[@vmm2022]. In @sec-delineation, you will be asked to delineate the catchment
-boundary of the Zwalmbeek yourself. The provided catchment boundaries can be
-used for comparison. Both files are provided as ESRI Shapefiles, called
-`afstroomgebied.shp` and `vlaamse_hydrografische_atlas.shp` respectively.
+The data in the `data/processed/catchment_info` folder contains information on the river network and the catchment boundaries in the broad vicinity of the Zwalm catchment. The source of the river network is the *Vlaamse Hydrografische Atlas* [@vmm2026]. The catchment boundaries come from the *Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027* dataset [@vmm2022]. In @sec-delineation, you will be asked to delineate the catchment boundary of the Zwalmbeek yourself. The provided catchment boundaries can be used for comparison. Both files are provided as ESRI Shapefiles, called `afstroomgebied.shp` and `vlaamse_hydrografische_atlas.shp` respectively.
 
 ## Digital terrain model
 
-For the catchment delineation of @sec-delineation, a digital terrain model (DTM)
-is provided in `data/processed/digital_terrain_model`. This DTM is derived from
-the *Digitaal Hoogtemodel Vlaanderen II* DTM at 1m spatial resolution.
-[@adv2014]. To reduce the size of the dataset and speed up the computation, the
-DTM has been resampled to a spatial resolution of
-`{python} DTM_SPATIAL_RESOLUTION_UPSCALED` m by averaging. The DTM is provided
-as a GeoTIFF file, called `DHMVII_DTM_1m_upscaled_10m.tif`.
+For the catchment delineation of @sec-delineation, a digital terrain model (DTM) is provided in `data/processed/digital_terrain_model`. This DTM is derived from the *Digitaal Hoogtemodel Vlaanderen II* DTM at 1m spatial resolution [@adv2014]. To reduce the size of the dataset and speed up the computation, the DTM has been resampled to a spatial resolution of `{python} DTM_SPATIAL_RESOLUTION_UPSCALED` m by averaging. The DTM is provided as a GeoTIFF file, called `DHMVII_DTM_1m_upscaled_10m.tif`.
 
 ## Meteorological and discharge data {#sec-study-area-forcings-discharge}
 
-Both meteorological forcings and observed discharge are provided in
-`data/processed/forcings_discharge`. All this data is retrieved from
-[Waterinfo](https://waterinfo.vlaanderen.be/), a website which combines
-hydro(meteorological) data from both the Flanders Environment Agency and
-Flanders Hydraulics Research. Programmatic access to the data is possible via
-the Python package [`pywaterinfo`](https://fluves.github.io/pywaterinfo/#), as
-demonstrated (for your information only) in
-`scripts/data_download/waterinfo_download.py`.
+Both meteorological forcings and observed discharge are provided in `data/processed/forcings_discharge`. All this data is retrieved from [Waterinfo](https://waterinfo.vlaanderen.be/), a website which combines hydro(meteorological) data from both the Flanders Environment Agency and Flanders Hydraulics Research. Programmatic access to the data is possible via the Python package [`pywaterinfo`](https://fluves.github.io/pywaterinfo/#), as demonstrated (for your information only) in `scripts/data_download/waterinfo_download.py`.
 
-The combined forcings and discharge dataset is provided in the CSV file
-`forcings_discharge.csv`. An overview of the the original data sources is given
-in @tbl-waterinfo-meta. The variable "Precipitation of catchment" is a
-combination of rainfall gauge and radar data, representative for the Zwalm
-catchment. Potential evapotranspiration is estimated using the Penman equation.
-Note that because the
+The combined forcings and discharge dataset is provided in the CSV file `forcings_discharge.csv`. An overview of the the original data sources is given in @tbl-waterinfo-meta. The locations of the different measurement stations are additionally shown in @fig-waterinfo-sites. The variable Precipitation ($P$) of catchment is a combination of rainfall gauge and radar data, representative for the Zwalm catchment. The gaps in this dataset are filled with precipitation data from the Pluviometer in Maarke-Kerkem. Potential evapotranspiration ($E_\mathrm{p}$) is estimated using the Penman equation. Missing values are gapfilled with the daily, smoothed climatology of EP. Smoothing occurs by applying a moving average with a centred window of `{python} WINDOW_SIZE_CLIMATOLOGY` days. 
 
 ```{python}
 # | echo: false
 # | label: tbl-waterinfo-meta
-# | tbl-cap: "Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each station has its own unique ID and coordintates x and y given in BD72"
+# | tbl-cap: "Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each variable has a corresponding measurement station, denoted by a unique station ID."
 df_meta = pd.read_csv(
     FORCINGS_DISCHARGE_PROCESSED_DIR / FILENAME_FORCINGS_DISCHARGE_META,
     index_col=0,
 )
 df_meta.reset_index(inplace=True, names="Variable")
-# df_meta["Variable"] = df_meta["Variable"].str.lower().str.replace(" ", "_")
-df_meta = df_meta[["Variable","unit","name","id","x","y"]]
-gt = GT(df_meta).cols_label(name="Station", id = "Station ID", unit = "Units", x = "x [m]", y = "y [m]").fmt_number(columns=["x", "y"], decimals=0, sep_mark=" ")
+df_table = df_meta[["Variable", "unit", "name", "id"]]
+gt = GT(df_table).cols_label(name="Station", id="Station ID", unit="Units")
 gt
 ```
 
-<!-- | Column | Description | Data Type |
-|--------|-------------|-----------|
-| (Index) | Date of the observations (YYYY-MM-DD) | Date |
-| `precipitation` | Daily precipitation | Float |
-| `potential_evapotranspiration` | Daily potential evapotranspiration | Float |
-| `river_discharge` | Daily average river discharge | Float |  -->
+```{python}
+# | echo: false
+# | fig-cap: "The Zwalmbeek and the measurement locations as denoted by their station ID"
+# | label: fig-waterinfo-sites
+
+gdf_meta = gpd.GeoDataFrame(
+    df_meta, geometry=gpd.points_from_xy(df_meta.x, df_meta.y), crs=gdf_zwalmbeek.crs
+)
+gdf_plot = pd.concat(
+    [
+        gdf_zwalmbeek.dissolve()[["NAAM", "geometry"]].rename(columns={"NAAM": "id"}),
+        gdf_meta[["id", "geometry"]],
+    ],
+    ignore_index=True,
+).drop_duplicates()
+# Convert the 'id' column into an ordered Categorical to prevent alphabetical sorting
+gdf_plot["id"] = pd.Categorical(
+    gdf_plot["id"], categories=gdf_plot["id"].unique(), ordered=True
+)
+
+fig, ax = plt.subplots(figsize=(6, 5), constrained_layout=True)
+gdf_plot.plot(ax=ax, column="id", legend=True)
+ax.set_xlabel("x [m]")
+ax.set_ylabel("y [m]")
+cx.add_basemap(ax, source=cx.providers.CartoDB.Positron, crs=gdf_meta.crs)
+```
+
+

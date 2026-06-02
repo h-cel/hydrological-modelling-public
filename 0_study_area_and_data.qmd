@@ -96,7 +96,11 @@ For the catchment delineation of @sec-delineation, a digital terrain model (DTM)
 
 Both meteorological forcings and observed discharge are provided in `data/processed/forcings_discharge`. All this data is retrieved from [Waterinfo](https://waterinfo.vlaanderen.be/), a website which combines hydro(meteorological) data from both the Flanders Environment Agency and Flanders Hydraulics Research. Programmatic access to the data is possible via the Python package [`pywaterinfo`](https://fluves.github.io/pywaterinfo/#), as demonstrated (for your information only) in `scripts/data_download/waterinfo_download.py`.
 
-The combined forcings and discharge dataset is provided in the CSV file `forcings_discharge.csv`. An overview of the the original data sources is given in @tbl-waterinfo-meta. The locations of the different measurement stations are additionally shown in @fig-waterinfo-sites. The variable Precipitation ($P$) of catchment is a combination of rainfall gauge and radar data, representative for the Zwalm catchment. The gaps in this dataset are filled with precipitation data from the Pluviometer in Maarke-Kerkem. Potential evapotranspiration ($E_\mathrm{p}$) is estimated using the Penman equation. Missing values are gapfilled with the daily, smoothed climatology of EP. Smoothing occurs by applying a moving average with a centred window of `{python} WINDOW_SIZE_CLIMATOLOGY` days. 
+The combined forcings and discharge dataset is provided in the CSV file `forcings_discharge.csv`. An overview of the the original data sources is given in @tbl-waterinfo-meta. Note that mm is equivalent to mm/d because of the daily time resolution. The locations of the different measurement stations are additionally shown in @fig-waterinfo-sites. Some processing details:
+
+- The variable Precipitation ($P$) of catchment is a combination of rainfall gauge and radar data, representative for the Zwalm catchment. The gaps in this dataset are filled with precipitation data from the Pluviometer in Maarke-Kerkem. 
+- Potential evapotranspiration ($E_\mathrm{p}$) is estimated using the Penman equation at a meteorological station. Missing values are gapfilled with the daily, smoothed climatology of $E_\mathrm{p}$. Smoothing occurs by applying a moving average with a centred window of `{python} WINDOW_SIZE_CLIMATOLOGY` days. 
+- River discharge ($Q$) is measured near the mouth of the Zwalmbeek in the village of Nederzwalm. No gapfilling is applied to this variable, as it is only used for model evaluation, not as a model input.
 
 ```{python}
 # | echo: false
@@ -140,3 +144,23 @@ cx.add_basemap(ax, source=cx.providers.CartoDB.Positron, crs=gdf_meta.crs)
 ```
 
 
+Consequently, following columns are present in `forcings_discharge.csv`: 
+
+```{python}
+# | echo: false
+df_fd = pd.read_csv(
+    FORCINGS_DISCHARGE_PROCESSED_DIR / FILENAME_FORCINGS_DISCHARGE,
+    index_col=0,
+    parse_dates=True,
+    nrows=2,
+)
+column_names = ["", *df_fd.columns]
+print(column_names)
+```
+
+Note that the first column without a name is the index column, which contains the date. The corret interpretation of the date is that the data value corresponds to the daily sum ($P$ and $E_\mathrm{p}$) or daily mean ($Q$) of the day indicated by the date. For example, the value of $P$ on 2020-01-01 corresponds to the total precipitation that fell during that day.
+
+::: {.callout-tip}
+To read in `forcings_discharge.csv`, checkout the documentation for [`pandas.read_csv()`](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html), specifically of the `index_col` and `parse_dates` parameters, to correctly read in the dataset.
+
+:::

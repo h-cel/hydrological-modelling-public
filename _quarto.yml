@@ -27,6 +27,7 @@ book:
     - 3_model_calibration.qmd
     - 4_model_uncertainty.qmd
     - 5_data_assimilation.qmd
+    - 6_conclusion.qmd
     - references.qmd
 number-sections: true
 
@@ -43,6 +44,7 @@ format:
   pdf:
     documentclass: scrreprt
     include-in-header: preamble.tex
+    papersize: a4
     fig-pos: 'htb'
 
 # Allows caching of notebooks when previewing 

@@ -94,7 +94,7 @@ For the catchment delineation of @sec-delineation, a digital terrain model (DTM)
 
 ## Meteorological and discharge data {#sec-study-area-forcings-discharge}
 
-Both meteorological forcings and observed discharge are provided in `data/processed/forcings_discharge`. All this data is retrieved from [Waterinfo](https://waterinfo.vlaanderen.be/), a website which combines hydro(meteorological) data from both the Flanders Environment Agency and Flanders Hydraulics Research. Programmatic access to the data is possible via the Python package [`pywaterinfo`](https://fluves.github.io/pywaterinfo/#), as demonstrated (for your information only) in `scripts/data_download/waterinfo_download.py`.
+Both meteorological forcings and observed discharge are provided in the folder `data/processed/forcings_discharge`. All this data is retrieved from [Waterinfo](https://waterinfo.vlaanderen.be/), a website which combines hydro(meteorological) data from both the Flanders Environment Agency and Flanders Hydraulics Research. Programmatic access to the data is possible via the Python package [`pywaterinfo`](https://fluves.github.io/pywaterinfo/#), as demonstrated (for your information only) in `scripts/data_download/waterinfo_download.py`.
 
 The combined forcings and discharge dataset is provided in the CSV file `forcings_discharge.csv`. An overview of the the original data sources is given in @tbl-waterinfo-meta. Note that mm is equivalent to mm/d because of the daily time resolution. The locations of the different measurement stations are additionally shown in @fig-waterinfo-sites. Some processing details:
 

@@ -1,3 +1,20 @@
 # Exercise 1: Delineation of the Zwalm catchment {#sec-delineation}
 
+## Assignment 
+
+The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The analysis consists of
+
+1. Removal of data gaps, no missing values are allowed in the digital elevation model.
+2. Removal of depressions, as these hinder the determination of the flow direction. 
+3. Determine the flow direction. Here the easiest algorithm is used: the Deterministic 8 (D8) algorithm, which assumes that water flows following the largest gradient. D8 only considers the gradient between a cell and its 8 surrounding neighbours.
+4. Calculate the drainage map, where for each cell the number of cumulative upstream cells is determined. This is used to determine the river network, as cells with a large drainage area are more likely to be part of the river network.
+5. Delineate the catchment boundary by first identifying the outlet from the drainage map. The outlet is the cell with the largest drainage area. Then, the catchment boundary is determined by following the flow direction map in an upstream direction, starting from the outlet.
+
+::: {.callout-tip}
+The outlet of the Zwalm catchment is located in the vicinity of $x$=101673 m and $y$=17537 m
+:::
+
+For this geospatial analysis, [GRASS](https://grass.osgeo.org/) will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. 
+
+## Results and discussion 
 

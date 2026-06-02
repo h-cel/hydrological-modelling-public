@@ -1,1 +1,5 @@
 # Exercise 3: Calibration of the model {#sec-calibration}
+
+## Assignment
+
+## Results and discussion

@@ -1,2 +1,5 @@
 # Exercise 5: Data assimilation {#sec-assimilation}
 
+## Assignment
+
+## Results and discussion

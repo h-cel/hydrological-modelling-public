@@ -16,6 +16,7 @@ dependencies:
   - geodatasets=2026.5
   - great_tables=0.21
   - netcdf4=1.7
+  - dask=2026.3 
   - openeo=0.33
   - pip
   - pip:

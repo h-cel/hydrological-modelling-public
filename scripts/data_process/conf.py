@@ -37,3 +37,7 @@ METADATA_MAP = {
     "station_local_x": "x",
     "station_local_y": "y",
 }
+
+# Catchment info
+CATCHMENT_NAME = "ZWALM"
+MIN_COVERAGE_RATIO = 0.75

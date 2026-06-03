@@ -1,6 +1,8 @@
 import datetime
+import time
 
 import openeo
+import pandas as pd
 from conf import (
     BBOX,
     COLLECTION_ID,
@@ -62,6 +64,7 @@ def main():
     start_year = int(start_date[:4])
     end_year = int(end_date[:4])
 
+    job_dict = {}
     for year in range(start_year, end_year + 1):
         year_start = max(start_date, f"{year}-01-01")
         # Use {year+1}-01-01 as the exclusive upper bound instead of {year}-12-31,
@@ -74,11 +77,28 @@ def main():
         )
         year_cube = ssm_cube.filter_temporal(year_start, year_end)
         job = year_cube.create_job(out_format="NetCDF", title=f"SSM {year}")
-        job.start_and_wait()
+        job_dict[year] = job.job_id
+        job.start()
+        logger.info(f"Job for {year} started with ID {job.job_id}")
 
+    # Save job IDs to a text file for reference
+    job_ids_file = SATELLITE_SOIL_MOISTURE_RAW_DIR / "job_ids.csv"
+    df_job_ids = pd.DataFrame.from_dict(job_dict, orient="index", columns=["job_id"])
+    df_job_ids.to_csv(job_ids_file)
+
+    # Allow to read back job_ids from the file in case you need to rerun the script
+    df_job_ids = pd.read_csv(job_ids_file, index_col=0)
+
+    for year, job_id in job_dict.items():
+        job = connection.job(job_id)
+        while job.status() != "finished":
+            logger.info(f"Waiting for job {job_id} (year {year}) to finish...")
+            time.sleep(30)  # Wait for 30 seconds before checking again
         logger.info(f"Job for {year} completed, downloading results...")
-        job.get_results().download_files(SATELLITE_SOIL_MOISTURE_RAW_DIR)
-        logger.info(f"Year {year} downloaded to {SATELLITE_SOIL_MOISTURE_RAW_DIR}")
+        folder_ = SATELLITE_SOIL_MOISTURE_RAW_DIR / f"{year}"
+        folder_.mkdir(parents=True, exist_ok=True)
+        job.get_results().download_files(folder_)
+        logger.info(f"Year {year} downloaded to {folder_}")
 
 
 if __name__ == "__main__":

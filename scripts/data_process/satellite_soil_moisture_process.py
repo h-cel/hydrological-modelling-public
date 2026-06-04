@@ -1,6 +1,7 @@
 # %% Imports
 import geopandas as gpd
 import numpy as np
+import rioxarray
 import xarray as xr
 from conf import (
     CATCHMENT_INFO_PROCESSED_DIR,
@@ -17,6 +18,7 @@ from conf import (
 )
 
 SATELLITE_SOIL_MOISTURE_PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+rioxarray.set_options(convention=rioxarray.enum.Convention.CF)
 
 
 # %% Main function
@@ -27,6 +29,9 @@ def main():
         decode_coords="all",
         chunks="auto",
     ).rename({"t": "time", "x": "lon", "y": "lat"})
+    # Set CRS properly
+    crs_ssm = ds.rio.crs
+    ds = ds.astype(np.float32).drop_vars("crs").rio.write_crs(crs_ssm)
 
     gdf = gpd.read_file(CATCHMENT_INFO_PROCESSED_DIR / FILENAME_AFSTROOMGEBIED)
     gdf_catchment = gdf[
@@ -48,7 +53,7 @@ def main():
         gdf_catchment.geometry.values, gdf_catchment.crs, all_touched=True
     )
     logger.info("Saving clipped surface soil moisture data to a NetCDF file.")
-    ds_clipped.astype(np.float32).to_netcdf(
+    ds_clipped.to_netcdf(
         SATELLITE_SOIL_MOISTURE_PROCESSED_DIR
         / FILENAME_SATELLITE_SOIL_MOISTURE.replace(".csv", "_unfiltered.nc")
     )
@@ -84,7 +89,7 @@ def main():
     # %% Save to csv
     path_save = SATELLITE_SOIL_MOISTURE_PROCESSED_DIR / FILENAME_SATELLITE_SOIL_MOISTURE
     logger.info(f"Saving processed surface soil moisture data to {path_save}")
-    ds_spatial_avg_filtered.to_dataframe().drop(["spatial_ref", "crs"], axis=1).to_csv(
+    ds_spatial_avg_filtered.to_dataframe().drop(["spatial_ref"], axis=1).to_csv(
         path_save
     )
 

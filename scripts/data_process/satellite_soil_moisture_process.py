@@ -47,6 +47,11 @@ def main():
     da_ref_clipped = da_ref.rio.clip(
         gdf_catchment.geometry.values, gdf_catchment.crs, all_touched=True
     )
+    logger.info("Saving clipped surface soil moisture data to a NetCDF file.")
+    ds_clipped.astype(np.float32).to_netcdf(
+        SATELLITE_SOIL_MOISTURE_PROCESSED_DIR
+        / FILENAME_SATELLITE_SOIL_MOISTURE.replace(".csv", "_unfiltered.nc")
+    )
 
     # %% Only keep pixels with coverage more than the minimum coverage ratio
     logger.info(

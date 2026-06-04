@@ -15,6 +15,7 @@ PROCESSED_DATA_DIR = DATA_DIR / "processed"
 DTM_PROCESSED_DIR = PROCESSED_DATA_DIR / "digital_terrain_model"
 FORCINGS_DISCHARGE_PROCESSED_DIR = PROCESSED_DATA_DIR / "forcings_discharge"
 CATCHMENT_INFO_PROCESSED_DIR = PROCESSED_DATA_DIR / "catchment_info"
+SATELLITE_SOIL_MOISTURE_PROCESSED_DIR = PROCESSED_DATA_DIR / "satellite_soil_moisture"
 
 # DTM info
 DTM_SPATIAL_RESOLUTION_UPSCALED = 10.0  # in meters
@@ -37,3 +38,14 @@ METADATA_MAP = {
     "station_local_x": "x",
     "station_local_y": "y",
 }
+
+# Catchment info
+CATCHMENT_NAME = "ZWALM"
+
+# Satellite soil moisture
+FILENAME_SATELLITE_SOIL_MOISTURE = "satellite_soil_moisture.csv"
+VARIABLE_NAME_SATELLITE_SOIL_MOISTURE = "ssm"
+VARIABLE_NAME_NOISE = "noise"
+MIN_COVERAGE_RATIO = 0.90
+MIN_PCT_DROP_PER_DAY = -7.5
+MAX_PCT_RISE_PER_DAY = 15

@@ -1,6 +1,7 @@
 from afstroomgebied_download import main as download_afstroomgebied
 from conf import LOG_FORMAT, RAW_DATA_DIR, logger
 from dtm_download import main as download_dtm
+from satellite_soil_moisture_download import main as download_satellite_soil_moisture
 from vha_download import main as download_vha
 from waterinfo_download import main as download_waterinfo
 
@@ -21,3 +22,6 @@ if __name__ == "__main__":
 
     logger.info("Running afstroomgebied_download.py...")
     download_afstroomgebied()
+
+    logger.info("Running satellite_soil_moisture_download.py...")
+    download_satellite_soil_moisture()

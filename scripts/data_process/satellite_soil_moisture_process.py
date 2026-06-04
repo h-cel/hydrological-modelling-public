@@ -13,6 +13,7 @@ from conf import (
     MIN_PCT_DROP_PER_DAY,
     SATELLITE_SOIL_MOISTURE_PROCESSED_DIR,
     SATELLITE_SOIL_MOISTURE_RAW_DIR,
+    VARIABLE_NAME_NOISE,
     VARIABLE_NAME_SATELLITE_SOIL_MOISTURE,
     logger,
 )
@@ -69,10 +70,28 @@ def main():
     )
     bool_time_steps_to_keep = nr_pixels_clipped >= nr_pixels_min
     ds_clipped_filtered = ds_clipped.sel(time=bool_time_steps_to_keep)
+    nr_pixels_filtered = nr_pixels_clipped.sel(time=bool_time_steps_to_keep)
 
     # %% Average surface soil moisture over catchment area
     logger.info("Averaging surface soil moisture over catchment area.")
-    ds_spatial_avg = ds_clipped_filtered.mean(dim=["lat", "lon"], skipna=True).compute()
+    da_spatial_avg_ssm = (
+        ds_clipped_filtered[VARIABLE_NAME_SATELLITE_SOIL_MOISTURE]
+        .mean(dim=["lat", "lon"], skipna=True)
+        .compute()
+    )
+    da_spatial_avg_noise = (
+        1
+        / nr_pixels_filtered
+        * np.sqrt(
+            (ds_clipped_filtered[VARIABLE_NAME_NOISE] ** 2).sum(
+                dim=["lat", "lon"], skipna=True
+            )
+        )
+    ).compute()
+    ds_spatial_avg = xr.Dataset({
+        VARIABLE_NAME_SATELLITE_SOIL_MOISTURE: da_spatial_avg_ssm,
+        VARIABLE_NAME_NOISE: da_spatial_avg_noise,
+    })
 
     # %% Filter out too large fluctuations
     logger.info("Filtering out unrealistic fluctuations in surface soil moisture")

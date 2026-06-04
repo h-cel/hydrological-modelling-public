@@ -5,16 +5,21 @@
 # | output: false
 import rootutils
 import contextily as cx
-import pandas as pd
 import geopandas as gpd
 import geodatasets as gds
 import matplotlib.pyplot as plt
+import pandas as pd
+import rioxarray  # noqa: F401
+import xarray as xr
 from scripts.data_process.conf import (
     CATCHMENT_INFO_PROCESSED_DIR,
     DTM_SPATIAL_RESOLUTION_UPSCALED,
     FILENAME_FORCINGS_DISCHARGE,
     FILENAME_FORCINGS_DISCHARGE_META,
+    FILENAME_SATELLITE_SOIL_MOISTURE,
     FORCINGS_DISCHARGE_PROCESSED_DIR,
+    SATELLITE_SOIL_MOISTURE_PROCESSED_DIR,
+    VARIABLE_NAME_SATELLITE_SOIL_MOISTURE,
     WINDOW_SIZE_CLIMATOLOGY,
 )
 from scripts.data_download.conf import (
@@ -25,6 +30,7 @@ from great_tables import GT
 
 from shapely.geometry import box
 
+MAP_SOURCE = cx.providers.CartoDB.Positron
 root_path = rootutils.find_root()
 processed_data_dir = root_path / "data" / "processed"
 ```
@@ -58,7 +64,7 @@ gdf_zwalmbeek = gdf_vha[gdf_vha["NAAM"] == "Zwalmbeek"]
 
 fig, ax = plt.subplots(figsize=(4, 5), constrained_layout=True)
 gdf_zwalmbeek.plot(ax=ax)
-cx.add_basemap(ax, source=cx.providers.CartoDB.Positron, crs=gdf_zwalmbeek.crs, zoom=12)
+cx.add_basemap(ax, source=MAP_SOURCE, crs=gdf_zwalmbeek.crs, zoom=12)
 ax.set_xlabel("x [m]")
 ax.set_ylabel("y [m]")
 
@@ -140,7 +146,7 @@ fig, ax = plt.subplots(figsize=(6, 5), constrained_layout=True)
 gdf_plot.plot(ax=ax, column="id", legend=True)
 ax.set_xlabel("x [m]")
 ax.set_ylabel("y [m]")
-cx.add_basemap(ax, source=cx.providers.CartoDB.Positron, crs=gdf_meta.crs)
+cx.add_basemap(ax, source=MAP_SOURCE, crs=gdf_meta.crs)
 ```
 
 
@@ -164,3 +170,43 @@ Note that the first column without a name is the index column, which contains th
 To read in `forcings_discharge.csv`, checkout the documentation for [`pandas.read_csv()`](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html), specifically of the `index_col` and `parse_dates` parameters, to correctly read in the dataset.
 
 :::
+
+## Satellite soil moisture 
+
+In @sec-assimilation, the goal is to improve the hydrological model predictions by assimilating observations of soil moisture. Here, we'll use satellite-derived surface soil moisture ($SSM$), which is provided in the folder `data/processed/satellite_soil_moisture`. 
+
+The original data source is the SSM product at 1 km spatial resolution over Europe form the [Copernicus Land Monitoring Service](https://land.copernicus.eu/en) [@clms2026]. An example of the original data for one example date is shown in @fig-ssm-original. The $SSM$ values are expressed in percent saturation and are representative of the top few centimeters (~5cm) of the soil. 
+
+```{python}
+# | echo: false
+# | label: fig-ssm-original
+# | fig-cap: "Satellite-derived surface soil moisture data at 1 km spatial resolution over the Zwalm catchment."
+
+ds_ssm = xr.open_dataset(
+    SATELLITE_SOIL_MOISTURE_PROCESSED_DIR / "satellite_soil_moisture_unfiltered.nc",
+    decode_coords="all",
+)
+ds_ssm = ds_ssm.rio.reproject("EPSG:31370")
+
+da_ssm_plot = ds_ssm.isel(time=10)[VARIABLE_NAME_SATELLITE_SOIL_MOISTURE]
+
+fig, ax = plt.subplots(figsize=(5.5, 5), constrained_layout=True)
+da_ssm_plot.plot(ax=ax, alpha=0.9, cbar_kwargs={"label": "surface soil moisture [%]"})
+ax.set_xlabel("x [m]")
+ax.set_ylabel("y [m]")
+ax.set_title(f"{da_ssm_plot.time.dt.date.values}")
+cx.add_basemap(ax, source=MAP_SOURCE, crs=ds_ssm.rio.crs)
+```
+
+For ease of use, the dataset has been processed to a timeseries by taking the average $SSM$ value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is found is called  `sattelite_soil_moisture.cv`, whic has following columns:
+
+```{python}
+# | echo: false
+df_ssm = pd.read_csv(
+    SATELLITE_SOIL_MOISTURE_PROCESSED_DIR / FILENAME_SATELLITE_SOIL_MOISTURE,
+    parse_dates=True,
+)
+print(list(df_ssm.columns))
+```
+
+with `time` the date of acquistion, `ssm` the spatially averaged $SSM$ and `noise` is the spatially averaged standard deviation of the $SSM$ following the [rules of propagation of uncertainty](https://en.wikipedia.org/wiki/Propagation_of_uncertainty)^[For any function $f$, the standard deviation is given by $\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}$ assuming no covariance between $x,y,z\cdots$ and linearly approximating $f$. Note that an average is a linear function, so here this is not an approximation. With the average $\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i$ as $f$, $\frac{\partial f}{\partial x_i} = \frac1N$ and so $\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2$]

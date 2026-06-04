@@ -198,7 +198,7 @@ ax.set_title(f"{da_ssm_plot.time.dt.date.values}")
 cx.add_basemap(ax, source=MAP_SOURCE, crs=ds_ssm.rio.crs)
 ```
 
-For ease of use, the dataset has been processed to a timeseries by taking the average $SSM$ value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is found is called  `sattelite_soil_moisture.cv`, whic has following columns:
+For ease of use, the dataset has been processed to a timeseries by taking the average $SSM$ value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is found is called  `sattelite_soil_moisture.cv`, which has following columns:
 
 ```{python}
 # | echo: false

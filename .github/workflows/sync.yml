@@ -1,0 +1,27 @@
+name: Sync Main to Public Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Push to target repository
+        run: |
+          echo "Setting up remote repository..."
+          git remote add public "https://${{ secrets.PAT_HYDROMOD_PUBLIC }}@github.com/olivierbonte/hydrological-modelling-public.git"
+          git config --unset-all http.https://github.com/.extraheader #From https://stackoverflow.com/questions/64374179/how-to-push-to-another-repository-in-github-actions
+          git push public main --force

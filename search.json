@@ -1,0 +1,232 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Exercises Hydrological Modelling",
+    "section": "",
+    "text": "1 Introduction\nThis book contains exercises for the course Hydrological Modelling at Ghent University. The focus of this set of exercises will be on rainfall-runoff modelling with a conceptual hydrological model.\nThe objective of the practical exercises of this course is to illustrate some of the most important steps necessary to perform a proper modelling of a medium-scale catchment in Flanders. Only some specific steps of the process will be illustrated here across 5 exercises:\n\nDelineation of the catchment (Chapter 4)\nImplementation of a hydrological model (Chapter 5)\nCalibration of the hydrological model (Chapter 6)\nThe analysis of uncertainty in the model output of the model (Chapter 7)\nAssimilation of observations into the model (Chapter 8).\n\nNeedless to say that for each step, there are many options, and that the choice for e.g. a specific model, calibration algorithm, or evaluation criterium depends on the specific situation, the aim of the modelling exercise, and the personal taste of the modeller. For an extensive – yet non-exhaustive – overview of different techniques in hydrological modelling, we refer to the theoretical course notes and specialized literature.\nThe aim of the practicals is to:\n\nMake you acquainted with the advantages and disadvantages of the selected algorithms,\nMake you aware of the potential problems related to modelling rainfall-runoff relationships, and\nPoint you to and make you reflect on existing alternatives for the algorithms selected here.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "0_practical_info.html",
+    "href": "0_practical_info.html",
+    "title": "2  Practical information",
+    "section": "",
+    "text": "2.1 The repository\nBefore diving into the exercises, some practical information is provided on how to effectively set up your working environment.\nAll code used to create this assignment is available at https://github.com/olivierbonte/hydrological-modelling. This collection of files is called a repository. To get started, go the the URL above, click on the green Code button and select Download ZIP (see Figure 2.1). Unzip the downloaded file and place the resulting folder at a location of your choice. This folder contains all the files you need to complete the exercises.\nNote that only the code, but also the processed data is now downloaded. You can find this data in data/processed. More info on the data sources and processing is given in Chapter 3.\nThis assignment is provided to you in two formats, up to you which one you prefer to work with:",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
+    ]
+  },
+  {
+    "objectID": "0_practical_info.html#the-repository",
+    "href": "0_practical_info.html#the-repository",
+    "title": "2  Practical information",
+    "section": "",
+    "text": "Figure 2.1: Screenshot of GitHub download button\n\n\n\n\n\n\nA website at https://olivierbonte.github.io/hydrological-modelling/\nA PDF document, which you can download from https://olivierbonte.github.io/hydrological-modelling/Exercises-Hydrological-Modelling.pdf",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
+    ]
+  },
+  {
+    "objectID": "0_practical_info.html#working-with-quarto-and-python",
+    "href": "0_practical_info.html#working-with-quarto-and-python",
+    "title": "2  Practical information",
+    "section": "2.2 Working with Quarto and Python",
+    "text": "2.2 Working with Quarto and Python\nA general introduction to Quarto and Python is given in… LINK TO DEPARTMENT WIDE INTRO HERE LATER.\nThe idea of this exercise set is that you will use Quarto to combine your code and your scientific report in a single document. The goal is to write a report following the principles of reproducible research1, where others have access to all the data and code needed to obtain the same results as the one you present.\nIn these practicals, you will therefore not write a report from scratch (in Microsoft Word, Google Docs…), but instead you’ll extend the provided .qmd files for each exercise. The files of interested are numbered from 1_...qmd to 6_...qmd. Here you can add Python code2 for your figures and write your discussion in Markdown.\n\n\n\n\n\n\nTip\n\n\n\nDon’t perform al your computations inside of the .qmd files! Instead, make a regular .py file inside of the src folder for each exercise. From these .py files, you can save the results (e.g. metrics, output data) in (for example) a data/results folder. From this folder, you can then import the necessary results in the .qmd files to write your report and make your figures.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
+    ]
+  },
+  {
+    "objectID": "0_practical_info.html#evaluation",
+    "href": "0_practical_info.html#evaluation",
+    "title": "2  Practical information",
+    "section": "2.3 Evaluation",
+    "text": "2.3 Evaluation\nHand in your report of this assignment via Ufora by ADD DATE LATER. Please hand in:\n\nA PDF version of your report, which is rendered via Quarto.\nThe full set of files (i.e. repository) including your solution as a .zip file.\n\nYour report should we written scientifically and should contain at least the following:\n\nA summary of the results with reference to relevant figures and metrics, and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections Results and discussion in 1...qmd to 5...qmd for writing this part down.\nA conclusion about the modelling exercise as a whole, which is written in the 6_conclusion.qmd file.\nTo support your discussion, it is valuable to include references to relevant scientific papers. To add a reference, please include the relevant source in its bibxtex format to references.bib. More information on how to handle citations in Quarto can be found here. The bibtex format is explained in this guide. By means of example, one scientific article, Moore (2007), is already included.\n\n\n\n\n\nMoore, R. J. 2007. “The PDM Rainfall-Runoff Model.” Hydrology and Earth System Sciences 11 (1): 483–99. https://doi.org/10.5194/hess-11-483-2007.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
+    ]
+  },
+  {
+    "objectID": "0_practical_info.html#footnotes",
+    "href": "0_practical_info.html#footnotes",
+    "title": "2  Practical information",
+    "section": "",
+    "text": "This concept is introduced in your course on Data Science in the 2nd Bachelor year of Bioscience Engineering, where you made a Quarto/Rmarkdown presentation/report for a data analysis↩︎\nAs an example of how this is used in practice, see e.g. the source file 0_study_area_and_data.qmd for Chapter 3↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
+    ]
+  },
+  {
+    "objectID": "0_study_area_and_data.html",
+    "href": "0_study_area_and_data.html",
+    "title": "3  Study area and data",
+    "section": "",
+    "text": "3.1 Catchment data\nFor these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the center of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in Figure 3.1. During the period 2009-2025, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see Section 3.3 for more information). The average annual rainfall and potential evapotranspiration of the catchment are 735 mm and 561 mm respectively, typical values for Belgium.\nAs mentioned in Chapter 2, all the processed data is available at data/processed. If interested, you can inspect (and execute) all downloading and processing steps yourself by following the instructions in scripts/data_download/README.md and scripts/data_process/README.md.\nIn the next section, more information is given on the data sources and processing steps for the different types of provided data. Note that all geographic data is provided in the Belgian Lambert 72 (BD72, EPSG:31370) coordinate reference system (CRS).\nThe data in the data/processed/catchment_info folder contains information on the river network and the catchment boundaries in the broad vicinity of the Zwalm catchment. The source of the river network is the Vlaamse Hydrografische Atlas (Vlaamse Milieumaatschappij 2026). The catchment boundaries come from the Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027 dataset (Vlaamse Milieumaatschappij 2023). In Chapter 4, you will be asked to delineate the catchment boundary of the Zwalmbeek yourself. The provided catchment boundaries can be used for comparison. Both files are provided as ESRI Shapefiles, called afstroomgebied.shp and vlaamse_hydrografische_atlas.shp respectively.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Study area and data</span>"
+    ]
+  },
+  {
+    "objectID": "0_study_area_and_data.html#digital-terrain-model",
+    "href": "0_study_area_and_data.html#digital-terrain-model",
+    "title": "3  Study area and data",
+    "section": "3.2 Digital terrain model",
+    "text": "3.2 Digital terrain model\nFor the catchment delineation of Chapter 4, a digital terrain model (DTM) is provided in data/processed/digital_terrain_model. This DTM is derived from the Digitaal Hoogtemodel Vlaanderen II DTM at 1m spatial resolution (Agentschap Digitaal Vlaanderen 2014). To reduce the size of the dataset and speed up the computation, the DTM has been resampled to a spatial resolution of 10.0 m by averaging. The DTM is provided as a GeoTIFF file, called DHMVII_DTM_1m_upscaled_10m.tif.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Study area and data</span>"
+    ]
+  },
+  {
+    "objectID": "0_study_area_and_data.html#sec-study-area-forcings-discharge",
+    "href": "0_study_area_and_data.html#sec-study-area-forcings-discharge",
+    "title": "3  Study area and data",
+    "section": "3.3 Meteorological and discharge data",
+    "text": "3.3 Meteorological and discharge data\nBoth meteorological forcings and observed discharge are provided in the folder data/processed/forcings_discharge. All this data is retrieved from Waterinfo, a website which combines hydro(meteorological) data from both the Flanders Environment Agency and Flanders Hydraulics Research. Programmatic access to the data is possible via the Python package pywaterinfo, as demonstrated (for your information only) in scripts/data_download/waterinfo_download.py.\nThe combined forcings and discharge dataset is provided in the CSV file forcings_discharge.csv. An overview of the the original data sources is given in Table 3.1. Note that mm is equivalent to mm/d because of the daily time resolution. The locations of the different measurement stations are additionally shown in Figure 3.2. Some processing details:\n\nThe variable Precipitation (\\(P\\)) of catchment is a combination of rainfall gauge and radar data, representative for the Zwalm catchment. The gaps in this dataset are filled with precipitation data from the Pluviometer in Maarke-Kerkem.\nPotential evapotranspiration (\\(E_\\mathrm{p}\\)) is estimated using the Penman equation at a meteorological station. Missing values are gapfilled with the daily, smoothed climatology of \\(E_\\mathrm{p}\\). Smoothing occurs by applying a moving average with a centred window of 11 days.\nRiver discharge (\\(Q\\)) is measured near the mouth of the Zwalmbeek in the village of Nederzwalm. No gapfilling is applied to this variable, as it is only used for model evaluation, not as a model input.\n\n\n\n\n\nTable 3.1: Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each variable has a corresponding measurement station, denoted by a unique station ID.\n\n\n\n\n\n\n\n\n\nVariable\nUnits\nStation\nStation ID\n\n\n\n\nPrecipitation\nmm\nMaarke-Kerkem_P\nP06_014\n\n\nPrecipitation of catchment\nmm\nNederzwalm/Zwalmbeek\nL06_342\n\n\nPotential Evapotranspiration\nmm\nWaregem_ME\nME05_019\n\n\nRiver Discharge\nm³/s\nNederzwalm/Zwalmbeek\nL06_342\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.2: The Zwalmbeek and the measurement locations as denoted by their station ID\n\n\n\n\n\nConsequently, following columns are present in forcings_discharge.csv:\n\n\n['', 'precipitation', 'potential_evapotranspiration', 'river_discharge']\n\n\nNote that the first column without a name is the index column, which contains the date. The corret interpretation of the date is that the data value corresponds to the daily sum (\\(P\\) and \\(E_\\mathrm{p}\\)) or daily mean (\\(Q\\)) of the day indicated by the date. For example, the value of \\(P\\) on 2020-01-01 corresponds to the total precipitation that fell during that day.\n\n\n\n\n\n\nTip\n\n\n\nTo read in forcings_discharge.csv, checkout the documentation for pandas.read_csv(), specifically of the index_col and parse_dates parameters, to correctly read in the dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Study area and data</span>"
+    ]
+  },
+  {
+    "objectID": "0_study_area_and_data.html#satellite-soil-moisture",
+    "href": "0_study_area_and_data.html#satellite-soil-moisture",
+    "title": "3  Study area and data",
+    "section": "3.4 Satellite soil moisture",
+    "text": "3.4 Satellite soil moisture\nIn Chapter 8, the goal is to improve the hydrological model predictions by assimilating observations of soil moisture. Here, we’ll use satellite-derived surface soil moisture (\\(SSM\\)), which is provided in the folder data/processed/satellite_soil_moisture.\nThe original data source is the SSM product at 1 km spatial resolution over Europe form the Copernicus Land Monitoring Service (European Union’s Copernicus Land Monitoring Service 2026). An example of the original data for one example date is shown in Figure 3.3. The \\(SSM\\) values are expressed in percent saturation and are representative of the top few centimeters (~5cm) of the soil.\n\n\n\n\n\n\n\n\nFigure 3.3: Satellite-derived surface soil moisture data at 1 km spatial resolution over the Zwalm catchment.\n\n\n\n\n\nFor ease of use, the dataset has been processed to a timeseries by taking the average \\(SSM\\) value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is found is called sattelite_soil_moisture.cv, which has following columns:\n\n\n['time', 'ssm', 'noise']\n\n\nwith time the date of acquistion, ssm the spatially averaged \\(SSM\\) and noise is the spatially averaged standard deviation of the \\(SSM\\) following the rules of propagation of uncertainty1.\n\n\n\n\nAgentschap Digitaal Vlaanderen. 2014. “Digitaal Hoogtemodel Vlaanderen II, DTM, Raster, 1 m.” Version 2014.01. Agentschap Digitaal Vlaanderen. https://metadata.vlaanderen.be/srv/api/records/f52b1a13-86bc-4b64-8256-88cc0d1a8735.\n\n\nEuropean Union’s Copernicus Land Monitoring Service. 2026. “Surface Soil Moisture 2014-Present (Raster 1 Km), Europe, Daily – Version 1.” https://doi.org/10.2909/e934b15f-7d48-4c6d-a9c6-6484488aa58f.\n\n\nVlaamse Milieumaatschappij. 2023. “Oppervlaktewaterlichamen En Hun Afstroomgebieden, 2022–2027.” Versions 2022-2027. Agentschap Digitaal Vlaanderen. https://metadata.vlaanderen.be/srv/api/records/e8f55350-5c8d-4b15-ac09-1014469c3f04.\n\n\nVlaamse Milieumaatschappij. 2026. “Vlaamse Hydrografische Atlas – Waterlopen, Toestand 03/02/2026.” Versions toestand 03/02/2026. Agentschap Digitaal Vlaanderen. https://metadata.vlaanderen.be/srv/api/records/d5a7a3df-a8a5-4516-92c4-d0128eea7fd7.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Study area and data</span>"
+    ]
+  },
+  {
+    "objectID": "0_study_area_and_data.html#footnotes",
+    "href": "0_study_area_and_data.html#footnotes",
+    "title": "3  Study area and data",
+    "section": "",
+    "text": "For any function \\(f\\), the standard deviation is given by \\(\\sigma_{f}={\\sqrt {\\left({\\frac {\\partial f}{\\partial x}}\\right)^{2}\\sigma_{x}^{2}+\\left({\\frac {\\partial f}{\\partial y}}\\right)^{2}\\sigma_{y}^{2}+\\left({\\frac {\\partial f}{\\partial z}}\\right)^{2}\\sigma_{z}^{2}+\\cdots }}\\) assuming no covariance between \\(x,y,z\\cdots\\) and linearly approximating \\(f\\). Note that an average is a linear function, so here this is not an approximation. With the average \\(\\bar{x} = \\frac{1}{N} \\sum_{i=1}^N x_i\\) as \\(f\\), \\(\\frac{\\partial f}{\\partial x_i} = \\frac1N\\) and so \\(\\sigma^2_{\\bar{x}} =\\sum_{i=1}^N \\left(\\frac{\\partial \\bar{x}}{\\partial x_i} \\right)^2\\sigma_i^2  = \\frac{1}{N^2} \\sum_{i=1}^N \\sigma_i^2\\)↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Study area and data</span>"
+    ]
+  },
+  {
+    "objectID": "1_catchment_delineation.html",
+    "href": "1_catchment_delineation.html",
+    "title": "4  Exercise 1: Delineation of the Zwalm catchment",
+    "section": "",
+    "text": "4.1 Assignment\nThe delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The analysis consists of\nFor this geospatial analysis, GRASS will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Exercise 1: Delineation of the Zwalm catchment</span>"
+    ]
+  },
+  {
+    "objectID": "1_catchment_delineation.html#assignment",
+    "href": "1_catchment_delineation.html#assignment",
+    "title": "4  Exercise 1: Delineation of the Zwalm catchment",
+    "section": "",
+    "text": "Removal of data gaps, no missing values are allowed in the digital elevation model.\nRemoval of depressions, as these hinder the determination of the flow direction.\nDetermine the flow direction. Here the easiest algorithm is used: the Deterministic 8 (D8) algorithm, which assumes that water flows following the largest gradient. D8 only considers the gradient between a cell and its 8 surrounding neighbours.\nCalculate the drainage map, where for each cell the number of cumulative upstream cells is determined. This is used to determine the river network, as cells with a large drainage area are more likely to be part of the river network.\nDelineate the catchment boundary by first identifying the outlet from the drainage map. The outlet is the cell with the largest drainage area. Then, the catchment boundary is determined by following the flow direction map in an upstream direction, starting from the outlet.\n\n\n\n\n\n\n\nTip\n\n\n\nThe outlet of the Zwalm catchment is located in the vicinity of \\(x\\)=101673 m and \\(y\\)=17537 m",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Exercise 1: Delineation of the Zwalm catchment</span>"
+    ]
+  },
+  {
+    "objectID": "1_catchment_delineation.html#results-and-discussion",
+    "href": "1_catchment_delineation.html#results-and-discussion",
+    "title": "4  Exercise 1: Delineation of the Zwalm catchment",
+    "section": "4.2 Results and discussion",
+    "text": "4.2 Results and discussion",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Exercise 1: Delineation of the Zwalm catchment</span>"
+    ]
+  },
+  {
+    "objectID": "2_model_implementation.html",
+    "href": "2_model_implementation.html",
+    "title": "5  Exercise 2: Implementation of the model",
+    "section": "",
+    "text": "5.1 Assignment",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Exercise 2: Implementation of the model</span>"
+    ]
+  },
+  {
+    "objectID": "2_model_implementation.html#results-and-discussion",
+    "href": "2_model_implementation.html#results-and-discussion",
+    "title": "5  Exercise 2: Implementation of the model",
+    "section": "5.2 Results and discussion",
+    "text": "5.2 Results and discussion",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Exercise 2: Implementation of the model</span>"
+    ]
+  },
+  {
+    "objectID": "3_model_calibration.html",
+    "href": "3_model_calibration.html",
+    "title": "6  Exercise 3: Calibration of the model",
+    "section": "",
+    "text": "6.1 Assignment",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Exercise 3: Calibration of the model</span>"
+    ]
+  },
+  {
+    "objectID": "3_model_calibration.html#results-and-discussion",
+    "href": "3_model_calibration.html#results-and-discussion",
+    "title": "6  Exercise 3: Calibration of the model",
+    "section": "6.2 Results and discussion",
+    "text": "6.2 Results and discussion",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Exercise 3: Calibration of the model</span>"
+    ]
+  },
+  {
+    "objectID": "4_model_uncertainty.html",
+    "href": "4_model_uncertainty.html",
+    "title": "7  Exercise 4:Uncertainty analysis of the model output",
+    "section": "",
+    "text": "7.1 Assignment",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4:Uncertainty analysis of the model output</span>"
+    ]
+  },
+  {
+    "objectID": "4_model_uncertainty.html#results-and-discussion",
+    "href": "4_model_uncertainty.html#results-and-discussion",
+    "title": "7  Exercise 4:Uncertainty analysis of the model output",
+    "section": "7.2 Results and discussion",
+    "text": "7.2 Results and discussion",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4:Uncertainty analysis of the model output</span>"
+    ]
+  },
+  {
+    "objectID": "5_data_assimilation.html",
+    "href": "5_data_assimilation.html",
+    "title": "8  Exercise 5: Data assimilation",
+    "section": "",
+    "text": "8.1 Assignment",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Exercise 5: Data assimilation</span>"
+    ]
+  },
+  {
+    "objectID": "5_data_assimilation.html#results-and-discussion",
+    "href": "5_data_assimilation.html#results-and-discussion",
+    "title": "8  Exercise 5: Data assimilation",
+    "section": "8.2 Results and discussion",
+    "text": "8.2 Results and discussion",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Exercise 5: Data assimilation</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Agentschap Digitaal Vlaanderen. 2014. “Digitaal Hoogtemodel\nVlaanderen II, DTM, Raster, 1 m.”\nVersion 2014.01. Agentschap Digitaal Vlaanderen. https://metadata.vlaanderen.be/srv/api/records/f52b1a13-86bc-4b64-8256-88cc0d1a8735.\n\n\nEuropean Union’s Copernicus Land Monitoring Service. 2026.\n“Surface Soil Moisture 2014-Present (Raster 1 Km), Europe, Daily –\nVersion 1.” https://doi.org/10.2909/e934b15f-7d48-4c6d-a9c6-6484488aa58f.\n\n\nMoore, R. J. 2007. “The PDM Rainfall-Runoff Model.”\nHydrology and Earth System Sciences 11 (1): 483–99. https://doi.org/10.5194/hess-11-483-2007.\n\n\nVlaamse Milieumaatschappij. 2023. “Oppervlaktewaterlichamen En Hun\nAfstroomgebieden, 2022–2027.” Versions 2022-2027. Agentschap\nDigitaal Vlaanderen. https://metadata.vlaanderen.be/srv/api/records/e8f55350-5c8d-4b15-ac09-1014469c3f04.\n\n\nVlaamse Milieumaatschappij. 2026. “Vlaamse Hydrografische Atlas –\nWaterlopen, Toestand 03/02/2026.” Versions toestand 03/02/2026.\nAgentschap Digitaal Vlaanderen. https://metadata.vlaanderen.be/srv/api/records/d5a7a3df-a8a5-4516-92c4-d0128eea7fd7.",
+    "crumbs": [
+      "References"
+    ]
+  }
+]

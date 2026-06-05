@@ -1,5 +1,7 @@
 # Hydrological-modelling
 
+This repository contains the assignment and processed data for the computer practicals of the course [Hydrological Modelling](https://studiekiezer.ugent.be/2026/studiefiche/en/I002659) at Ghent University. The [public repository](https://github.com/olivierbonte/hydrological-modelling-public) does not contain solutions to the exercise. Solutions can be found in the `solutions` branch of a a [private repository](https://github.com/olivierbonte/hydrological-modelling), access to which can be granted upon [contacting me](mailto:olivier.bonte@hotmail.com).
+
 ## Installation instructions (local setup)
 
 First, make a local copy of this repository using

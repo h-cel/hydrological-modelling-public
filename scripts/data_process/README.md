@@ -25,3 +25,5 @@ For precipitation, the catchment rainfall is preferred over the pluviograph rain
 ## Satellite soil moisture
 
 Processing file: [`satellite_soil_moisture_process.py`](satellite_soil_moisture_process.py)
+
+The 1 km satellite soil moisture is first clipped and masked to the catchment area. Only timestamps where more than a fixed percentage (see `conf.py`) of the pixels have values are retained. The surface soil moisture is averaged over the catchment area and the noise is averaged using the rules of uncertainty error propagation. As a final step, the change in percent saturation per day between two timestamps is calculated and when this is too high or low (see `conf.py`), the last timestamp of the two is dropped. 

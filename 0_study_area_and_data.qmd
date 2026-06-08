@@ -94,7 +94,7 @@ In the next section, more information is given on the data sources and processin
 
 The data in the `data/processed/catchment_info` folder contains information on the river network and the catchment boundaries in the broad vicinity of the Zwalm catchment. The source of the river network is the *Vlaamse Hydrografische Atlas* [@vmm2026]. The catchment boundaries come from the *Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027* dataset [@vmm2022]. In @sec-delineation, you will be asked to delineate the catchment boundary of the Zwalmbeek yourself. The provided catchment boundaries can be used for comparison. Both files are provided as ESRI Shapefiles, called `afstroomgebied.shp` and `vlaamse_hydrografische_atlas.shp` respectively.
 
-## Digital terrain model
+## Digital terrain model {#sec-study-area-dtm}
 
 For the catchment delineation of @sec-delineation, a digital terrain model (DTM) is provided in `data/processed/digital_terrain_model`. This DTM is derived from the *Digitaal Hoogtemodel Vlaanderen II* DTM at 1m spatial resolution [@adv2014]. To reduce the size of the dataset and speed up the computation, the DTM has been resampled to a spatial resolution of `{python} DTM_SPATIAL_RESOLUTION_UPSCALED` m by averaging. The DTM is provided as a GeoTIFF file, called `DHMVII_DTM_1m_upscaled_10m.tif`.
 

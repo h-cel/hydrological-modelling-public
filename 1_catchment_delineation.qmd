@@ -1,5 +1,10 @@
 # Exercise 1: Delineation of the Zwalm catchment {#sec-delineation}
 
+```{python}
+# | echo: false
+from scripts.data_download.conf import XMIN, XMAX, YMIN, YMAX
+```
+
 ## Assignment 
 
 The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The analysis consists of
@@ -14,7 +19,27 @@ The delineation of a catchment based on a digital elevation model is often one o
 The outlet of the Zwalm catchment is located in the vicinity of $x$=101673 m and $y$=17537 m
 :::
 
-For this geospatial analysis, [GRASS](https://grass.osgeo.org/) will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. 
+For this geospatial analysis, [GRASS](https://grass.osgeo.org/) will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. There are multiple ways of using GRASS. In this exercise, you can choose between 2 ways of interacting with GRASS: 
+
+- ![QGIS](figures/qgis-icon.svg){height=1em} With QGIS as Graphical User Inteface (GUI), all GRASS functionality can be accessed via the Procesing Toolbox
+- ![Python](figures/python-logo-only.svg){height=1em} The Python GRASS interface allows programmatic access to GRASS functionality. For an in depth introduction, we refer to the [documentation](https://grass.osgeo.org/grass85/manuals/python_intro.html). In this exercise, we will use the `grass.tools` interface. The initial setup of the GRASS environment is provided in `scripts/1_catchment_delineation.py`, to which you can add your own code. All tools are accessible via the `tools` variable defined there. For example if you want ot use the `r.import` function, you would call
+`tools.r_import(input="PATH_TO_FILE",output="OUTPUT_NAME", overwrite=True)`.
+Note that:
+    - It is recommended to set the `overwrite=True` argument for all functions. 
+    - It is a general convention that the `.` defined in the GRASS function name (as found in the [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html))is replaced by `_` in the Python function name.
+    - The output of a previous function (e.g. `OUTPUT_NAME` in the example above) can be used as input for a subsequent function. For example, if you want to use the output of `r.import` as input (called `elevation`) for a slope calculation with `r.slope.aspect`, you would call `tools.r_slope_aspect(elevation="OUTPUT_NAME", slope="SLOPE", overwrite=True)`.
+
+Irrespective of the choice of interface, an overview of all GRASS functions can be found in [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html). Specific tips for each interface will be denoted by their logo in the steps below.
+
+1. Start by loading the DTM (see @sec-study-area-dtm). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately $x_{\mathrm{min}}=$ `{python} XMIN` m, $x_{\mathrm{max}}$ = `{python} XMAX` m, $y_{\mathrm{min}}$ = `{python} YMIN` m, $y_{\mathrm{max}}$ = `{python} YMAX` m). 
+    - ![Python](figures/python-logo-only.svg){height=1em} Use the [`r.import`](https://grass.osgeo.org/grass85/manuals/r.import.html) function to load in raster data. 
+2. Spatially gap-fill the DTM (i.e. make sure there are no missing values). 
+    - ![Python](figures/python-logo-only.svg){height=1em} Use the [`r.fillnulls`](https://grass.osgeo.org/grass85/manuals/r.fillnulls.html) function to fill in missing values.
+    - ![QGIS](figures/qgis-icon.svg){height=1em} Use the `Fill nodata` tool (from GDAL).
+3. Filter the digital elevation model for sinks (or depressions) and fill them. Use the `r.fill.dir` function.
+4.  Calculate the flow direction and accumulation into each grid cell of the domain. 
+
+
 
 ## Results and discussion 
 

@@ -12,8 +12,8 @@ Note that only the code, but also the processed data is now downloaded. You can 
 
 This assignment is provided to you in two formats, up to you which one you prefer to work with:
 
-1. A website at [https://olivierbonte.github.io/hydrological-modelling/](https://olivierbonte.github.io/hydrological-modelling/)
-2. A PDF document, which you can download from [https://olivierbonte.github.io/hydrological-modelling/Exercises-Hydrological-Modelling.pdf](https://olivierbonte.github.io/hydrological-modelling/Exercises-Hydrological-Modelling.pdf)
+1. A website at [https://olivierbonte.github.io/hydrological-modelling-public/](https://olivierbonte.github.io/hydrological-modelling-public/)
+2. A PDF document, which you can download from [https://olivierbonte.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf](https://olivierbonte.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf)
 
 ## Working with Quarto and Python 
 

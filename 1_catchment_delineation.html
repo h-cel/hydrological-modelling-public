@@ -244,13 +244,13 @@ window.Quarto = {
 <section id="assignment" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="assignment"><span class="header-section-number">4.1</span> Assignment</h2>
 <p>The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The pre-processing of the digital elevation model at least includes the removal of data gaps (i.e.&nbsp;spatial interpolation) and the removal of sinks (or depressions). Based on the processed DTM, the catchment can then be easily delineated using the simple principle that water always flows in the direction of the largest gradient. Different algorithms exist to do so (see course notes); here, only the gradient of every cell to its eight direct neighbours, the deterministic 8 (D8) algorithm, will be used.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div id="tip-coordinates" class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Tip&nbsp;4.1
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -297,6 +297,7 @@ Tip
 <li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Convert the output raster to an <code>xarray.DataArray</code> using a helper function. Subsequently, the <a href="https://corteva.github.io/geocube/stable/geocube.html#geocube.vector.vectorize"><code>vectorize</code></a> function from the <code>geocube</code> package can be applied.</li>
 <li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Polygonize (raster to vector)</code> tool (from GDAL).</li>
 </ul></li>
+<li>Repeat step 7 for the coordinates provided in <a href="#tip-coordinates" class="quarto-xref">Tip&nbsp;<span>4.1</span></a>. Compare the resulting catchment boundary with the one obtained in step 7 and with the provided catchment boundary from the <em>Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027</em> dataset (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>). What are the differences between these catchment boundaries? What could be the reasons for these differences?</li>
 <li>Calculate the catchment area.</li>
 </ol>
 </section>

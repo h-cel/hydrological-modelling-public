@@ -243,14 +243,7 @@ window.Quarto = {
 
 <section id="assignment" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="assignment"><span class="header-section-number">4.1</span> Assignment</h2>
-<p>The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The analysis consists of</p>
-<ol type="1">
-<li>Removal of data gaps, no missing values are allowed in the digital elevation model.</li>
-<li>Removal of depressions, as these hinder the determination of the flow direction.</li>
-<li>Determine the flow direction. Here the easiest algorithm is used: the Deterministic 8 (D8) algorithm, which assumes that water flows following the largest gradient. D8 only considers the gradient between a cell and its 8 surrounding neighbours.</li>
-<li>Calculate the drainage map, where for each cell the number of cumulative upstream cells is determined. This is used to determine the river network, as cells with a large drainage area are more likely to be part of the river network.</li>
-<li>Delineate the catchment boundary by first identifying the outlet from the drainage map. The outlet is the cell with the largest drainage area. Then, the catchment boundary is determined by following the flow direction map in an upstream direction, starting from the outlet.</li>
-</ol>
+<p>The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The pre-processing of the digital elevation model at least includes the removal of data gaps (i.e.&nbsp;spatial interpolation) and the removal of sinks (or depressions). Based on the processed DTM, the catchment can then be easily delineated using the simple principle that water always flows in the direction of the largest gradient. Different algorithms exist to do so (see course notes); here, only the gradient of every cell to its eight direct neighbours, the deterministic 8 (D8) algorithm, will be used.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -264,7 +257,48 @@ Tip
 <p>The outlet of the Zwalm catchment is located in the vicinity of <span class="math inline">\(x\)</span>=101673 m and <span class="math inline">\(y\)</span>=17537 m</p>
 </div>
 </div>
-<p>For this geospatial analysis, <a href="https://grass.osgeo.org/">GRASS</a> will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing.</p>
+<p>For this geospatial analysis, <a href="https://grass.osgeo.org/">GRASS</a> will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. There are multiple ways of using GRASS. In this exercise, you can choose between 2 ways of interacting with GRASS:</p>
+<ul>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> With QGIS as Graphical User Inteface (GUI), all GRASS functionality can be accessed via the Procesing Toolbox</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> The Python GRASS interface allows programmatic access to GRASS functionality. For an in depth introduction, we refer to the <a href="https://grass.osgeo.org/grass85/manuals/python_intro.html">documentation</a>. In this exercise, we will use the <code>grass.tools</code> interface. The initial setup of the GRASS environment is provided in <code>scripts/1_catchment_delineation.py</code>, to which you can add your own code. All tools are accessible via the <code>tools</code> variable defined there. For example if you want ot use the <code>r.import</code> function, you would call <code>tools.r_import(input="PATH_TO_FILE",output="OUTPUT_NAME", overwrite=True)</code>. Note that:
+<ul>
+<li>It is recommended to set the <code>overwrite=True</code> argument for all functions.</li>
+<li>It is a general convention that the <code>.</code> defined in the GRASS function name (as found in the <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>)is replaced by <code>_</code> in the Python function name.</li>
+<li>The output of a previous function (e.g.&nbsp;<code>OUTPUT_NAME</code> in the example above) can be used as input for a subsequent function. For example, if you want to use the output of <code>r.import</code> as input (called <code>elevation</code>) for a slope calculation with <code>r.slope.aspect</code>, you would call <code>tools.r_slope_aspect(elevation="OUTPUT_NAME", slope="SLOPE", overwrite=True)</code>.</li>
+<li>In <code>scripts/helper_functions.py</code>, two helper functions are defined: <code>get_data_array_from_raster</code> gives you an <a href="https://docs.xarray.dev/en/stable/user-guide/data-structures.html#dataarray"><code>xarray.DataArray</code></a> given the name (e.g.&nbsp;<code>"OUTPUT_NAME"</code>) of a GRASS raster layer and <code>plot_grass_raster</code> makes a plot of a GRASS raster layer (given its name as again). Use these functions to check intermediate results.</li>
+</ul></li>
+</ul>
+<p>Irrespective of the choice of interface, an overview of all GRASS functions can be found in <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>. Specific tips for each interface will be denoted by their logo in the steps below.</p>
+<ol type="1">
+<li>Start by loading the DTM (see <a href="0_study_area_and_data.html#sec-study-area-dtm" class="quarto-xref"><span>Section 3.2</span></a>). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately <span class="math inline">\(x_{\mathrm{min}}=\)</span> 98000 m, <span class="math inline">\(x_{\mathrm{max}}\)</span> = 116000 m, <span class="math inline">\(y_{\mathrm{min}}\)</span> = 160000 m, <span class="math inline">\(y_{\mathrm{max}}\)</span> = 180000 m).
+<ul>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.import.html"><code>r.import</code></a> function to load in raster data.</li>
+</ul></li>
+<li>Spatially gap-fill the DTM (i.e.&nbsp;make sure there are no missing values).
+<ul>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fillnulls.html"><code>r.fillnulls</code></a> function to fill in missing values.</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Fill nodata</code> tool (from GDAL).</li>
+</ul></li>
+<li>Filter the digital elevation model for sinks (or depressions) and fill them. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fill.dir.html"><code>r.fill.dir</code></a> function.</li>
+<li>Calculate the flow direction and accumulation into each grid cell of the domain. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.watershed.html"><code>r.watershed</code></a> function. Make sure that D8 is used as flow direction algorithm. Further more, ensure that the minimum size of an exterior watershed basins is set to 500. Keep both the accumulation (i.e.&nbsp;how many cells drain into each cell) and the flow direction map as outputs.<br>
+</li>
+<li>Check if the accumulation map aligns with the actual river network of the Zwalm catchment from the <em>Vlaamse Hydrografische Atlas</em> (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>). In the attributes of the shapefile, you can filter in <code>"NAMEN"</code> for <code>"Zwalmbeek - Dorenbosbeek"</code> to only withhold the main Zwalm river.
+<ul>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <code>get_data_array_from_raster</code> to get the accumulation map as an <code>xarray.DataArray</code>. Use <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.read_file.html#geopandas.read_file"><code>geopandas.read_file</code></a> to read in the river network shapefile.</li>
+</ul></li>
+<li>Find the point with the largest accumulation that is located within the Zwalm river network. Rasterise the river network to the same grid as the accumulation map to do so. This point is the outlet of the catchment.
+<ul>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://corteva.github.io/geocube/stable/geocube.html#make-geocube"><code>make_geocube</code></a> function from the <a href="https://corteva.github.io/geocube/stable/index.html"><code>geocube</code></a> package. Use the <code>like</code> argument.<br>
+</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Rasterize (vector to raster)</code> tool (from GDAL).</li>
+</ul></li>
+<li>Given the outlet determined in the previous step, delineate the catchment using <a href="https://grass.osgeo.org/grass85/manuals/r.water.outlet.html"><code>r.water.outlet</code></a>. Vectorize the resulting raster map of the catchment.
+<ul>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Convert the output raster to an <code>xarray.DataArray</code> using a helper function. Subsequently, the <a href="https://corteva.github.io/geocube/stable/geocube.html#geocube.vector.vectorize"><code>vectorize</code></a> function from the <code>geocube</code> package can be applied.</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Polygonize (raster to vector)</code> tool (from GDAL).</li>
+</ul></li>
+<li>Calculate the catchment area.</li>
+</ol>
 </section>
 <section id="results-and-discussion" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="results-and-discussion"><span class="header-section-number">4.2</span> Results and discussion</h2>

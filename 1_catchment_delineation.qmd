@@ -10,7 +10,7 @@ from scripts.data_download.conf import XMIN, XMAX, YMIN, YMAX
 The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The pre-processing of the digital elevation model at least includes the removal of data gaps (i.e. spatial interpolation) and the removal of sinks (or depressions). Based on the processed DTM, the catchment can then be easily delineated using the simple principle that water always flows in the direction of the largest gradient. Different algorithms exist to do so (see course notes); here, only the gradient of every cell to its eight direct neighbours, the deterministic 8 (D8) algorithm, will be used.
 
 
-::: {.callout-tip}
+::: {#tip-coordinates .callout-tip}
 The outlet of the Zwalm catchment is located in the vicinity of $x$=101673 m and $y$=17537 m
 :::
 
@@ -42,7 +42,8 @@ Irrespective of the choice of interface, an overview of all GRASS functions can 
 7. Given the outlet determined in the previous step, delineate the catchment using [`r.water.outlet`](https://grass.osgeo.org/grass85/manuals/r.water.outlet.html). Vectorize the resulting raster map of the catchment. 
     - ![Python](figures/python-logo-only.png){height=1em} Convert the output raster to an `xarray.DataArray` using a helper function. Subsequently, the [`vectorize`](https://corteva.github.io/geocube/stable/geocube.html#geocube.vector.vectorize) function from the `geocube` package can be applied. 
     - ![QGIS](figures/qgis-icon.png){height=1em} Use the `Polygonize (raster to vector)` tool (from GDAL).
-8. Calculate the catchment area. 
+8. Repeat step 7 for the coordinates provided in @tip-coordinates. Compare the resulting catchment boundary with the one obtained in step 7 and with the provided catchment boundary from the *Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027* dataset (see @sec-study-area-catchment-data). What are the differences between these catchment boundaries? What could be the reasons for these differences?
+9. Calculate the catchment area. 
 
 
 ## Results and discussion 

@@ -43,6 +43,7 @@ format:
     code-fold: show
   pdf:
     documentclass: scrreprt
+    classoption: DIV=12
     include-in-header: preamble.tex
     papersize: a4
     fig-pos: 'htb'

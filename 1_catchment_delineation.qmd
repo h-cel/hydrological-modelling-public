@@ -45,6 +45,7 @@ Irrespective of the choice of interface, an overview of all GRASS functions can 
 8. Repeat step 7 for the coordinates provided in @tip-coordinates. Compare the resulting catchment boundary with the one obtained in step 7 and with the provided catchment boundary from the *Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027* dataset (see @sec-study-area-catchment-data). What are the differences between these catchment boundaries? What could be the reasons for these differences?
 9. Calculate the catchment area. 
 
+In your results and discussion below, make sure to include an overview figure of the Zwalm catchment including the DTM, river network and catchment boundary. 
 
 ## Results and discussion 
 

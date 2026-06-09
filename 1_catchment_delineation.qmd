@@ -1,7 +1,6 @@
 # Exercise 1: Delineation of the Zwalm catchment {#sec-delineation}
 
 ```{python}
-# | echo: false
 from scripts.data_download.conf import XMIN, XMAX, YMIN, YMAX
 ```
 

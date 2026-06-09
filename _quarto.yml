@@ -51,6 +51,7 @@ format:
 execute:
   #cache: true
   freeze: auto
+  echo: false 
 
 editor:
   render-on-save: true

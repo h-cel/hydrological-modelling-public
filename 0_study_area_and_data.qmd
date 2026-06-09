@@ -109,7 +109,6 @@ The combined forcings and discharge dataset is provided in the CSV file `forcing
 - River discharge ($Q$) is measured near the mouth of the Zwalmbeek in the village of Nederzwalm. No gapfilling is applied to this variable, as it is only used for model evaluation, not as a model input.
 
 ```{python}
-# | echo: false
 # | label: tbl-waterinfo-meta
 # | tbl-cap: "Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each variable has a corresponding measurement station, denoted by a unique station ID."
 df_meta = pd.read_csv(
@@ -123,7 +122,6 @@ gt
 ```
 
 ```{python}
-# | echo: false
 # | fig-cap: "The Zwalmbeek and the measurement locations as denoted by their station ID"
 # | label: fig-waterinfo-sites
 
@@ -153,7 +151,6 @@ cx.add_basemap(ax, source=MAP_SOURCE, crs=gdf_meta.crs)
 Consequently, following columns are present in `forcings_discharge.csv`: 
 
 ```{python}
-# | echo: false
 df_fd = pd.read_csv(
     FORCINGS_DISCHARGE_PROCESSED_DIR / FILENAME_FORCINGS_DISCHARGE,
     index_col=0,
@@ -178,7 +175,6 @@ In @sec-assimilation, the goal is to improve the hydrological model predictions 
 The original data source is the SSM product at 1 km spatial resolution over Europe form the [Copernicus Land Monitoring Service](https://land.copernicus.eu/en) [@clms2026]. An example of the original data for one example date is shown in @fig-ssm-original. The $SSM$ values are expressed in percent saturation and are representative of the top few centimeters (~5cm) of the soil. 
 
 ```{python}
-# | echo: false
 # | label: fig-ssm-original
 # | fig-cap: "Satellite-derived surface soil moisture data at 1 km spatial resolution over the Zwalm catchment."
 
@@ -201,7 +197,6 @@ cx.add_basemap(ax, source=MAP_SOURCE, crs=ds_ssm.rio.crs)
 For ease of use, the dataset has been processed to a timeseries by taking the average $SSM$ value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is found is called  `sattelite_soil_moisture.cv`, which has following columns:
 
 ```{python}
-# | echo: false
 df_ssm = pd.read_csv(
     SATELLITE_SOIL_MOISTURE_PROCESSED_DIR / FILENAME_SATELLITE_SOIL_MOISTURE,
     parse_dates=True,

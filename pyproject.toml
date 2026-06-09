@@ -1,6 +1,7 @@
 [tool.ruff]
 preview = true
 extension = {qmd = "markdown" }
+ignore = ["E703"] # Allow for semicolon use 
 
 [tool.ruff.lint]
 extend-select = ["I"]

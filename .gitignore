@@ -6,6 +6,9 @@
 data/*
 !data/processed/
 
+# GRASS environment
+grass_project/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

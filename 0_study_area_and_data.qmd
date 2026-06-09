@@ -90,7 +90,7 @@ and processing steps yourself by following the instructions in `scripts/data_dow
 
 In the next section, more information is given on the data sources and processing steps for the different types of provided data. Note that all geographic data is provided in the [Belgian Lambert 72](https://epsg.io/31370) (BD72, EPSG:31370) coordinate reference system (CRS).
 
-## Catchment data
+## Catchment data {#sec-study-area-catchment-data}
 
 The data in the `data/processed/catchment_info` folder contains information on the river network and the catchment boundaries in the broad vicinity of the Zwalm catchment. The source of the river network is the *Vlaamse Hydrografische Atlas* [@vmm2026]. The catchment boundaries come from the *Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027* dataset [@vmm2022]. In @sec-delineation, you will be asked to delineate the catchment boundary of the Zwalmbeek yourself. The provided catchment boundaries can be used for comparison. Both files are provided as ESRI Shapefiles, called `afstroomgebied.shp` and `vlaamse_hydrografische_atlas.shp` respectively.
 

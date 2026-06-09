@@ -25,7 +25,7 @@ In these practicals, you will therefore **not** write a report from scratch (in 
 
 ::: {.callout-tip}
 
-Don't perform al your computations inside of the `.qmd` files! Instead, make a regular `.py` file inside of the `src` folder for each exercise. From these `.py` files, you can save the results (e.g. metrics, output data) in (for example) a `data/results` folder. From this folder, you can then import the necessary results in the `.qmd` files to write your report and make your figures. 
+Don't perform al your computations inside of the `.qmd` files! Instead, make a regular `.py` file inside of the `scripts` folder for each exercise. From these `.py` files, you can save the results (e.g. metrics, output data) in (for example) a `data/solutions` folder. From this folder, you can then import the necessary results in the `.qmd` files to write your report and make your figures. 
 :::
 
 ## Evaluation 

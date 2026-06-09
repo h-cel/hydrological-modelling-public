@@ -7,13 +7,8 @@ from scripts.data_download.conf import XMIN, XMAX, YMIN, YMAX
 
 ## Assignment 
 
-The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The analysis consists of
+The delineation of a catchment based on a digital elevation model is often one of the first steps in a hydrological modelling study. The procedure is relatively straightforward, but the digital elevation model needs to be properly processed prior to the analysis. The pre-processing of the digital elevation model at least includes the removal of data gaps (i.e. spatial interpolation) and the removal of sinks (or depressions). Based on the processed DTM, the catchment can then be easily delineated using the simple principle that water always flows in the direction of the largest gradient. Different algorithms exist to do so (see course notes); here, only the gradient of every cell to its eight direct neighbours, the deterministic 8 (D8) algorithm, will be used.
 
-1. Removal of data gaps, no missing values are allowed in the digital elevation model.
-2. Removal of depressions, as these hinder the determination of the flow direction. 
-3. Determine the flow direction. Here the easiest algorithm is used: the Deterministic 8 (D8) algorithm, which assumes that water flows following the largest gradient. D8 only considers the gradient between a cell and its 8 surrounding neighbours.
-4. Calculate the drainage map, where for each cell the number of cumulative upstream cells is determined. This is used to determine the river network, as cells with a large drainage area are more likely to be part of the river network.
-5. Delineate the catchment boundary by first identifying the outlet from the drainage map. The outlet is the cell with the largest drainage area. Then, the catchment boundary is determined by following the flow direction map in an upstream direction, starting from the outlet.
 
 ::: {.callout-tip}
 The outlet of the Zwalm catchment is located in the vicinity of $x$=101673 m and $y$=17537 m
@@ -28,6 +23,7 @@ Note that:
     - It is recommended to set the `overwrite=True` argument for all functions. 
     - It is a general convention that the `.` defined in the GRASS function name (as found in the [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html))is replaced by `_` in the Python function name.
     - The output of a previous function (e.g. `OUTPUT_NAME` in the example above) can be used as input for a subsequent function. For example, if you want to use the output of `r.import` as input (called `elevation`) for a slope calculation with `r.slope.aspect`, you would call `tools.r_slope_aspect(elevation="OUTPUT_NAME", slope="SLOPE", overwrite=True)`.
+    - In `scripts/helper_functions.py`, two helper functions are defined: `get_data_array_from_raster` gives you an [`xarray.DataArray`](https://docs.xarray.dev/en/stable/user-guide/data-structures.html#dataarray) given the name (e.g. `"OUTPUT_NAME"`) of a GRASS raster layer and `plot_grass_raster` makes a plot of a GRASS raster layer (given its name as again). Use these functions to check intermediate results. 
 
 Irrespective of the choice of interface, an overview of all GRASS functions can be found in [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html). Specific tips for each interface will be denoted by their logo in the steps below.
 
@@ -36,10 +32,19 @@ Irrespective of the choice of interface, an overview of all GRASS functions can 
 2. Spatially gap-fill the DTM (i.e. make sure there are no missing values). 
     - ![Python](figures/python-logo-only.svg){height=1em} Use the [`r.fillnulls`](https://grass.osgeo.org/grass85/manuals/r.fillnulls.html) function to fill in missing values.
     - ![QGIS](figures/qgis-icon.svg){height=1em} Use the `Fill nodata` tool (from GDAL).
-3. Filter the digital elevation model for sinks (or depressions) and fill them. Use the `r.fill.dir` function.
-4.  Calculate the flow direction and accumulation into each grid cell of the domain. 
-
+3. Filter the digital elevation model for sinks (or depressions) and fill them. Use the [`r.fill.dir`](https://grass.osgeo.org/grass85/manuals/r.fill.dir.html) function.
+4.  Calculate the flow direction and accumulation into each grid cell of the domain. Use the [`r.watershed`](https://grass.osgeo.org/grass85/manuals/r.watershed.html) function. Make sure that D8 is used as flow direction algorithm. Further more, ensure that the minimum size of an exterior watershed basins is set to 500. Keep both the accumulation (i.e. how many cells drain into each cell) and the flow direction map as outputs.  
+5. Check if the accumulation map aligns with the actual river network of the Zwalm catchment from the *Vlaamse Hydrografische Atlas* (see @sec-study-area-catchment-data). In the attributes of the shapefile, you can filter in `"NAMEN"` for `"Zwalmbeek - Dorenbosbeek"` to only withhold the main Zwalm river. 
+    - ![Python](figures/python-logo-only.svg){height=1em} Use `get_data_array_from_raster` to get the accumulation map as an `xarray.DataArray`. Use [`geopandas.read_file`](https://geopandas.org/en/stable/docs/reference/api/geopandas.read_file.html#geopandas.read_file) to read in the river network shapefile.
+6. Find the point with the largest accumulation that is located within the Zwalm river network. Rasterise the river network to the same grid as the accumulation map to do so. This point is the outlet of the catchment. 
+    - ![Python](figures/python-logo-only.svg){height=1em} Use the [`make_geocube`](https://corteva.github.io/geocube/stable/geocube.html#make-geocube) function from the [`geocube`](https://corteva.github.io/geocube/stable/index.html) package. Use the `like` argument.  
+    - ![QGIS](figures/qgis-icon.svg){height=1em} Use the `Rasterize (vector to raster)` tool (from GDAL). 
+7. Given the outlet determined in the previous step, delineate the catchment using [`r.water.outlet`](https://grass.osgeo.org/grass85/manuals/r.water.outlet.html). Vectorize the resulting raster map of the catchment. 
+    - ![Python](figures/python-logo-only.svg){height=1em} Convert the output raster to an `xarray.DataArray` using a helper function. Subsequently, the [`vectorize`](https://corteva.github.io/geocube/stable/geocube.html#geocube.vector.vectorize) function from the `geocube` package can be applied. 
+    - ![QGIS](figures/qgis-icon.svg){height=1em} Use the `Polygonize (raster to vector)` tool (from GDAL).
+8. Calculate the catchment area. 
 
 
 ## Results and discussion 
+
 

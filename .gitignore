@@ -2,6 +2,7 @@
 /_book/
 /_freeze/
 /.jupyter_cache/
+0_study_area_and_data_files/
 
 data/*
 !data/processed/

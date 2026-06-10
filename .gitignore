@@ -3,6 +3,7 @@
 /_freeze/
 /.jupyter_cache/
 0_study_area_and_data_files/
+1_catchment_delineation_files/
 
 data/*
 !data/processed/

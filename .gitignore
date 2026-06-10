@@ -7,6 +7,9 @@
 
 data/*
 !data/processed/
+!data/parameters_new.csv
+!data/parameters_old.csv
+!data/parameter_conversion.py
 
 # GRASS environment
 grass_project/*

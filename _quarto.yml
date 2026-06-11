@@ -13,7 +13,7 @@ book:
       email: hans.lievens@ugent.be
   date: today
   downloads: [pdf]
-  repo-url: https://github.com/olivierbonte/quarto_template_ugent
+  repo-url: https://github.com/olivierbonte/hydrological-modelling-public
   navbar: 
     title: "Exercises Hydrological Modelling"
     search: true 

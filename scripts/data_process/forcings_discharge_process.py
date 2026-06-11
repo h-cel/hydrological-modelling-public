@@ -228,8 +228,10 @@ def main():
     df_combined = pd.DataFrame(index=date_range)
     for name, df in df_dict.items():
         if (
-            name != PRECIPITATION_CATCHMENT_LONGNAME
-        ):  # avoid duplicate info with station precipitation
+            name != PRECIPITATION_LONGNAME
+        ):  # only keep gap filled catchment precipitation, not station precipitation
+            if name == PRECIPITATION_CATCHMENT_LONGNAME:
+                name = name.split(" ")[0]  # shorten to precipitation as name
             name = name.replace(" ", "_").lower()
             df_combined[name] = df["Value"]
     df_combined.to_csv(out_path_)

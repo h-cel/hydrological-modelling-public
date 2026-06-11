@@ -63,7 +63,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-de1c958a30f57551a8c1c477e302d13e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-544537484d1132e2332c9966fc148d9a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -270,99 +270,92 @@ window.Quarto = {
 </ol>
 <p><img src="figures/FLEX_schets.png" class="img-fluid" style="width:60.0%"></p>
 <p>The model is forced with precipitation <span class="math inline">\(P(t)\)</span> and potential evaporation <span class="math inline">\(E_p(t)\)</span> (see <a href="0_study_area_and_data.html#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for details on the forcing data). Note that mm is used as a unit here, as it allows to implement the model independently of the catchment area<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div id="tbl-parameters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-parameters" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.1: Model parameters together with their units, minimum and maximum value, and a set of uncalibrated values. <strong>Note:</strong> <span class="math inline">\(S_{2,\mathrm{max}}\)</span> can be used as maximum capacity of both the slow and fast reacting reservoir.
+Table&nbsp;5.1: Model parameters together with their units, minimum and maximum value and a set of uncalibrated values. Note that <span class="math inline">\(S_{2,\mathrm{max}}\)</span> can be used as the maximum capacity of both the slow and fast reacting reservoir.
 </figcaption>
 <div aria-describedby="tbl-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 15%">
-<col style="width: 21%">
-<col style="width: 21%">
-<col style="width: 21%">
-<col style="width: 21%">
-</colgroup>
+<table class="cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th><strong>Parameter</strong></th>
-<th style="text-align: right;"><strong>Units</strong></th>
-<th style="text-align: right;"><strong>Minimum</strong></th>
-<th style="text-align: right;"><strong>Maximum</strong></th>
-<th style="text-align: right;"><strong>Value</strong></th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Units</th>
+<th style="text-align: right;">Minimum</th>
+<th style="text-align: right;">Maximum</th>
+<th style="text-align: right;">Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(\lambda\)</span></td>
-<td style="text-align: right;">-</td>
+<td style="text-align: left;"><span class="math inline">\(\lambda\)</span></td>
+<td style="text-align: left;">-</td>
 <td style="text-align: right;">0.5</td>
 <td style="text-align: right;">1.5</td>
 <td style="text-align: right;">0.65</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(S_{\mathrm{max}}\)</span></td>
-<td style="text-align: right;">m<span class="math inline">\(^3\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(1\cdot10^7\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(5\cdot10^7\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(4\cdot10^7\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(S_{\mathrm{max}}\)</span></td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">430</td>
+<td style="text-align: right;">350</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(b\)</span></td>
-<td style="text-align: right;">-</td>
+<td style="text-align: left;"><span class="math inline">\(b\)</span></td>
+<td style="text-align: left;">-</td>
 <td style="text-align: right;">0.5</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">0.86</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\alpha\)</span></td>
-<td style="text-align: right;">-</td>
+<td style="text-align: left;"><span class="math inline">\(\alpha\)</span></td>
+<td style="text-align: left;">-</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">1.5</td>
-<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">1.1</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(Q_{\mathrm{p,max}}\)</span></td>
-<td style="text-align: right;">m<span class="math inline">\(^3\)</span>/s</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">45</td>
+<td style="text-align: left;"><span class="math inline">\(Q_{p,\mathrm{max}}\)</span></td>
+<td style="text-align: left;">mm/d</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">34</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\beta\)</span></td>
-<td style="text-align: right;">-</td>
+<td style="text-align: left;"><span class="math inline">\(\beta\)</span></td>
+<td style="text-align: left;">-</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.1</td>
 <td style="text-align: right;">0.06</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\gamma\)</span></td>
-<td style="text-align: right;">-</td>
+<td style="text-align: left;"><span class="math inline">\(\gamma\)</span></td>
+<td style="text-align: left;">-</td>
 <td style="text-align: right;">5</td>
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">9.84</td>
+<td style="text-align: right;">9.8</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(S_{2,\mathrm{max}}\)</span></td>
-<td style="text-align: right;">m<span class="math inline">\(^3\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(1.5\cdot10^6\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(3\cdot10^6\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(1.6\cdot10^6\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(S_{2,\mathrm{max}}\)</span></td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">14</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\kappa_2\)</span></td>
-<td style="text-align: right;">m<span class="math inline">\(^3\)</span>/s</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">250</td>
-<td style="text-align: right;">147</td>
+<td style="text-align: left;"><span class="math inline">\(\kappa_2\)</span></td>
+<td style="text-align: left;">mm/d</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">110</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\kappa_1\)</span></td>
-<td style="text-align: right;">s<span class="math inline">\(^{-1}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(3\cdot10^{-6}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(6\cdot10^{-6}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(3.75\cdot10^{-6}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\kappa_1\)</span></td>
+<td style="text-align: left;">1/d</td>
+<td style="text-align: right;">0.26</td>
+<td style="text-align: right;">0.52</td>
+<td style="text-align: right;">0.32</td>
 </tr>
 </tbody>
 </table>

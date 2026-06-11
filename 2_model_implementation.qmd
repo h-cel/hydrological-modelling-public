@@ -12,20 +12,35 @@ The lumped, conceptual rainfall-runoff model implemented here is a simplified an
 
 The model is forced with precipitation $P(t)$ and potential evaporation $E_p(t)$ (see @sec-study-area-forcings-discharge for details on the forcing data). Note that mm is used as a unit here, as it allows to implement the model independently of the catchment area^[$1 \mathrm{ mm} = 1 \cdot 10^{-3} \mathrm{ m}^3 / \mathrm{m}^2$]
 
-| **Parameter** | **Units** | **Minimum** | **Maximum** | **Value** |
-|---|---:|---:|---:|---:|
-| $\lambda$ | - | 0.5 | 1.5 | 0.65 |
-| $S_{\mathrm{max}}$ | m$^3$ | $1\cdot10^7$ | $5\cdot10^7$ | $4\cdot10^7$ |
-| $b$ | - | 0.5 | 1 | 0.86 |
-| $\alpha$ | - | 1 | 1.5 | 1.11 |
-| $Q_{\mathrm{p,max}}$ | m$^3$/s | 1 | 100 | 45 |
-| $\beta$ | - | 0.05 | 0.1 | 0.06 |
-| $\gamma$ | - | 5 | 10 | 9.84 |
-| $S_{2,\mathrm{max}}$ | m$^3$ | $1.5\cdot10^6$ | $3\cdot10^6$ | $1.6\cdot10^6$ |
-| $\kappa_2$ | m$^3$/s | 100 | 250 | 147 |
-| $\kappa_1$ | s$^{-1}$ | $3\cdot10^{-6}$ | $6\cdot10^{-6}$ | $3.75\cdot10^{-6}$ |
 
-: Model parameters together with their units, minimum and maximum value, and a set of uncalibrated values. **Note:** $S_{2,\mathrm{max}}$ can be used as maximum capacity of both the slow and fast reacting reservoir. {#tbl-parameters}
+```{python}
+#| output: asis
+#| label: tbl-parameters
+#| tbl-cap: Model parameters together with their units, minimum and maximum value and a set of uncalibrated values. Note that $S_{2,\mathrm{max}}$ can be used as the maximum capacity of both the slow and fast reacting reservoir. 
+import pandas as pd
+
+df_parameters = pd.read_csv("data/parameters_new.csv")
+parameter_labels = {
+    "lambda": r"$\lambda$",
+    "S_max": r"$S_{\mathrm{max}}$",
+    "b": r"$b$",
+    "alpha": r"$\alpha$",
+    "Q_p_max": r"$Q_{p,\mathrm{max}}$",
+    "beta": r"$\beta$",
+    "gamma": r"$\gamma$",
+    "S2_max": r"$S_{2,\mathrm{max}}$",
+    "kappa_2": r"$\kappa_2$",
+    "kappa_1": r"$\kappa_1$",
+}
+unit_labels = {
+    "d^-1": r"1/d",
+}
+df_parameters = df_parameters.replace({
+    "Parameter": parameter_labels,
+    "Units": unit_labels,
+})
+print(df_parameters.to_markdown(index=False))
+```
 
 By applying the conservation of mass to each reservoir, three ordinary differential equations can be derived to describe the change in storage in each reservoir over time.
 

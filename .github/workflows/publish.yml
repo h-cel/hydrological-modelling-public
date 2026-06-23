@@ -19,7 +19,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          version: 1.9.37
+          version: 1.9.38
           tinytex: true
           
       - name: Get environment name from environment.yml

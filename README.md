@@ -2,7 +2,7 @@
 
 A starting point for making courses with Quarto at Ghent University with a focus on using Python code. 
 
-## Installation instructions (local setup)
+## Installation instructions (local setup) (local setup)
 
 First, make a local copy of this repository using
 
@@ -12,7 +12,7 @@ git clone https://github.com/olivierbonte/quarto_template_ugent.git
 
 or download as zip file and unzip. In each case, make sure to navigate inside the `quarto_template_ugent` folder before executing any of the command line interface (CLI) instructions below.
 
-Go to the [Quarto download page](https://quarto.org/docs/download/) and download Quarto for your operating system (OS). This repository was built using Quarto 1.9.37.
+Go to the [Quarto download page](https://quarto.org/docs/download/) and download Quarto for your operating system (OS). This repository was built using Quarto 1.9.38.
 
 Next, make sure you have (Mini)Conda installed (download links found [here](https://docs.anaconda.com/miniconda/)) to handle virtual environments in Python. Next open your CLI (or Anaconda prompt) and type:
 
@@ -45,13 +45,13 @@ for Chrome.
 
 For this purpose, your clone or fork of this repository should be on GitHub. 
 
-### Activating Quarto Pub
+### Activating Github Pages
 
 For this template, the website is hosted using [GitHub Pages](https://quarto.org/docs/publishing/github-pages.html). 
 
 For your own use, start by running
 ```
-quarto publish gh-pages. 
+quarto publish gh-pages
 ```
 This wil automate the process of setting up a `gh-pages` branch from which the website is hosted. 
 

@@ -1,0 +1,62 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+name: Quarto Publish
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          version: 1.9.38
+          tinytex: true
+          
+      - name: Get environment name from environment.yml
+        id: get-env-name
+        run: echo "ENV_NAME=$(yq '.name' environment.yml)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Python with Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          activate-environment: ${{ steps.get-env-name.outputs.ENV_NAME }}
+          auto-activate-base: false 
+      
+      - name: Install Chrome Headless Shell
+        shell: bash -el {0}
+        run: quarto install chrome-headless-shell --no-prompt
+
+      - name: Check Quarto and dependencies
+        shell: bash -el {0}
+        run: quarto check
+
+      - name: Render and Publish 
+        shell: bash -el {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          quarto publish gh-pages --no-browser --no-prompt
+
+      - name: Get book title from _quarto.yml
+        id: get-book-title
+        run: echo "BOOK_TITLE=$(yq '.book.title' _quarto.yml)" >> "$GITHUB_OUTPUT"
+
+      - name: Save PDF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: _book/${{ steps.get-book-title.outputs.BOOK_TITLE }}.pdf
+          retention-days: 90
+          name: rendered_pdf_artifact

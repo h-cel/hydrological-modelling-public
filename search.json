@@ -14,7 +14,7 @@
     "href": "0_practical_info.html",
     "title": "2  Practical information",
     "section": "",
-    "text": "2.1 The repository\nBefore diving into the exercises, some practical information is provided on how to effectively set up your working environment.\nAll code used to create this assignment is available at https://github.com/olivierbonte/hydrological-modelling. This collection of files is called a repository. To get started, go the the URL above, click on the green Code button and select Download ZIP (see Figure 2.1). Unzip the downloaded file and place the resulting folder at a location of your choice. This folder contains all the files you need to complete the exercises.\nNote that only the code, but also the processed data is now downloaded. You can find this data in data/processed. More info on the data sources and processing is given in Chapter 3.\nThis assignment is provided to you in two formats, up to you which one you prefer to work with:",
+    "text": "2.1 The repository\nBefore diving into the exercises, some practical information is provided on how to effectively set up your working environment.\nAll code used to create this assignment is available at https://github.com/h-cel/hydrological-modelling. This collection of files is called a repository. To get started, go the the URL above, click on the green Code button and select Download ZIP (see Figure 2.1). Unzip the downloaded file and place the resulting folder at a location of your choice. This folder contains all the files you need to complete the exercises.\nNote that only the code, but also the processed data is now downloaded. You can find this data in data/processed. More info on the data sources and processing is given in Chapter 3.\nThis assignment is provided to you in two formats, up to you which one you prefer to work with:",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
     ]
@@ -24,7 +24,7 @@
     "href": "0_practical_info.html#the-repository",
     "title": "2  Practical information",
     "section": "",
-    "text": "Figure 2.1: Screenshot of GitHub download button\n\n\n\n\n\n\nA website at https://olivierbonte.github.io/hydrological-modelling-public/\nA PDF document, which you can download from https://olivierbonte.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf",
+    "text": "Figure 2.1: Screenshot of GitHub download button\n\n\n\n\n\n\nA website at https://h-cel.github.io/hydrological-modelling-public/\nA PDF document, which you can download from https://h-cel.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
     ]

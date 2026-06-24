@@ -4,7 +4,7 @@ Before diving into the exercises, some practical information is provided on how 
 
 ## The repository
 
-All code used to create this assignment is available at [https://github.com/olivierbonte/hydrological-modelling](https://github.com/olivierbonte/hydrological-modelling). This collection of files is called a repository. To get started, go the the URL above, click on the green `Code` button and select `Download ZIP` (see @fig-screenshot-download-button). Unzip the downloaded file and place the resulting folder at a location of your choice. This folder contains all the files you need to complete the exercises.
+All code used to create this assignment is available at [https://github.com/h-cel/hydrological-modelling](https://github.com/h-cel/hydrological-modelling). This collection of files is called a repository. To get started, go the the URL above, click on the green `Code` button and select `Download ZIP` (see @fig-screenshot-download-button). Unzip the downloaded file and place the resulting folder at a location of your choice. This folder contains all the files you need to complete the exercises.
 
 ![Screenshot of GitHub download button](figures/screenshot_github_download.png){#fig-screenshot-download-button}
 
@@ -12,8 +12,8 @@ Note that only the code, but also the processed data is now downloaded. You can 
 
 This assignment is provided to you in two formats, up to you which one you prefer to work with:
 
-1. A website at [https://olivierbonte.github.io/hydrological-modelling-public/](https://olivierbonte.github.io/hydrological-modelling-public/)
-2. A PDF document, which you can download from [https://olivierbonte.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf](https://olivierbonte.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf)
+1. A website at [https://h-cel.github.io/hydrological-modelling-public/](https://h-cel.github.io/hydrological-modelling-public/)
+2. A PDF document, which you can download from [https://h-cel.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf](https://h-cel.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf)
 
 ## Working with Quarto and Python 
 

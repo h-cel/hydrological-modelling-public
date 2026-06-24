@@ -1,16 +1,16 @@
 # Hydrological-modelling
 
-This repository contains the assignment and processed data for the computer practicals of the course [Hydrological Modelling](https://studiekiezer.ugent.be/2026/studiefiche/en/I002659) at Ghent University. The [public repository](https://github.com/olivierbonte/hydrological-modelling-public) does not contain solutions to the exercise. Solutions can be found in the `solutions` branch of a a [private repository](https://github.com/olivierbonte/hydrological-modelling), access to which can be granted upon [contacting me](mailto:olivier.bonte@hotmail.com).
+This repository contains the assignment and processed data for the computer practicals of the course [Hydrological Modelling](https://studiekiezer.ugent.be/2026/studiefiche/en/I002659) at Ghent University. The [public repository](https://github.com/h-cel/hydrological-modelling-public) does not contain solutions to the exercise. Solutions can be found in the `solutions` branch of a a [private repository](https://github.com/h-cel/hydrological-modelling), access to which can be granted upon [contacting me](mailto:olivier.bonte@hotmail.com).
 
 ## Installation instructions (local setup)
 
 First, make a local copy of this repository using
 
 ```
-git clone https://github.com/olivierbonte/quarto_template_ugent.git
+git clone https://github.com/h-cel/hydrological-modelling.git
 ```
 
-or download as zip file and unzip. In each case, make sure to navigate inside the `quarto_template_ugent` folder before executing any of the command line interface (CLI) instructions below.
+or download as zip file and unzip. In each case, make sure to navigate inside the `hydrological-modelling` folder before executing any of the command line interface (CLI) instructions below.
 
 Go to the [Quarto download page](https://quarto.org/docs/download/) and download Quarto for your operating system (OS). This repository was built using Quarto 1.9.37.
 

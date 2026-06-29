@@ -265,8 +265,8 @@ window.Quarto = {
 <p>The lumped, conceptual rainfall-runoff model implemented here is a simplified and modified version of the FLEX model as described in <span class="citation" data-cites="fenicia2006">Fenicia et al. (<a href="references.html#ref-fenicia2006" role="doc-biblioref">2006</a>)</span> and <span class="citation" data-cites="fenicia2008">Fenicia et al. (<a href="references.html#ref-fenicia2008" role="doc-biblioref">2008</a>)</span>. The simplifications include not considering an interception reservoir and omitting lag functions for the routing. An overview of the model structure is given ADD FIGURE. The model considers three state variables, corresponding to the volume of water in three reservoirs:</p>
 <ol type="1">
 <li>The unsaturated soil reservoir <span class="math inline">\(S(t)\)</span> [mm]</li>
-<li>The fast reacting reservoir <span class="math inline">\(S_1(t)\)</span> [mm]</li>
-<li>The slow reacting reservoir <span class="math inline">\(S_2(t)\)</span> [mm] , conceptually representing the groundwater system</li>
+<li>The slow reacting reservoir <span class="math inline">\(S_1(t)\)</span> [mm], conceptually representing the groundwater system</li>
+<li>The fast reacting reservoir <span class="math inline">\(S_2(t)\)</span> [mm]</li>
 </ol>
 <p><img src="figures/FLEX_schets.png" class="img-fluid" style="width:60.0%"></p>
 <p>The model is forced with precipitation <span class="math inline">\(P(t)\)</span> and potential evaporation <span class="math inline">\(E_p(t)\)</span> (see <a href="0_study_area_and_data.html#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for details on the forcing data). Note that mm is used as a unit here, as it allows to implement the model independently of the catchment area<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>

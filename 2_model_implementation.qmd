@@ -5,8 +5,8 @@
 The lumped, conceptual rainfall-runoff model implemented here is a simplified and modified version of the FLEX model as described in @fenicia2006 and @fenicia2008. The simplifications include not considering an interception reservoir and omitting lag functions for the routing. An overview of the model structure is given ADD FIGURE. The model considers three state variables, corresponding to the volume of water in three reservoirs:
 
 1. The unsaturated soil reservoir $S(t)$ [mm]
-2. The fast reacting reservoir $S_1(t)$ [mm]
-3. The slow reacting reservoir $S_2(t)$ [mm] , conceptually representing the groundwater system
+2. The slow reacting reservoir $S_1(t)$ [mm], conceptually representing the groundwater system
+3. The fast reacting reservoir $S_2(t)$ [mm] 
 
 ![](figures/FLEX_schets.png){width=60%}
 

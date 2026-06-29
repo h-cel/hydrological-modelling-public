@@ -133,6 +133,16 @@ Some general tips and recommendations:
 - Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period.
 - Take into account the physical limitations of the state variables. 
 - Take into account the impact of initialisation of the state variables
+- Not a single figure or metric can summarize the model performance. Nevertheless, some metrics and/or figures are (partially) linked to each other.
+
+:::
+
+
+::: {.callout-important icon="false" title="Challenge"}
+
+The forward Euler scheme presented above is the simplest available numerical method to solve the ordinary differential equations. [`SciPy`](https://docs.scipy.org/doc/scipy/index.html) offers more advanced numerical time integration methods. Investigate how the choice of time integration method affects the model outcome.
+
+Important: this challenge is optional and only serves as an extra challenge for those who are interested. 
 
 :::
 

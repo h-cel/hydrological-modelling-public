@@ -262,13 +262,22 @@ window.Quarto = {
 
 <section id="assignment" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="assignment"><span class="header-section-number">5.1</span> Assignment</h2>
-<p>The lumped, conceptual rainfall-runoff model implemented here is a simplified and modified version of the FLEX model as described in <span class="citation" data-cites="fenicia2006">Fenicia et al. (<a href="references.html#ref-fenicia2006" role="doc-biblioref">2006</a>)</span> and <span class="citation" data-cites="fenicia2008">Fenicia et al. (<a href="references.html#ref-fenicia2008" role="doc-biblioref">2008</a>)</span>. The simplifications include not considering an interception reservoir and omitting lag functions for the routing. An overview of the model structure is given ADD FIGURE. The model considers three state variables, corresponding to the volume of water in three reservoirs:</p>
+<p>The lumped, conceptual rainfall-runoff model implemented here is a simplified and modified version of the FLEX model as described in <span class="citation" data-cites="fenicia2006">Fenicia et al. (<a href="references.html#ref-fenicia2006" role="doc-biblioref">2006</a>)</span> and <span class="citation" data-cites="fenicia2008">Fenicia et al. (<a href="references.html#ref-fenicia2008" role="doc-biblioref">2008</a>)</span>. The simplifications include not considering an interception reservoir and omitting lag functions for the routing. An overview of the model structure is given in <a href="#fig-model-concept" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>. The model considers three state variables, corresponding to the volume of water in three reservoirs:</p>
 <ol type="1">
 <li>The unsaturated soil reservoir <span class="math inline">\(S(t)\)</span> [mm]</li>
 <li>The slow reacting reservoir <span class="math inline">\(S_1(t)\)</span> [mm], conceptually representing the groundwater system</li>
 <li>The fast reacting reservoir <span class="math inline">\(S_2(t)\)</span> [mm]</li>
 </ol>
-<p><img src="figures/FLEX_schets.png" class="img-fluid" style="width:60.0%"></p>
+<div id="fig-model-concept" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/FLEX_schets.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Conceptual representation of the hydrological model
+</figcaption>
+</figure>
+</div>
 <p>The model is forced with precipitation <span class="math inline">\(P(t)\)</span> and potential evaporation <span class="math inline">\(E_p(t)\)</span> (see <a href="0_study_area_and_data.html#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for details on the forcing data). Note that mm is used as a unit here, as it allows to implement the model independently of the catchment area<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div id="tbl-parameters" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-tbl figure">

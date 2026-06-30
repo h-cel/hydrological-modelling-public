@@ -33,6 +33,7 @@ from shapely.geometry import box
 MAP_SOURCE = cx.providers.CartoDB.Positron
 root_path = rootutils.find_root()
 processed_data_dir = root_path / "data" / "processed"
+plt.style.use("figurestyling.mplstyle")
 ```
 
 ```{python}

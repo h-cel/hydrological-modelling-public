@@ -63,11 +63,12 @@ For these exercises, a hydrological dataset of the Zwalm catchment will be used.
 gdf_vha = gpd.read_file(CATCHMENT_INFO_PROCESSED_DIR / FILENAME_VHA)
 gdf_zwalmbeek = gdf_vha[gdf_vha["NAAM"] == "Zwalmbeek"]
 
-fig, ax = plt.subplots(figsize=(4, 5), constrained_layout=True)
+fig, ax = plt.subplots(figsize=(4, 4), constrained_layout=True)
 gdf_zwalmbeek.plot(ax=ax)
 cx.add_basemap(ax, source=MAP_SOURCE, crs=gdf_zwalmbeek.crs, zoom=12)
 ax.set_xlabel("x [m]")
 ax.set_ylabel("y [m]")
+ax.ticklabel_format(useMathText=True, scilimits=(0, 0))
 
 # Now adding an inset axis to show the location within Belgium
 # Following https://geopandas.org/en/latest/gallery/inset_map.html
@@ -141,10 +142,11 @@ gdf_plot["id"] = pd.Categorical(
     gdf_plot["id"], categories=gdf_plot["id"].unique(), ordered=True
 )
 
-fig, ax = plt.subplots(figsize=(6, 5), constrained_layout=True)
+fig, ax = plt.subplots(figsize=(5, 4), constrained_layout=True)
 gdf_plot.plot(ax=ax, column="id", legend=True)
 ax.set_xlabel("x [m]")
 ax.set_ylabel("y [m]")
+ax.ticklabel_format(useMathText=True, scilimits=(0, 0))
 cx.add_basemap(ax, source=MAP_SOURCE, crs=gdf_meta.crs)
 ```
 
@@ -187,10 +189,11 @@ ds_ssm = ds_ssm.rio.reproject("EPSG:31370")
 
 da_ssm_plot = ds_ssm.isel(time=10)[VARIABLE_NAME_SATELLITE_SOIL_MOISTURE]
 
-fig, ax = plt.subplots(figsize=(5.5, 5), constrained_layout=True)
+fig, ax = plt.subplots(figsize=(4, 4), constrained_layout=True)
 da_ssm_plot.plot(ax=ax, alpha=0.9, cbar_kwargs={"label": "surface soil moisture [%]"})
 ax.set_xlabel("x [m]")
 ax.set_ylabel("y [m]")
+ax.ticklabel_format(useMathText=True, scilimits=(0, 0))
 ax.set_title(f"{da_ssm_plot.time.dt.date.values}")
 cx.add_basemap(ax, source=MAP_SOURCE, crs=ds_ssm.rio.crs)
 ```

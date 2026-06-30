@@ -16,7 +16,7 @@ The model is forced with precipitation $P(t)$ and potential evaporation $E_p(t)$
 ```{python}
 #| output: asis
 #| label: tbl-parameters
-#| tbl-cap: Model parameters together with their units, minimum and maximum value and a set of uncalibrated values. Note that $S_{2,\mathrm{max}}$ can be used as the maximum capacity of both the slow and fast reacting reservoir. 
+#| tbl-cap: Model parameters together with their units, minimum and maximum value and a set of uncalibrated values
 import pandas as pd
 
 df_parameters = pd.read_csv("data/parameters_new.csv")

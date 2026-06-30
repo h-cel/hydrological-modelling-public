@@ -42,7 +42,7 @@ df_parameters = df_parameters.replace({
 print(df_parameters.to_markdown(index=False))
 ```
 
-By applying the conservation of mass to each reservoir, three ordinary differential equations can be derived to describe the change in storage in each reservoir over time.
+By applying the conservation of mass to each reservoir, three ordinary differential equations (ODEs) can be derived to describe the change in storage in each reservoir over time.
 
 
 $$
@@ -117,7 +117,7 @@ $$
 \frac{d\mathbf{x}}{dt} = \mathcal{f}(\mathbf{x}, \mathbf{{f}}, \mathbf{p})
 $$
 
-with $f$ a non-linear function, $\mathbf{x} = [S, S_1, S_2]^T$ the state vector, $\mathbf{f} = [P, E_p]^T$ the forcing vector, and $\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T$ the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme^[For more background info on numerical methods for ordinary differential equation, see your [bachelor course on differential equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)]:
+with $f$ a non-linear function, $\mathbf{x} = [S, S_1, S_2]^T$ the state vector, $\mathbf{f} = [P, E_p]^T$ the forcing vector, and $\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T$ the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme^[For more background info on numerical methods for ODEs, see your [bachelor course on differential equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)]:
 $$
 \mathbf{x}(t+\Delta t) = \mathbf{x}(t) + \mathcal{f}(\mathbf{x}(t), \mathbf{{f}}(t), \mathbf{p})\Delta t
 $$
@@ -140,7 +140,7 @@ Some general tips and recommendations:
 
 ::: {.callout-important icon="false" title="Challenge"}
 
-The forward Euler scheme presented above is the simplest available numerical method to solve the ordinary differential equations. [`SciPy`](https://docs.scipy.org/doc/scipy/index.html) offers more advanced numerical time integration methods. Investigate how the choice of time integration method affects the model outcome.
+The forward Euler scheme presented above is the simplest available numerical method to solve the ODEs. [`SciPy`](https://docs.scipy.org/doc/scipy/index.html) offers more advanced numerical time integration methods. Investigate how the choice of time integration method affects the model outcome.
 
 Important: this challenge is optional and only serves as an extra challenge for those who are interested. 
 

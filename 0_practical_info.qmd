@@ -8,7 +8,7 @@ All code used to create this assignment is available at [https://github.com/h-ce
 
 ![Screenshot of GitHub download button](figures/screenshot_github_download.png){#fig-screenshot-download-button}
 
-Note that only the code, but also the processed data is now downloaded. You can find this data in `data/processed`. More info on the data sources and processing is given in @sec-study-area. 
+Note that not only the code, but also the processed data is now downloaded. You can find this data in `data/processed`. More info on the data sources and processing is given in @sec-study-area. 
 
 This assignment is provided to you in two formats, up to you which one you prefer to work with:
 
@@ -35,7 +35,7 @@ Hand in your report of this assignment via Ufora by ADD DATE LATER. Please hand 
 - A PDF version of your report, which is rendered via Quarto. 
 - The full set of files (i.e. repository) including your solution as a `.zip` file. 
 
-Your report should we written **scientifically** and should contain at least the following:
+Your report should be written **scientifically** and should contain at least the following:
 
 - A summary of the results with reference to relevant figures and metrics, and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections `Results and discussion` in `1...qmd` to `5...qmd` for writing this part down. 
 - A conclusion about the modelling exercise as a whole, which is written in the `6_conclusion.qmd` file.

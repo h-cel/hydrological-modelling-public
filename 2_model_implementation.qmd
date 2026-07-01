@@ -47,7 +47,7 @@ By applying the conservation of mass to each reservoir, three ordinary different
 
 $$
 \frac{dS(t)}{dt} = P_{\mathrm{in}}(t) - E_{\mathrm{a}}(t) - Q_{\mathrm{p}}(t)
-$${#eq-soil-reservoir}
+$$ {#eq-soil-reservoir}
 $$
 \frac{dS_1(t)}{dt} = P_1(t) - Q_1(t) + Q_{\mathrm{p}}(t)
 $$ {#eq-fast-reacting-reservoir}

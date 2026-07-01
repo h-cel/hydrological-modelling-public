@@ -115,18 +115,19 @@ def Q_analytical_linear(t, I, K, Q0):
 
 define the parameters and the three different inflows:
 ```{python}
-Q_0 = 0.1 # m^3/h 
-K = 7 # h
-t = np.linspace(0, 40, 200)  # h
-I = [0.0, 0.06, 0.12]  # m^3/h
+Q_0_num = 0.1 # m^3/h 
+K_num = 7 # h
+t_array = np.linspace(0, 40, 200)  # h
+I_array = [0.0, 0.06, 0.12]  # m^3/h
 ```
 
 to then plot the results:
 ```{python}
 fig, ax = plt.subplots()
-for I_ in I:
-    Q_ = Q_analytical_linear(t, I_, K, Q_0)
-    ax.plot(t, Q_, label=rf"I = {I_:.2f} m$^3$/h")
+colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+for i, I_ in enumerate(I_array):
+    Q_ = Q_analytical_linear(t_array, I_, K_num, Q_0_num)
+    ax.plot(t_array, Q_, color=colors[i], label=rf"I = {I_:.2f} m$^3$/h")
 ax.set_xlabel(r"$t$ [h]")
 ax.set_ylabel(r"$Q$ [m$^3$/h]")
 ax.legend()
@@ -243,6 +244,22 @@ Finally, apply the inverse Laplace transform to obtain $Q_2(t)$.
 Q2_solved = sp.inverse_laplace_transform(q2_s_partial, s, t)
 Q2_solved
 ```
+
+Also $Q_2(t)$ can now be visualised for different constant inflows $I$ and the same parameters as before:
+```{python}
+for i, I_ in enumerate(I_array):
+    Q2_func = sp.lambdify(t, Q2_solved.subs({I: I_, K: K_num, Q0: Q_0_num}), "numpy")
+    Q2_ = Q2_func(t_array)
+    ax.plot(
+        t_array, Q2_, label=rf"I = {I_:.2f} m$^3$/h", color=colors[i], linestyle="--"
+    )
+ax.set_xlabel(r"$t$ [h]")
+ax.set_ylabel(r"$Q$ [m$^3$/h]")
+ax.legend()
+fig
+```
+
+In this figure, full lines are the output of the first reservoir and dashed lines are the output of the second reservoir. Note that the second reservoir has a delayed response compared to the first reservoir.
 
 Given that the second reservoir is initially empty and receives no external input $I$, $Q_2$ is entirely defined by $Q_1$ and $K^{(1)} = K$. So if you solve for $Q_2$ (in the $s$-domain $q_2(s)$) with an assumed known $Q_1(t)$ function (in the $s$-domain $q_1(s)$), you get:
 

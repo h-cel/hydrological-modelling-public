@@ -43,40 +43,18 @@ in practice you only need to apply a limited set of transforms to solve linear O
 | $e^{at}$ | $\displaystyle \frac{1}{s-a}$ |
 | $f'(t)$ | $sF(s) - f(0)$ |
 
-where $H(t)$ is the Heaviside function, which is defined as $H(t) = 0$ for $t < 0$ and $H(t) = 1$ for $t \geq 0$. $n$ is a positive integer and $a$ is a real number. Applying the Laplace transform to equation @eq-ode-linear-reservoir gives with $Q(t=0) = Q_0 = S_0/K$:
+where $H(t)$ is the Heaviside function, which is defined as $H(t) = 0$ for $t < 0$ and $H(t) = 1$ for $t \geq 0$. $n$ is a positive integer and $a$ is a real number. Applying the Laplace transform to equation @eq-ode-linear-reservoir with $Q(t=0) = Q_0 = S_0/K$ and $q(s) = \mathcal{L}\{Q(t)\}$ gives:
 
 $$
-K(sQ(s) - Q_0) = \frac{I}{s} - Q(s)
+K(sq(s) - Q_0) = \frac{I}{s} - q(s)
 $$
 
-Isolating $Q(s)$ gives:
+Isolating $q(s)$ gives:
 $$
-Q(s) = \frac{I}{s(1+Ks)} + \frac{K Q_0}{1+Ks}
-$$
+q(s) = \frac{I}{s(1+Ks)} + \frac{K Q_0}{1+Ks}
+$$ {#eq-Q1-transfer-function-form}
 
-We now need to apply the inverse Laplace transform to get $Q(t)$. Trivially, $\mathcal{L}^{-1} (Q(s)) = Q(t)$. For the term containing $Q_0$:
-
-$$
-\mathcal{L}^{-1}\left(\frac{K Q_0}{1+Ks}\right) = \frac{K}{K} Q_0 \mathcal{L}^{-1}\left(\frac{1}{1/K+s}\right) = Q_0 e^{-t/K}
-$$ {#eq-inverse-laplace-Q0}
-
-The term with $I$ is a bit more convolved, but can be solved using partial fraction decomposition:
-
-$$
-\frac{I}{s(1+Ks)} = \frac{A}{s} + \frac{B}{1+Ks}
-$$
-
-To solve for $A$, multiply both sides by $s$ and set $s = 0$:
-$$
-\frac{I}{1+Ks} \Big|_{s=0} = A \iff A = I
-$$
-
-To solve for $B$, multiply both sides by $(1+Ks)$ and set $s = -1/K$:
-$$
-\frac{I}{s} \Big|_{s=-1/K} = B \iff B = -IK
-$$
-
-We now need to apply the inverse Laplace transform to get $Q(t)$. Trivially, $\mathcal{L}^{-1} (Q(s)) = Q(t)$. For the term containing $Q_0$:
+We now need to apply the inverse Laplace transform to get $Q(t)$. Trivially, $\mathcal{L}^{-1} (q(s)) = Q(t)$. For the term containing $Q_0$:
 
 $$
 \mathcal{L}^{-1}\left(\frac{K Q_0}{1+Ks}\right) = \frac{K}{K} Q_0 \mathcal{L}^{-1}\left(\frac{1}{1/K+s}\right) = Q_0 e^{-t/K}
@@ -97,6 +75,7 @@ To solve for $B$, multiply both sides by $(1+Ks)$ and set $s = -1/K$:
 $$
 \frac{I}{s} \Big|_{s=-1/K} = B \iff B = -IK
 $$
+
 
 Now we can apply the inverse laplace transform on the partial fraction decomposition:
 $$
@@ -233,8 +212,8 @@ display(ode1_laplace_ic, ode2_laplace_ic)
 Solve the algebraic system for $q_1(s)$ and $q_2(s)$:
 
 ```{python}
-q_s_solved = sp.solve([ode1_laplace_ic, ode2_laplace_ic], [q1(s), q2(s)], dict=True)[0]
-q2_s = q_s_solved[q2(s)]
+q_s_solved_2 = sp.solve([ode1_laplace_ic, ode2_laplace_ic], [q1(s), q2(s)], dict=True)[0]
+q2_s = q_s_solved_2[q2(s)]
 q2_s
 ```
 
@@ -276,4 +255,38 @@ q2_s_bis
 This concept can be generalised in what is called a **transfer function**, which is defined as the ratio of the Laplace transforms of the output and input of a system. In this case, the transfer function $H(s)$ is defined as:
 $$
 H(s) = \frac{q_2(s)}{q_1(s)} = \frac{1}{1 + Ks}
+$$ {#eq-transfer-function-second-reservoir}
+
+### $n$-th order linear reservoir with constant input
+
+The concept of 2 reservoirs can be generalised to $n$ reservoirs in series, with the general form of the ODEs given by:
 $$
+\frac{dS^{(i)}}{dt} = K \frac{dQ^{(i)}}{dt} = (Q^{(i-1)} - Q^{(i)}), \quad i = 1, 2, \dots, n
+$$
+
+Again, we assume $K^{(i)} = K$ for all reservoirs, $Q^{(0)}(t) = I$ and $Q^{(i)}(t=0) = 0 \quad \forall i > 1$. The easiest way to solve this equation is to use the transfer function concept. The first reservoir is a special case, as it has an external input $I$ and an initial outflow $Q^{(1)}(0) = Q_0$. In the $s$-domain, $q^{(1)}(s)$ is given by @eq-Q1-transfer-function-form. $\forall i > 1$, the transfer function is given by a form analogous to @eq-transfer-function-second-reservoir:
+$$
+H^{(i)}(s) = \frac{q_i(s)}{q_{i-1}(s)} = \frac{1}{1 + Ks}
+$$
+
+Consequently, $q^{(n)}(s)$ can be expressed as:
+$$
+q^{(n)}(s) = q^{(1)}(s)\prod_{i=2}^n H^{(i)}(s) = \frac{q^{(1)}(s)}{(1 + Ks)^{n-1}}
+$$
+
+In SymPy, this can be expressed as (reusing the previously solved $q^{(1)}(s)$ denoted as `q_s_solved`):
+```{python}
+n = sp.symbols("n", positive=True, integer=True)  # n >= 2
+q_n_s = q_s_solved / ((1 + K * s) ** (n - 1))
+display(q_n_s)
+```
+
+The inverse Laplace transform can be applied to get $Q^{(n)}(t)$:
+```{python}
+Q_n_solved = sp.refine(sp.inverse_laplace_transform(q_n_s, s, t), sp.Q.gt(n, 1))
+# Q_n_solved = sp.simplify(sp.refine(Q_n_solved, sp.Q.gt(n, 2)))
+Q_n_solved
+```
+
+TO DO: get this working with an arbitrary $n$.
+

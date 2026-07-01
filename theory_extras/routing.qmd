@@ -175,5 +175,83 @@ Q_solved
 
 Which is identical to the analytical solution @eq-analytical-solution-linear-reservoir derived above.
 
+### Second order linear reservoir with constant input
 
+We now get two reservoirs in series:
 
+$$
+\begin{aligned}
+K^{(1)} \frac{dQ^{(1)}}{dt} &= I - Q^{(1)} \\
+K^{(2)} \frac{dQ^{(2)}}{dt} &= Q^{(1)} - Q^{(2)}
+\end{aligned}
+$$
+
+The same SymPy approach can be extended to solve this coupled system. To simplify the solution, we'll assume:
+
+- The second reservoir is initially empty, i.e. $Q^{(2)}(0) = 0$.
+- The first reservoir has an initial outflow $Q^{(1)}(0) = Q_0$ as it is assumed non-empty.
+- The first and second reservoirs have the same residence time, i.e. $K^{(1)} = K^{(2)} = K$. 
+
+We define two unknown functions and their Laplace transforms:
+
+```{python}
+q1, q2, Q1, Q2 = sp.symbols("q1 q2 Q1 Q2", cls=sp.Function)
+```
+
+Write both ODEs in the form $(\dots) = 0$:
+
+```{python}
+ode1 = K * sp.diff(Q1(t), t) - (I - Q1(t))
+ode2 = K * sp.diff(Q2(t), t) - (Q1(t) - Q2(t))
+display(ode1, ode2)
+```
+
+Take the Laplace transform using $q_1(s) = \mathcal{L}\{Q_1(t)\}$ and $q_2(s) = \mathcal{L}\{Q_2(t)\}$:
+
+```{python}
+ode1_laplace = sp.laplace_transform(ode1, t, s, noconds=True)
+ode1_laplace = sp.laplace_correspondence(ode1_laplace, {Q1: q1})
+
+ode2_laplace = sp.laplace_transform(ode2, t, s, noconds=True)
+ode2_laplace = sp.laplace_correspondence(ode2_laplace, {Q1: q1, Q2: q2})
+```
+
+Insert the initial conditions:
+
+```{python}
+ode1_laplace_ic = sp.laplace_initial_conds(ode1_laplace, t, {Q1: [Q0], Q2: [0]})
+ode2_laplace_ic = sp.laplace_initial_conds(ode2_laplace, t, {Q1: [Q0], Q2: [0]})
+display(ode1_laplace_ic, ode2_laplace_ic)
+```
+
+Solve the algebraic system for $q_1(s)$ and $q_2(s)$:
+
+```{python}
+q_s_solved = sp.solve([ode1_laplace_ic, ode2_laplace_ic], [q1(s), q2(s)], dict=True)[0]
+q2_s = q_s_solved[q2(s)]
+q2_s
+```
+
+To get a solution closer to the notation of the theory, we'll first break up into partial fractions:
+```{python}
+q2_s_partial = sp.apart(q2_s, s)
+q2_s_partial
+```
+Finally, apply the inverse Laplace transform to obtain $Q_2(t)$. 
+
+```{python}
+Q2_solved = sp.inverse_laplace_transform(q2_s_partial, s, t)
+Q2_solved
+```
+
+Given that the second reservoir is initially empty and receives no external input $I$, $Q_2$ is entirely defined by $Q_1$ and $K^{(1)} = K$. So if you solve for $Q_2$ (in the $s$-domain $q_2(s)$) with an assumed known $Q_1(t)$ function (in the $s$-domain $q_1(s)$), you get:
+
+```{python}
+q2_s_bis = sp.solve(ode2_laplace_ic, q2(s))[0]
+q2_s_bis
+```
+
+This concept can be generalised in what is called a **transfer function**, which is defined as the ratio of the Laplace transforms of the output and input of a system. In this case, the transfer function $H(s)$ is defined as:
+$$
+H(s) = \frac{q_2(s)}{q_1(s)} = \frac{1}{1 + Ks}
+$$

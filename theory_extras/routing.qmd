@@ -2,7 +2,12 @@
 title: "Chapter 1 Basics concepts of hydrological models: routing"
 author: Olivier Bonte
 date: today
-format: pdf 
+format:
+  pdf:
+    header-includes: |
+      \usepackage{fvextra}
+      \usepackage[htt]{hyphenat}
+      \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 number-sections: true
 ---
 

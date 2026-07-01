@@ -3,11 +3,16 @@ title: "Chapter 1 Basics concepts of hydrological models: routing"
 author: Olivier Bonte
 date: today
 format: pdf 
+number-sections: true
 ---
 
 To get more insight into the routing concepts explained in the theory, a computational guide is given here
 
-## First order linear reservoir
+# Reservoir cascade models
+
+## Cascade of linear reservoirs
+
+### First order linear reservoir with constant input
 
 A linear reservoir with storage $S$ [m^3^] and a constant input $I$ [m^3^/s] is characterised by 
 $$ 
@@ -96,7 +101,7 @@ $$ {#eq-inverse-laplace-I}
 Combining @eq-inverse-laplace-Q0 and @eq-inverse-laplace-I gives the final solution for $Q(t)$:
 $$
 Q(t) = I(1 - e^{-t/K}) + Q_0 e^{-t/K}
-$$
+$$ {#eq-analytical-solution-linear-reservoir}
 
 E.g. for $Q_0 = 0.1$ m^3^/h and $K = 7$ h, we can plot the outflow $Q(t)$ for different constant inflows $I$. In the examples that follow, we'll use m^3^/h and h for the units instead of the standard SI-units for convenience. Define the analytical solutions as a function:
 ```{python}
@@ -127,5 +132,48 @@ ax.set_ylabel(r"$Q$ [m$^3$/h]")
 ax.legend()
 ```
 
-Additionally, note that we can automate the algebraic routines above using [SymPy](https://docs.sympy.org/latest/index.html).
+Additionally, note that we can automate the algebraic routines above using [SymPy](https://docs.sympy.org/latest/index.html). First define all symbols: 
+
+```{python}
+import sympy as sp
+
+t, K, I, Q0 = sp.symbols("t K I Q0", positive=True)
+s = sp.symbols("s")
+q, Q = sp.symbols("q, Q", cls=sp.Function)
+```
+
+and then define the ODE in the form $K \frac{dQ}{dt} - (I - Q) = 0$:
+```{python}
+ode_linear = K * sp.diff(Q(t), t) - (I - Q(t))
+ode_linear
+```
+
+Now take the Laplace transform of the ODE defining $q(s) = \mathcal{L}\{Q(t)\}$:
+```{python}
+ode_linear_laplace = sp.laplace_transform(ode_linear, t, s, noconds=True)
+ode_linear_laplace = sp.laplace_correspondence(ode_linear_laplace, {Q: q})
+ode_linear_laplace
+```
+
+We now insert the initial condition $Q(0) = Q_0$:
+```{python}
+ode_linear_laplace_ic = sp.laplace_initial_conds(ode_linear_laplace, t, {Q: [Q0]})
+ode_linear_laplace_ic
+```
+
+In the equation above, the only unknown is $q(s)$, which can be solved for:
+```{python}
+q_s_solved = sp.solve(ode_linear_laplace_ic, q(s))[0]
+q_s_solved
+```
+
+Now apply the inverse Laplace transform to get $Q(t)$:
+```{python}
+Q_solved = sp.simplify(sp.inverse_laplace_transform(q_s_solved, s, t))
+Q_solved
+```
+
+Which is identical to the analytical solution @eq-analytical-solution-linear-reservoir derived above.
+
+
 

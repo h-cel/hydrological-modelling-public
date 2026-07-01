@@ -117,9 +117,9 @@ $$
 \frac{d\mathbf{x}}{dt} = \mathcal{f}(\mathbf{x}, \mathbf{{f}}, \mathbf{p})
 $$
 
-with $f$ a non-linear function, $\mathbf{x} = [S, S_1, S_2]^T$ the state vector, $\mathbf{f} = [P, E_p]^T$ the forcing vector, and $\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T$ the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme^[For more background info on numerical methods for ODEs, see your [bachelor course on differential equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)]:
+with $\mathcal{f}$ a non-linear function, $\mathbf{x} = [S, S_1, S_2]^T$ the state vector, $\mathbf{f} = [P, E_p]^T$ the forcing vector, and $\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T$ the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme^[For more background info on numerical methods for ODEs, see your [bachelor course on differential equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)]:
 $$
-\mathbf{x}(t+\Delta t) = \mathbf{x}(t) + \mathcal{f}(\mathbf{x}(t), \mathbf{{f}}(t), \mathbf{p})\Delta t
+\mathbf{x}(t+\Delta t) = \mathbf{x}(t) + \mathcal{f}(\mathbf{x}(t), \mathbf{f}(t), \mathbf{p})\Delta t
 $$
 The time step $\Delta t$ is set to 1 day, which is the same as the time step of the forcing data. 
 

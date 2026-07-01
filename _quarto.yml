@@ -48,6 +48,7 @@ format:
     include-in-header: preamble.tex
     papersize: a4
     fig-pos: 'htb'
+    pdf-engine: xelatex
 
 # Allows caching of notebooks when previewing 
 execute:

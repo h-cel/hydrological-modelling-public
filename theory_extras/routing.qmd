@@ -113,7 +113,7 @@ t_array = np.linspace(0.01, 40, 200)  # h
 I_array = [0.0, 0.06, 0.12]  # m^3/h
 ```
 
-to then plot the results:
+Note that all numerical examples that follow will use the value of $K$ defined above. Now we can plot the results:
 ```{python}
 fig, ax = plt.subplots()
 colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
@@ -419,7 +419,7 @@ ax.tick_params(axis="y")
 ax.legend()
 ```
 
-::: {.callout-note icon=false}
+::: {#nte-convolution-application .callout-note icon=false}
 
 ## Application: routing via convolution
 
@@ -428,6 +428,8 @@ Defining $u(t) = \frac{1}{(n-1)!K}(\frac{t}{K})^{n-1} \exp{(-t/K)}$ following th
 $$
 Q(t) = (u * I)(t) = \int_0^t u(\tau) I(t-\tau) d\tau
 $$
+
+Note that this convolution concept is only valid because the system is **linear** and hence the [**principle of superposition**](https://en.wikipedia.org/wiki/Superposition_principle) holds!
 
 Define a toy input $I(t)$:
 ```{python}
@@ -483,5 +485,88 @@ ax.set_xlabel(r"$t$ [h]")
 ax.set_ylabel(r"$Q$ [m$^3$/h]")
 ax.legend()
 ```
+
+:::
+
+### Linear reservoir with time-varying input
+
+For a linear reservoir with a time-varying input $I(t)$, the ODE is given by:
+$$
+\frac{dS}{dt} = I(t) - \frac{S}{K}
+$$ {#eq-ode-linear-reservoir-time-varying-input}
+
+For this case, there are 2 options:
+
+1. Apply the convolution approach as shown in @nte-convolution-application
+2. Solve the ODE defined by @eq-ode-linear-reservoir-time-varying-input numerically. 
+
+For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$)time steps:
+
+1. Fixed time step schemes: you choose the time step $\Delta t$ of your solver to be equal to (or a integer fraction of) the $\Delta t_{in}$. 
+2. Adaptive time step schemes: the solver chooses a timestep $\Delta t$ based on its estimate of numerical error. These solvers cannot handle discontinuities however. Therefore, you need to integrate in $[0,\Delta t_{in}]$, then in $[\Delta t_{in}, 2\Delta t_{in}]$, etc. and restart the solver at each discontinuity.
+
+These concepts will be illustrated by retaking @nte-convolution-application below
+
+::: {#nte-numerical-ode-linear .callout-note icon=false}
+
+## Routing via numerical ODE integration
+
+Two different numerical solvers (representing the two classes above) will be used to solve the example from @nte-convolution-application:
+
+1. Explicit Euler method with $\Delta t = \Delta t_{in} = 1$ h
+2. The explicit Runge-Kutta method of order 5(4) with adaptive time stepping control as provided by [`scipy.integrate.solve_ivp`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html) with the `RK45` method.
+
+We reuse the input `I(t)` defined as a piecewise constant function so that `I(m \Delta t_{in})` equals the rainfall input between $m \Delta t_{in}$ and $(m+1) \Delta t_{in}$. 
+
+```{python}
+def ode_func(t, S, I_func, K):
+    return I_func(t) - S / K
+```
+
+We then implement the explicit Euler method:
+
+```{python}
+def explicit_euler(ode_func, t_span:tuple, S0:np.array, delta_t:float, args):
+    t_eval = np.arange(t_span[0], t_span[1] + delta_t, delta_t)
+    # Initialize the storage array: n_states x n_time_steps
+    S = np.zeros((len(S0), len(t_eval)))
+    S[:, 0] = S0
+    for i in range(1, len(t_eval)):
+        dt = t_eval[i] - t_eval[i - 1]
+        S[:, i] = S[:, i - 1] + dt * ode_func(t_eval[i - 1], S[:, i - 1], *args)
+    return S
+```
+
+We can now solve the ODE with this method. 
+```{python}
+S0 = np.array([0]) # Initial storage
+t_span = (0, 60) # hr
+delta_t = 1 # hr
+explicit_euler_solution = explicit_euler(ode_func, (0, 60), S0, 1, (I_func, K_num))
+```
+
+For the RK45 method we write a wrapper around `scipy.integrate.solve_ivp` to handle the piecewise constant input function. 
+
+```{python}
+def rk_45(ode_func, t_span:tuple, S0:np.array, args):
+    t_eval = np.arange(t_span[0], t_span[1] + 1, 1) # Evaluate at integer hours
+    S = np.zeros((len(S0), len(t_eval)))
+    S_current = S0
+    for i in range(len(t_eval) - 1):
+        t_interval = (t_eval[i], t_eval[i + 1])
+        sol = scipy.integrate.solve_ivp(
+            ode_func, t_interval, S_current, method="RK45", args=args, dense_output=True
+        )
+        S[:, i + 1] = sol.y[:, -1]
+        S_current = sol.y[:, -1]
+    return S
+```
+
+
+```{python}
+rk45_solution = rk_45(ode_func, (0, 60), S0, (I_func, K_num))
+```
+
+TO DO: FLATTEN THE SOLUTIONS FOR PLOTTING
 
 :::

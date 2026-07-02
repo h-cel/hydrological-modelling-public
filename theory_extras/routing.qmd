@@ -11,7 +11,7 @@ format:
 number-sections: true
 ---
 
-To get more insight into the routing concepts explained in the theory, a computational guide is given here
+To get more insight into the routing concepts explained in the theory, a computational guide is given here, leveraging both symbolic and numerical computing. 
 
 # Reservoir cascade models
 
@@ -222,6 +222,7 @@ To get a solution closer to the notation of the theory, we'll first break up int
 q2_s_partial = sp.apart(q2_s, s)
 q2_s_partial
 ```
+
 Finally, apply the inverse Laplace transform to obtain $Q_2(t)$. 
 
 ```{python}
@@ -278,15 +279,46 @@ In SymPy, this can be expressed as (reusing the previously solved $q^{(1)}(s)$ d
 ```{python}
 n = sp.symbols("n", positive=True, integer=True)  # n >= 2
 q_n_s = q_s_solved / ((1 + K * s) ** (n - 1))
+q_n_s = sp.refine(q_n_s, sp.Q.gt(n, 1))
 display(q_n_s)
 ```
 
 The inverse Laplace transform can be applied to get $Q^{(n)}(t)$:
 ```{python}
 Q_n_solved = sp.refine(sp.inverse_laplace_transform(q_n_s, s, t), sp.Q.gt(n, 1))
-# Q_n_solved = sp.simplify(sp.refine(Q_n_solved, sp.Q.gt(n, 2)))
 Q_n_solved
 ```
 
-TO DO: get this working with an arbitrary $n$.
+Unfortunately, we run into a limitation of SymPy here, as it can't generalise the inverse Laplace transform for arbitrary $n$ (try calling `sp.simplify` on `Q_n_solved`, it will crash). For specific values of $n$, we can still get the solutions
+```{python}
+n_num_list = [5, 6, 7]
+for n_num in n_num_list:
+    print(f"n = {n_num}")
+    Q_n_solved_specific = sp.simplify(Q_n_solved.subs(n, n_num))
+    display(Q_n_solved_specific)
+```
 
+From these solutions, we can easily identify the general pattern that can be expressed as:
+$$
+Q^{(n)}(t) = I  - I e^{-t/K}\sum_{i=0}^{n-1} \frac{(t/K)^i}{i!} + Q_0 e^{-t/K}\sum_{i=0}^{n-1} \frac{(t/K)^i}{i!}
+$$
+
+which is identical to the formulation in the theory notes. We can now also easily plot results for different $n$ values
+
+```{python}
+I_num = 0.06  # m^3/h
+n_num_list = [1, 2, 3, 4, 5]
+fig, ax = plt.subplots()
+for n_num in n_num_list:
+    Q_n_solved_specific_ = sp.simplify(Q_n_solved.subs(n, n_num))
+    Q_n_func_ = sp.lambdify(
+        t, Q_n_solved_specific_.subs({I: I_num, K: K_num, Q0: Q_0_num}), "numpy"
+    )
+    Q_n_ = Q_n_func_(t_array)
+    ax.plot(t_array, Q_n_, label=rf"n = {n_num}")
+ax.set_xlabel(r"$t$ [h]")
+ax.set_ylabel(r"$Q^{(n)}$ [m$^3$/h]")
+ax.legend()
+```
+
+The larger $n$, the more delayed the response of the outflow is. 

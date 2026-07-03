@@ -27,7 +27,7 @@ To get more insight into the routing concepts explained in the theory, a computa
 A linear reservoir with storage $S$ [m^3^] and a constant input $I$ [m^3^/s] is characterised by 
 $$ 
 S = KQ
-$$ {#eq-linear_storage}
+$$ {#eq-linear-storage}
 
 with $K$ [s] the residence time and $Q$ [m^3^/s] the outflow. The mass balance equation is given by 
 
@@ -688,3 +688,41 @@ The same conclusions as before can be drawn: the RK45 method is closer to the co
 
 :::
 
+## 1.2 Cascade of  non-linear reservoirs
+
+In contrast to @eq-linear-storage, the storage-outflow relationship is now given by a non-linear function:
+
+$$
+Q = C S^r
+$$
+
+The mass balance equation is then given by:
+
+$$
+\frac{dS}{dt} = I(t) - C S^r
+$$
+
+This can be solved numerically with the same solvers as before, as shown below. 
+
+TO DO: ADD EXAMPLE
+
+## 1.3 Muskingum method
+
+For this method, the storage-outflow relationship is given by:
+$$
+S = KQ + KX(I-Q) = K[XI + (1-X)Q]
+$$
+
+This can be rearanged to give the outflow $Q$ as a function of the storage $S$ and the inflow $I$:
+$$
+Q = \frac{S/K - XI}{1-X}
+$$
+
+and so the mass balance equation is given by:
+$$
+\frac{dS}{dt} = I - \frac{S/K - XI}{1-X} = \frac{I(1 + X)}{1-X} - \frac{S/K}{1-X}
+$$
+
+where $I = I(t)$ as the input is time-varying  
+
+TO DO: ADD EXAMPLE 

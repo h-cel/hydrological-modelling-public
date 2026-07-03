@@ -433,7 +433,7 @@ Note that this convolution concept is only valid because the system is **linear*
 
 Define a toy input $I(t)$:
 ```{python}
-I_array = [0.2, 0.5, 0.1, 0.2, 0.6, 0.8, 1.2, 1, 0.5, 0.2]  # mm/h
+I_array = [0.2, 0.5, 0.1, 0.2, 0.6, 0.8, 1.2, 1, 0.5, 0.2, 0.0]  # mm/h
 A_example = 10_000  # m^2, example catchment area
 I_array_m3h = np.array(I_array) * A_example / 1000  # m^3/h
 t_array = np.arange(len(I_array))  # h
@@ -443,7 +443,22 @@ where each value represent the average rainfall intensity over a 1h time step. W
 I_func = scipy.interpolate.interp1d(
     t_array, I_array_m3h, kind="previous", fill_value=0, bounds_error=False
 )
-t_eval = np.linspace(0, 60, 61) # h
+t_eval = np.linspace(0, 60, 61)  # h
+
+# For plotting rainfall take higher resolution timeseries
+t_eval_hr = np.linspace(0, 60, 10_000)  # h
+I_hr = I_func(t_eval_hr)
+```
+
+Where $I(t) = I_m$ during the time interval $[m \Delta t, (m+1) \Delta t[$, as illustrated below. 
+
+```{python}
+fig, ax = plt.subplots()
+ax.plot(t_eval_hr, I_hr, color="blue", label=r"$I(t)$", alpha=0.8)
+ax.scatter(t_array, I_array_m3h, color="black", label="Array data", zorder=3)
+ax.set_xlim(0, np.max(t_array) * 1.1)
+ax.set_xlabel(r"$t$ [h]")
+ax.legend()
 ```
 
 Now wen can numerically integrate the convolution with [`scipy.integrate.quad`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html) to get $Q(t)$ for different $n$ values:
@@ -468,10 +483,6 @@ for n_num in n_num_list:
 
 Now we can plot the input and output:
 ```{python}
-# For plotting rainfall take higher resolution timeseries
-t_eval_hr = np.linspace(0, 60, 1000)  # h
-I_hr = I_func(t_eval_hr)
-
 fig, ax = plt.subplots()
 for n_num, Q_numerical_ in Q_numerical_dict.items():
     ax.plot(t_eval, Q_numerical_, label=rf"n = {n_num}", zorder=3)
@@ -500,7 +511,7 @@ For this case, there are 2 options:
 1. Apply the convolution approach as shown in @nte-convolution-application
 2. Solve the ODE defined by @eq-ode-linear-reservoir-time-varying-input numerically. 
 
-For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$)time steps:
+For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$) xtime steps:
 
 1. Fixed time step schemes: you choose the time step $\Delta t$ of your solver to be equal to (or a integer fraction of) the $\Delta t_{in}$. 
 2. Adaptive time step schemes: the solver chooses a timestep $\Delta t$ based on its estimate of numerical error. These solvers cannot handle discontinuities however. Therefore, you need to integrate in $[0,\Delta t_{in}]$, then in $[\Delta t_{in}, 2\Delta t_{in}]$, etc. and restart the solver at each discontinuity.
@@ -516,10 +527,10 @@ Two different numerical solvers (representing the two classes above) will be use
 1. Explicit Euler method with $\Delta t = \Delta t_{in} = 1$ h
 2. The explicit Runge-Kutta method of order 5(4) with adaptive time stepping control as provided by [`scipy.integrate.solve_ivp`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html) with the `RK45` method.
 
-We reuse the input `I(t)` defined as a piecewise constant function so that `I(m \Delta t_{in})` equals the rainfall input between $m \Delta t_{in}$ and $(m+1) \Delta t_{in}$. 
+We reuse the input function `I(t)` defined in @nte-convolution-application. 
 
 ```{python}
-def ode_func(t, S, I_func, K):
+def ode_func(t: float, S: np.array, I_func, K: float):
     return I_func(t) - S / K
 ```
 
@@ -542,7 +553,7 @@ We can now solve the ODE with this method.
 S0 = np.array([0]) # Initial storage
 t_span = (0, 60) # hr
 delta_t = 1 # hr
-explicit_euler_solution = explicit_euler(ode_func, (0, 60), S0, 1, (I_func, K_num))
+S_explicit_euler_solution = explicit_euler(ode_func, t_span, S0, delta_t, (I_func, K_num))
 ```
 
 For the RK45 method we write a wrapper around `scipy.integrate.solve_ivp` to handle the piecewise constant input function. 
@@ -555,7 +566,7 @@ def rk_45(ode_func, t_span:tuple, S0:np.array, args):
     for i in range(len(t_eval) - 1):
         t_interval = (t_eval[i], t_eval[i + 1])
         sol = scipy.integrate.solve_ivp(
-            ode_func, t_interval, S_current, method="RK45", args=args, dense_output=True
+            ode_func, t_interval, S_current, method="RK45", args=args, t_eval=list(t_interval)
         )
         S[:, i + 1] = sol.y[:, -1]
         S_current = sol.y[:, -1]
@@ -564,9 +575,116 @@ def rk_45(ode_func, t_span:tuple, S0:np.array, args):
 
 
 ```{python}
-rk45_solution = rk_45(ode_func, (0, 60), S0, (I_func, K_num))
+S_rk45_solution = rk_45(ode_func, t_span, S0, (I_func, K_num))
 ```
 
-TO DO: FLATTEN THE SOLUTIONS FOR PLOTTING
+Now wen can plot the results of both solvers:
+
+```{python}
+diff_S = S_explicit_euler_solution - S_rk45_solution
+fig, axes = plt.subplots(2, 1, sharex=True)
+axes[0].plot(t_eval, S_explicit_euler_solution[0, :], label="Explicit Euler")
+axes[0].plot(t_eval, S_rk45_solution[0, :], label="RK45")
+axes[0].set_ylabel(r"$S$ [m$^3$]")
+axes[0].legend()
+
+axes[1].plot(t_eval, diff_S[0, :], label="Difference (Euler - RK45)")
+axes[1].set_xlabel(r"$t$ [h]")
+axes[1].set_ylabel(r"$\Delta S$ [m$^3$]")
+axes[1].legend()
+```
+
+As $Q = S/K$, this difference directly translates to the outflow $Q(t)$. Below, we compare this $Q$ to the convolution solution from @nte-convolution-application for $n = 1$
+
+```{python}
+fig, axes = plt.subplots(2, 1, sharex=True)
+Q_euler = S_explicit_euler_solution[0, :] / K_num
+Q_rk45 = S_rk45_solution[0, :] / K_num
+Q_convolution = Q_numerical_dict[1]
+axes[0].plot(t_eval, Q_euler, label="Explicit Euler")
+axes[0].plot(t_eval, Q_rk45, label="RK45")
+axes[0].plot(t_eval, Q_convolution, label="Convolution (n=1)")
+axes[0].set_xlabel(r"$t$ [h]")
+axes[0].set_ylabel(r"$Q$ [m$^3$/h]")
+axes[0].legend()
+
+diff_euler_convolution = Q_euler - Q_convolution
+diff_rk45_convolution = Q_rk45 - Q_convolution
+axes[1].plot(t_eval, diff_euler_convolution, label="Euler - Convolution")
+axes[1].plot(t_eval, diff_rk45_convolution, label="RK45 - Convolution")
+axes[1].set_xlabel(r"$t$ [h]")
+axes[1].set_ylabel(r"$\Delta Q$ [m$^3$/h]")
+axes[1].legend()
+```
+
+So these are not identical, although `RK45` is closer to the convolution solution than the explicit Euler method. This is to be expected, as both `RK45` and [`scipy.integrate.quad`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html) have numerical error control, while the explicit Euler method does not. 
+
+Lastly, we can also do numerical ODE integration for an $n$-th order linear reservoir with a time-varying input $I(t)$.  
+
+```{python}
+def ode_func_nth_order(t: float, S: np.array, I_func, K: float, n: int):
+    dSdt = np.zeros_like(S)
+    dSdt[0] = I_func(t) - S[0] / K
+    if n > 1:
+        for i in range(1, n):
+            dSdt[i] = S[i - 1] / K - S[i] / K
+    return dSdt
+```
+
+This can be solved with both solvers. $S^{(i)} = 0$ for all $i$. 
+
+```{python}
+S_n_EE_dict = {}
+S_n_RK45_dict = {}
+n_num_list = [1,2,3,5]
+for n_num in n_num_list:
+    S0 = np.zeros(n_num)  # Initial storage
+    S_n_EE_dict[n_num] = explicit_euler(ode_func_nth_order, t_span, S0, delta_t, (I_func, K_num, n_num))
+    S_n_RK45_dict[n_num] = rk_45(ode_func_nth_order, t_span, S0, (I_func, K_num, n_num))
+```
+
+Comparing Explicit Euler to the convolution:
+
+```{python}
+fig, ax = plt.subplots()
+colors = plt.get_cmap("tab10").colors
+for i, n_num in enumerate(n_num_list):
+    Q_n_EE = S_n_EE_dict[n_num][n_num - 1, :] / K_num
+    ax.plot(t_eval, Q_n_EE, label=f"Explicit Euler (n={n_num})", color=colors[i])
+    Q_n_convolution = Q_numerical_dict[n_num]
+    ax.plot(
+        t_eval,
+        Q_n_convolution,
+        label=f"Convolution (n={n_num})",
+        linestyle="--",
+        color=colors[i],
+    )
+ax.set_xlabel(r"$t$ [h]")
+ax.set_ylabel(r"$Q$ [m$^3$/h]")
+ax.legend()
+```
+
+and `RK45` to the convolution:
+
+```{python}
+fig, ax = plt.subplots()
+for i, n_num in enumerate(n_num_list):
+    Q_n_RK45 = S_n_RK45_dict[n_num][n_num - 1, :] / K_num
+    ax.plot(t_eval, Q_n_RK45, label=f"RK45 (n={n_num})", color=colors[i])
+    Q_n_convolution = Q_numerical_dict[n_num]
+    ax.plot(
+        t_eval,
+        Q_n_convolution,
+        label=f"Convolution (n={n_num})",
+        linestyle="--",
+        color=colors[i],
+    )
+ax.set_xlabel(r"$t$ [h]")
+ax.set_ylabel(r"$Q$ [m$^3$/h]")
+ax.legend()
+```
+
+The same conclusions as before can be drawn: the RK45 method is closer to the convolution solution than the explicit Euler method. The most important takeaway is that both the convolution approach and the numerical ODE integration can be applied to linear systems with time-varying inputs and yield pratically identical results when numerical error in the solvers are controlled. 
 
 :::
+

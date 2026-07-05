@@ -12,7 +12,7 @@ format:
       \usepackage[htt]{hyphenat}
       \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 execute: 
-  freeze: auto
+   cache: True
 number-sections: true
 bibliography: references.bib
 ---

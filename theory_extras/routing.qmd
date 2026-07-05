@@ -396,7 +396,7 @@ Q_n_solved_nash_simplified = sp.refine(Q_n_solved_nash_simplified, sp.Q.positive
 Q_n_solved_nash_simplified
 ```
 
-Again note the equivalence to the formulation in the theory notes. Interestingly, the solution here assumes an empty first reservoir and a Dirac delta input, while the theory notes assume no input and a first and $Q^{(1)}(t=0) = 1$. The two assumptions are equivalent, as the Dirac delta input can be interpreted as a unit input to an empty reservoir. 
+Again note the equivalence to the formulation in the theory notes. Interestingly, the solution here assumes an empty first reservoir and a Dirac delta input, while the theory notes assume no input and the first reservoir contains a unit volume $S^{(1)}(t=0) = 1$ m^3^. The two assumptions are equivalent, as the Dirac delta input can be interpreted as this unit input to an empty reservoir. 
 
 Because the Nash-cascade is the response to an instantaneous input, it can be interpreted as an Instantaneous Unit Hydrograph (IUH)! Also note that the assumption that $n$ is an integer can be relaxed to $n$ being a positive real number. In this case, applying the inverse Laplace transform yields:
 ```{python}
@@ -514,7 +514,7 @@ For this case, there are 2 options:
 1. Apply the convolution approach as shown in @nte-convolution-application
 2. Solve the ODE defined by @eq-ode-linear-reservoir-time-varying-input numerically. 
 
-For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$) xtime steps:
+For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$) time steps:
 
 1. Fixed time step schemes: you choose the time step $\Delta t$ of your solver to be equal to (or a integer fraction of) the $\Delta t_{in}$. 
 2. Adaptive time step schemes: the solver chooses a timestep $\Delta t$ based on its estimate of numerical error. These solvers cannot handle discontinuities however. Therefore, you need to integrate in $[0,\Delta t_{in}]$, then in $[\Delta t_{in}, 2\Delta t_{in}]$, etc. and restart the solver at each discontinuity.
@@ -563,7 +563,7 @@ For the RK45 method we write a wrapper around `scipy.integrate.solve_ivp` to han
 
 ```{python}
 def rk_45(ode_func, t_span: tuple, S0: np.array, delta_t_eval: float, args, **kwargs):
-    t_eval = np.arange(t_span[0], t_span[1] + delta_t_eval, delta_t_eval)  # Evaluate at integer hours
+    t_eval = np.arange(t_span[0], t_span[1] + delta_t_eval, delta_t_eval)
     S = np.zeros((len(S0), len(t_eval)))
     S[:, 0] = S0  # store initial condition
     S_current = S0
@@ -588,7 +588,7 @@ def rk_45(ode_func, t_span: tuple, S0: np.array, delta_t_eval: float, args, **kw
 S_rk45_solution = rk_45(ode_func, t_span, S0, delta_t, (I_func, K_num))
 ```
 
-Now wen can plot the results of both solvers:
+Now we can plot the results of both solvers:
 
 ```{python}
 diff_S = S_explicit_euler_solution - S_rk45_solution
@@ -737,7 +737,7 @@ $$
 \frac{dS}{dt} = I - \frac{S/K - XI}{1-X} = \frac{I(1 + X)}{1-X} - \frac{S/K}{1-X}
 $$
 
-where $I = I(t)$ as the input is time-varying. Note that the reservoir is linear in $K$. The Muskingum method is typically applied over a channel reach, defined by its length $\Delta x$. Below, an example is worked out based on @2005Brutsaert. However, the example is 'modernised' by:
+where $I = I(t)$ as the input is time-varying. Note that the relation between storage and discharge is linear. The Muskingum method is typically applied over a channel reach, defined by its length $\Delta x$. Below, an example is worked out based on @2005Brutsaert. However, the example is 'modernised' with following changes:
 
 1. The explicit Euler method is replaced by the adaptive `RK45` method
 2. Calibration will be carried out using standard calibration practices (minimising the mean squared error of the ODE solution) instead of the methods described in @2005Brutsaert.
@@ -753,6 +753,7 @@ Following @2005Brutsaert, $\Delta x = 23$ km. Example data for $I$ and $O$ is gi
 df_brutsaert = pd.read_csv("data/brutsaert_reach.csv", index_col=0)
 df_brutsaert.head()
 t_array = df_brutsaert.index.values * 3600  # Convert h to s
+delta_x = 23_000  # m
 ```
 
 For the interpolation, we'll assume that the hourly measurement is reflective of the flow at that exact moment in the time. For simplicity, we'll therefore apply linear interpolation between the measurements
@@ -773,12 +774,8 @@ def muskingum_storage(Q, K, X, I):
     return K * (X * I + (1 - X) * Q)
 
 
-def calc_wave_celerity(K, delta_x):
-    return delta_x / K
-
-
 def calc_max_delta_t(K, X, delta_x):
-    c_m = calc_wave_celerity(K, delta_x)
+    c_m = delta_x / K  # wave celerity
     return (1 - X) * delta_x / c_m  # CFL condition
 
 
@@ -790,34 +787,9 @@ def ode_func_muskingum(t: float, S: np.array, I_func, K: float, X: float):
 
 To obtain optimal parameters for $K$ and $X$, we define a cost function that calculates the mean squared error between the observed outflow and the modelled outflow. 
 
-```{python}
-## TEST!
-K_test = 5 * 3600  # s
-X_test = 0.25  # -
-delta_x = 23_000  # m
-max_delta_t = calc_max_delta_t(K_test, X_test, delta_x)  # CFL condition
-# Equilibrium initial storage: S0 = K*[(1-X)*O0 + X*I0]
-S0_test = np.array([
-    muskingum_storage(df_brutsaert["O"].iloc[0], K_test, X_test, fn_I(t_array[0]))
-])  # Initial storage
-S_explicit_euler_test = explicit_euler(
-    ode_func_muskingum, (t_array[0], t_array[-1]), S0_test, 3600, (fn_I, K_test, X_test)
-)  # Solve ODE
-```
 
 ```{python}
-S_solution_test = rk_45(
-    ode_func_muskingum,
-    (t_array[0], t_array[-1]),
-    S0_test,
-    delta_t_eval=3600,
-    args=(fn_I, K_test, X_test),
-    max_step=max_delta_t,
-)  # Solve ODE
-```
-
-```{python}
-def cost_function_muskingum(params, t_array, I_func, O_obs):
+def cost_function_muskingum(params, t_array, I_func, O_obs, delta_x):
     K_hours, X = params
     K = K_hours * 3600  # Convert to seconds for the ODE
     # Equilibrium initial storage: S0 = K*[(1-X)*O0 + X*I0]
@@ -845,7 +817,7 @@ def cost_function_muskingum(params, t_array, I_func, O_obs):
 
 To calibrathe parameters with the Nelder-Mead method from `scipy.optimize.minimize`, we need to provide an initial guess for $K$ and $X$:
 
-- $X \in ]0, 0.5] (see @2005Brutsaert), so 0.25 is a reasonable initial guess
+- For the physical interpretation of $X$ tol hold (see @2005Brutsaert), $X \in ]0, 0.5]$ is required. 0.25 is hence a reasonable initial guess.
 - $K$ can still be intepreted as a residence time, so $K = 5h$ is assumed a reasonable initial guess.
 
 ```{python}
@@ -854,14 +826,14 @@ K_hours_0 = 5.0  # hours (optimizer works in hours; cost function converts to se
 X_0 = 0.25  # -
 params_0 = np.array([K_hours_0, X_0])
 bounds = [(1e-6, None), (1e-6, 0.5)]  # K_hours > 0, X in ]0, 0.5]
-test_cost = cost_function_muskingum(params_0, t_array, fn_I, df_brutsaert["O"].values)
+test_cost = cost_function_muskingum(params_0, t_array, fn_I, df_brutsaert["O"].values, delta_x)
 ```
 
 ```{python}
 optim_res = scipy.optimize.minimize(
     cost_function_muskingum,
     params_0,
-    args=(t_array, fn_I, df_brutsaert["O"].values),
+    args=(t_array, fn_I, df_brutsaert["O"].values, delta_x),
     method=method,
     bounds=bounds,
     tol=1e-3,

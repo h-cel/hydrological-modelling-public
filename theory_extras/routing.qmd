@@ -12,11 +12,21 @@ format:
       \usepackage[htt]{hyphenat}
       \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 execute: 
-  freeze: auto
+   cache: True
 number-sections: true
+bibliography: references.bib
 ---
 
 To get more insight into the routing concepts explained in the theory, a computational guide is given here, leveraging both symbolic and numerical computing. 
+
+```{python}
+# Imports
+import matplotlib.pyplot as plt
+import numpy as np
+import sympy as sp
+import scipy
+import pandas as pd
+```
 
 # Reservoir cascade models
 
@@ -94,13 +104,6 @@ $$ {#eq-analytical-solution-linear-reservoir}
 
 E.g. for $Q_0 = 0.1$ m^3^/h and $K = 7$ h, we can plot the outflow $Q(t)$ for different constant inflows $I$. In the examples that follow, we'll use m^3^/h and h for the units instead of the standard SI-units for convenience. Define the analytical solutions as a function:
 ```{python}
-# Imports
-import matplotlib.pyplot as plt
-import numpy as np
-import sympy as sp
-import scipy 
-
-
 def Q_analytical_linear(t, I, K, Q0):
     return I * (1 - np.exp(-t / K)) + Q0 * np.exp(-t / K)
 ```
@@ -401,7 +404,7 @@ Q_n_solved_nash_simplified = sp.refine(Q_n_solved_nash_simplified, sp.Q.positive
 Q_n_solved_nash_simplified
 ```
 
-Again note the equivalence to the formulation in the theory notes. Interestingly, the solution here assumes an empty first reservoir and a Dirac delta input, while the theory notes assume no input and a first and $Q^{(1)}(t=0) = 1$. The two assumptions are equivalent, as the Dirac delta input can be interpreted as a unit input to an empty reservoir. 
+Again note the equivalence to the formulation in the theory notes. Interestingly, the solution here assumes an empty first reservoir and a Dirac delta input, while the theory notes assume no input and the first reservoir contains a unit volume $S^{(1)}(t=0) = 1$ m^3^. The two assumptions are equivalent, as the Dirac delta input can be interpreted as this unit input to an empty reservoir. 
 
 Because the Nash-cascade is the response to an instantaneous input, it can be interpreted as an Instantaneous Unit Hydrograph (IUH)! Also note that the assumption that $n$ is an integer can be relaxed to $n$ being a positive real number. In this case, applying the inverse Laplace transform yields:
 ```{python}
@@ -520,7 +523,7 @@ For this case, there are 2 options:
 1. Apply the convolution approach as shown in @nte-convolution-application
 2. Solve the ODE defined by @eq-ode-linear-reservoir-time-varying-input numerically. 
 
-For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$) xtime steps:
+For details on numerical solvers for ODEs, we again refer to your bachelor course on Differential Equations. However, one must pay special attention to the fact the the input $I(t)$ is a piecewise constant function. For example, we consider the rainfall input to be constant over 1h ($=\Delta t_{in}$) time steps:
 
 1. Fixed time step schemes: you choose the time step $\Delta t$ of your solver to be equal to (or a integer fraction of) the $\Delta t_{in}$. 
 2. Adaptive time step schemes: the solver chooses a timestep $\Delta t$ based on its estimate of numerical error. These solvers cannot handle discontinuities however. Therefore, you need to integrate in $[0,\Delta t_{in}]$, then in $[\Delta t_{in}, 2\Delta t_{in}]$, etc. and restart the solver at each discontinuity.
@@ -568,14 +571,21 @@ S_explicit_euler_solution = explicit_euler(ode_func, t_span, S0, delta_t, (I_fun
 For the RK45 method we write a wrapper around `scipy.integrate.solve_ivp` to handle the piecewise constant input function. 
 
 ```{python}
-def rk_45(ode_func, t_span:tuple, S0:np.array, args):
-    t_eval = np.arange(t_span[0], t_span[1] + 1, 1) # Evaluate at integer hours
+def rk_45(ode_func, t_span: tuple, S0: np.array, delta_t_eval: float, args, **kwargs):
+    t_eval = np.arange(t_span[0], t_span[1] + delta_t_eval, delta_t_eval)
     S = np.zeros((len(S0), len(t_eval)))
+    S[:, 0] = S0  # store initial condition
     S_current = S0
     for i in range(len(t_eval) - 1):
         t_interval = (t_eval[i], t_eval[i + 1])
         sol = scipy.integrate.solve_ivp(
-            ode_func, t_interval, S_current, method="RK45", args=args, t_eval=list(t_interval)
+            ode_func,
+            t_interval,
+            S_current,
+            method="RK45",
+            args=args,
+            t_eval=list(t_interval),
+            **kwargs,
         )
         S[:, i + 1] = sol.y[:, -1]
         S_current = sol.y[:, -1]
@@ -584,10 +594,10 @@ def rk_45(ode_func, t_span:tuple, S0:np.array, args):
 
 
 ```{python}
-S_rk45_solution = rk_45(ode_func, t_span, S0, (I_func, K_num))
+S_rk45_solution = rk_45(ode_func, t_span, S0, delta_t, (I_func, K_num))
 ```
 
-Now wen can plot the results of both solvers:
+Now we can plot the results of both solvers:
 
 ```{python}
 diff_S = S_explicit_euler_solution - S_rk45_solution
@@ -645,11 +655,15 @@ This can be solved with both solvers. $S^{(i)} = 0$ for all $i$.
 ```{python}
 S_n_EE_dict = {}
 S_n_RK45_dict = {}
-n_num_list = [1,2,3,5]
+n_num_list = [1, 2, 3, 5]
 for n_num in n_num_list:
     S0 = np.zeros(n_num)  # Initial storage
-    S_n_EE_dict[n_num] = explicit_euler(ode_func_nth_order, t_span, S0, delta_t, (I_func, K_num, n_num))
-    S_n_RK45_dict[n_num] = rk_45(ode_func_nth_order, t_span, S0, (I_func, K_num, n_num))
+    S_n_EE_dict[n_num] = explicit_euler(
+        ode_func_nth_order, t_span, S0, delta_t, (I_func, K_num, n_num)
+    )
+    S_n_RK45_dict[n_num] = rk_45(
+        ode_func_nth_order, t_span, S0, delta_t, (I_func, K_num, n_num)
+    )
 ```
 
 Comparing Explicit Euler to the convolution:
@@ -697,13 +711,15 @@ The same conclusions as before can be drawn: the RK45 method is closer to the co
 
 :::
 
-## 1.2 Cascade of  non-linear reservoirs
+## Cascade of non-linear reservoirs
 
 In contrast to @eq-linear-storage, the storage-outflow relationship is now given by a non-linear function:
 
 $$
 Q = C S^r
-$$
+$$ {#eq-non-linear-storage}
+
+where $C$ [1/($\mathrm{m}^{3^{r-1}}$ s)] and $r$ [-] are parameters that can be calibrated. This relation makes the ODE non-linear, and so general analytical solutions cannot be obtained via the Laplace transformation. 
 
 The mass balance equation is then given by:
 
@@ -713,9 +729,53 @@ $$
 
 This can be solved numerically with the same solvers as before, as shown below. 
 
-TO DO: ADD EXAMPLE
+::: {#nte-numerical-ode-non-linear .callout-note icon=false}
 
-## 1.3 Muskingum method
+## Routing via numerical ODE integration for non-linear reservoirs
+
+We retake @nte-numerical-ode-linear but now the storage-outflow relation takes the form of @eq-non-linear-storage with $r=3$. 
+
+```{python}
+def ode_func_nonlinear(t: float, S: np.array, I_func, C: float, r: float):
+    dSdt = I_func(t) - C * S**r
+    return dSdt
+```
+
+The ODE are integrated with both solvers (explicit Euler and `RK45`). Note that we can't use the $K$ residence time parameter anymore, as we can't relate $K$ to $C$ without taking into account the storage itself ($Q = S/K = CS^r$)
+
+```{python}
+r_num = 3
+C_num = 1 / 3000 # 1/(m^6 h)
+S0 = np.array([0])  # Initial storage
+sol_ee_nonlinear = explicit_euler(
+    ode_func_nonlinear, t_span, S0, delta_t, (I_func, C_num, r_num)
+)
+Q_ee_nonlinear = (C_num * sol_ee_nonlinear**r_num).flatten()
+sol_rk45_nonlinear = rk_45(
+    ode_func_nonlinear, t_span, S0, delta_t, (I_func, C_num, r_num)
+)
+Q_rk45_nonlinear = (C_num * sol_rk45_nonlinear**r_num).flatten()
+```
+
+```{python}
+diff_euler_rk45_nonlinear = Q_ee_nonlinear - Q_rk45_nonlinear
+
+fig, axes = plt.subplots(2, 1, sharex=True)
+axes[0].plot(t_eval, Q_ee_nonlinear, label="Explicit Euler")
+axes[0].plot(t_eval, Q_rk45_nonlinear, label="RK45")
+axes[0].set_ylabel(r"$Q$ [m$^3$/h]")
+axes[0].legend()
+
+axes[1].plot(t_eval, diff_euler_rk45_nonlinear, label="Difference (Euler - RK45)")
+axes[1].set_xlabel(r"$t$ [h]")
+axes[1].set_ylabel(r"$\Delta Q$ [m$^3$/h]")
+axes[1].legend()
+```
+
+Remark that the difference between the two solvers is larger than for the linear reservoir case in @nte-numerical-ode-linear, i.e.\ the numerical error for the explicit Euler scheme becomes substantial. Nonetheless, a lot of operatoinal rainfall-runoff models (which contain non-linear reservoirs) still use the explicit Euler method. Following the seminal work of @2010ClarkKavetski, we encourage the reader to use adaptive explicit (such as `RK45`) or implicit methods. 
+:::
+
+## Muskingum method
 
 For this method, the storage-outflow relationship is given by:
 $$
@@ -732,6 +792,151 @@ $$
 \frac{dS}{dt} = I - \frac{S/K - XI}{1-X} = \frac{I(1 + X)}{1-X} - \frac{S/K}{1-X}
 $$
 
-where $I = I(t)$ as the input is time-varying  
+where $I = I(t)$ as the input is time-varying. Note that the relation between storage and discharge is linear. The Muskingum method is typically applied over a channel reach, defined by its length $\Delta x$. Below, an example is worked out based on @2005Brutsaert. However, the example is 'modernised' with following changes:
 
-TO DO: ADD EXAMPLE 
+1. The explicit Euler method is replaced by the adaptive `RK45` method
+2. Calibration will be carried out using standard calibration practices (minimising the mean squared error of the ODE solution) instead of the methods described in @2005Brutsaert.
+3. Replace the upper bound on the allowed $\Delta t$ given the wave celerity $c_m = \Delta x / K$ and $X$ from @2005Brutsaert for the specific time discretisation proposed there with a more general [Courant-Friedrichs-Lewy (CFL)](https://en.wikipedia.org/wiki/Courant%E2%80%93Friedrichs%E2%80%93Lewy_condition#The_one-dimensional_case) condition: $\frac{c_m \Delta t}{\Delta x} \leq 1 - X$.
+
+::: {#nte-muskingum .callout-note icon=false}
+
+## Example: Muskingum channel routing
+
+Following @2005Brutsaert, $\Delta x = 23$ km. Example data for $I$ and $O$ is given in `data/brutsaert_reach.csv` with `I` and `O` in m$^3$/s and `t` in h.  
+
+```{python}
+df_brutsaert = pd.read_csv("data/brutsaert_reach.csv", index_col=0)
+df_brutsaert.head()
+t_array = df_brutsaert.index.values * 3600  # Convert h to s
+delta_x = 23_000  # m
+```
+
+For the interpolation, we'll assume that the hourly measurement is reflective of the flow at that exact moment in the time. For simplicity, we'll therefore apply linear interpolation between the measurements
+
+```{python}
+fn_I = scipy.interpolate.interp1d(
+    t_array, df_brutsaert["I"], kind="linear", fill_value="extrapolate"
+)
+```
+
+Now define the ODE function for the Muskingum method:
+```{python}
+def muskingum_outflow(S, K, X, I):
+    return (S / K - X * I) / (1 - X)
+
+
+def muskingum_storage(Q, K, X, I):
+    return K * (X * I + (1 - X) * Q)
+
+
+def calc_max_delta_t(K, X, delta_x):
+    c_m = delta_x / K  # wave celerity
+    return (1 - X) * delta_x / c_m  # CFL condition
+
+
+def ode_func_muskingum(t: float, S: np.array, I_func, K: float, X: float):
+    I_t = I_func(t)
+    dSdt = I_t - muskingum_outflow(S, K, X, I_t)
+    return dSdt
+```
+
+To obtain optimal parameters for $K$ and $X$, we define a cost function that calculates the mean squared error between the observed outflow and the modelled outflow. 
+
+
+```{python}
+def cost_function_muskingum(params, t_array, I_func, O_obs, delta_x):
+    K_hours, X = params
+    K = K_hours * 3600  # Convert to seconds for the ODE
+    # Equilibrium initial storage: S0 = K*[(1-X)*O0 + X*I0]
+    S0 = np.array([
+        muskingum_storage(O_obs[0], K, X, I_func(t_array[0]))
+    ])  # Initial storage
+    max_delta_t = calc_max_delta_t(K, X, delta_x)  # CFL condition
+    delta_t_eval = np.diff(t_array)[
+        0
+    ]  # Use the time step of the input data for evaluation
+    S_solution = rk_45(
+        ode_func_muskingum,
+        (t_array[0], t_array[-1]),
+        S0,
+        delta_t_eval=delta_t_eval,
+        args=(I_func, K, X),
+        max_step=max_delta_t,
+    )  # Solve ODE
+    Q_solution = muskingum_outflow(
+        S_solution[0, :], K, X, I_func(t_array)
+    )  # Calculate outflow
+    mse = np.mean((Q_solution - O_obs) ** 2)
+    return mse
+```
+
+To calibrathe parameters with the Nelder-Mead method from `scipy.optimize.minimize`, we need to provide an initial guess for $K$ and $X$:
+
+- For the physical interpretation of $X$ tol hold (see @2005Brutsaert), $X \in ]0, 0.5]$ is required. 0.25 is hence a reasonable initial guess.
+- $K$ can still be intepreted as a residence time, so $K = 5h$ is assumed a reasonable initial guess.
+
+```{python}
+method = "Nelder-Mead"
+K_hours_0 = 5.0  # hours (optimizer works in hours; cost function converts to seconds)
+X_0 = 0.25  # -
+params_0 = np.array([K_hours_0, X_0])
+bounds = [(1e-6, None), (1e-6, 0.5)]  # K_hours > 0, X in ]0, 0.5]
+test_cost = cost_function_muskingum(params_0, t_array, fn_I, df_brutsaert["O"].values, delta_x)
+```
+
+```{python}
+optim_res = scipy.optimize.minimize(
+    cost_function_muskingum,
+    params_0,
+    args=(t_array, fn_I, df_brutsaert["O"].values, delta_x),
+    method=method,
+    bounds=bounds,
+    tol=1e-3,
+    options={"disp": True},
+)
+K_hours_opt, X_opt = optim_res.x
+K_opt = K_hours_opt * 3600  # Convert to seconds
+print(f"Optimized parameters: K = {K_hours_opt:.2f} h, X = {X_opt:.4f}")
+```
+
+These values are very similar to the $K = 1.99$h and $X=0.3$ reported in @2005Brutsaert. We can now solve the ODE with the optimized parameters and compare the results to the observed outflow:
+
+```{python}
+S0_opt = np.array([
+    muskingum_storage(df_brutsaert["O"].iloc[0], K_opt, X_opt, fn_I(t_array[0]))
+])  # Initial storage
+max_step = calc_max_delta_t(K_opt, X_opt, delta_x)  # CFL condition
+S_solution_opt = rk_45(
+    ode_func_muskingum,
+    (t_array[0], t_array[-1]),
+    S0_opt,
+    delta_t_eval=3600,
+    args=(fn_I, K_opt, X_opt),
+    max_step=max_step,
+)  # Solve ODE
+Q_solution_opt = muskingum_outflow(
+    S_solution_opt[0, :], K_opt, X_opt, fn_I(t_array)
+)  # Calculate outflow
+```
+
+```{python}
+fig, ax = plt.subplots()
+df_brutsaert["I"].plot(ax=ax, label=r"$I$ observed", color=colors[0])
+df_brutsaert["O"].plot(ax=ax, label=r"$O$ observed", color=colors[1])
+ax.plot(
+    t_array / 3600,
+    Q_solution_opt,
+    label=r"$O$ modelled",
+    linestyle="--",
+    color=colors[1],
+)
+ax.set_xlabel("Time [h]")
+ax.set_ylabel(r"$Q$ [m$^3$/s]")
+ax.legend()
+```
+:::
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

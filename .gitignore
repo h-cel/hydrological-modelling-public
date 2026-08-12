@@ -1,7 +1,7 @@
 # Quarto related 
 /_book/
 /_freeze/
-/.jupyter_cache/
+*.jupyter_cache/
 0_study_area_and_data_files/
 1_catchment_delineation_files/
 

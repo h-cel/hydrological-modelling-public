@@ -170,7 +170,7 @@ Which is identical to the analytical solution @eq-analytical-solution-linear-res
 
 ### Second order linear reservoir with constant input
 
-We now get two reservoirs in series:
+We now have two reservoirs in series:
 
 $$
 \begin{aligned}
@@ -181,7 +181,7 @@ $$
 
 The same SymPy approach can be extended to solve this coupled system. To simplify the solution, we'll assume:
 
-- The second reservoir is initially empty, i.e. $Q^{(2)}(0) = 0$.
+- The second reservoir is initially empty, i.e. $Q^{(2)}(0) = 0 / K_2 = 0$.
 - The first reservoir has an initial outflow $Q^{(1)}(0) = Q_0$ as it is assumed non-empty.
 - The first and second reservoirs have the same residence time, i.e. $K^{(1)} = K^{(2)} = K$. 
 
@@ -220,12 +220,14 @@ display(ode1_laplace_ic, ode2_laplace_ic)
 Solve the algebraic system for $q_1(s)$ and $q_2(s)$:
 
 ```{python}
-q_s_solved_2 = sp.solve([ode1_laplace_ic, ode2_laplace_ic], [q1(s), q2(s)], dict=True)[0]
-q2_s = q_s_solved_2[q2(s)]
+q_s_solved_2 = sp.solve([ode1_laplace_ic, ode2_laplace_ic], [q1(s), q2(s)], dict=True)[
+    0
+]  # Solve for q1(s) and q2(s)
+q2_s = q_s_solved_2[q2(s)]  # Extract q2(s) from solution dict
 q2_s
 ```
 
-To get a solution closer to the notation of the theory, we'll first break up into partial fractions:
+To get a solution closer to the notation of the theory, we'll first break up into partial fractions using `sp.apart`:
 ```{python}
 q2_s_partial = sp.apart(q2_s, s)
 q2_s_partial
@@ -238,11 +240,17 @@ Q2_solved = sp.inverse_laplace_transform(q2_s_partial, s, t)
 Q2_solved
 ```
 
-Also $Q_2(t)$ can now be visualised for different constant inflows $I$ and the same parameters as before:
+This symbolic solution can now be converted into a regular, numeric Python function acccepting `numpy` using `sp.lambdify`:
+
+```{python}
+Q2_func = sp.lambdify([t, I, K, Q0], Q2_solved, "numpy")
+```
+
+$Q_2(t)$ can now be visualised for different constant inflows $I$ and the same parameters as before. 
 ```{python}
 for i, I_ in enumerate(I_array):
-    Q2_func = sp.lambdify(t, Q2_solved.subs({I: I_, K: K_num, Q0: Q_0_num}), "numpy")
-    Q2_ = Q2_func(t_array)
+    Q2_func_ = lambda t_: Q2_func(t_, I_, K_num, Q_0_num)
+    Q2_ = Q2_func_(t_array)
     ax.plot(
         t_array, Q2_, label=rf"I = {I_:.2f} m$^3$/h", color=colors[i], linestyle="--"
     )
@@ -438,6 +446,7 @@ A_example = 10_000  # m^2, example catchment area
 I_array_m3h = np.array(I_array) * A_example / 1000  # m^3/h
 t_array = np.arange(len(I_array))  # h
 ```
+
 where each value represent the average rainfall intensity over a 1h time step. We can make a piecewise constant function of this input:
 ```{python}
 I_func = scipy.interpolate.interp1d(

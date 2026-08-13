@@ -45,7 +45,7 @@ $$
 \frac{dS}{dt} = K\frac{dQ}{dt} =  I - Q
 $$ {#eq-ode-linear-reservoir}
 
-As this is a linear ordinary differential equation, it can be solved analytically using Laplace transforms (see your course in the 2nd bachelor year on [Differential Equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)). Remember that although the definition of a Laplace transform might seem complex
+As this is a linear ordinary differential equation (ODE), it can be solved analytically using Laplace transforms (see your course in the 2nd bachelor year on [Differential Equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)). Remember that although the definition of a Laplace transform might seem complex
 $$
 F(s) = \mathcal{L}\{f(t)\} = \int_0^\infty f(t) e^{-st} dt,
 $$
@@ -143,6 +143,8 @@ and then define the ODE in the form $K \frac{dQ}{dt} - (I - Q) = 0$:
 ode_linear = K * sp.diff(Q(t), t) - (I - Q(t))
 ode_linear
 ```
+
+using `sp.diff(Q(t), t)` to denote the derivative of $Q(t)$ with respect to $t$.
 
 Now take the Laplace transform of the ODE defining $q(s) = \mathcal{L}\{Q(t)\}$:
 ```{python}
@@ -243,7 +245,7 @@ Q2_solved = sp.inverse_laplace_transform(q2_s_partial, s, t)
 Q2_solved
 ```
 
-This symbolic solution can now be converted into a regular, numeric Python function acccepting `numpy` using `sp.lambdify`:
+This symbolic solution can now be converted into a regular, numeric Python function accepting `numpy` using `sp.lambdify`:
 
 ```{python}
 Q2_func = sp.lambdify([t, I, K, Q0], Q2_solved, "numpy")
@@ -296,9 +298,9 @@ $$ {#eq-qn-s-consant-input}
 
 In SymPy, this can be expressed as (reusing the previously solved $q^{(1)}(s)$ denoted as `q_s_solved`):
 ```{python}
-n = sp.symbols("n", positive=True, integer=True)  
+n = sp.symbols("n", positive=True, integer=True)
 q_n_s = q_s_solved / ((1 + K * s) ** (n - 1))
-q_n_s = sp.refine(q_n_s, sp.Q.gt(n, 1))
+q_n_s = sp.refine(q_n_s, sp.Q.gt(n, 1))  # Specify n > 1
 display(q_n_s)
 ```
 
@@ -322,7 +324,7 @@ $$
 Q^{(n)}(t) = I  - I e^{-t/K}\sum_{i=0}^{n-1} \frac{(t/K)^i}{i!} + Q_0 e^{-t/K}\sum_{i=0}^{n-1} \frac{(t/K)^i}{i!}
 $$
 
-which is identical to the formulation in the theory notes. We can now also easily plot results for different $n$ values
+which is identical to the formulation in the theory notes. We can now also plot results for different $n$ values, again using `sp.lambdify` to convert the symbolic solution into a numeric function:
 
 ```{python}
 I_num = 0.06  # m^3/h
@@ -342,9 +344,9 @@ ax.legend()
 
 The larger $n$, the more delayed the response of the outflow is. 
 
-### Nash-casacde 
+### Nash casacde 
 
-A Nash-cascade is a special case of the $n$-th order linear reservoir, where the input $I$ to the first reservoir is a [Dirac delta function $\delta(t)$](https://en.wikipedia.org/wiki/Dirac_delta_function):
+A Nash cascade is a special case of the $n$-th order linear reservoir, where the input $I$ to the first reservoir is a [Dirac delta function $\delta(t)$](https://en.wikipedia.org/wiki/Dirac_delta_function):
 $$
 \delta(t) = \begin{cases}
 \infty, & t = 0 \\
@@ -356,7 +358,7 @@ $$
 \int_{-\infty}^{\infty} \delta(t) dt = 1
 $$
 
-It has the very useful property that $\mathcal{L}\{\delta(t)\} = 1$^[Note that $t$ needs to be defined between $-\infty$ and $\infty$ for this to be true]. Additionally assuming that the first reservoir is initially empty, i.e. $Q^{(1)}(0) = 0$, the continuity equation for the first reservoir of @eq-ode-linear-reservoir sets $I = \delta(t)$ and $Q(t=0) = 0$. The ODE can be laplace transformed:
+It has the very useful property that $\mathcal{L}\{\delta(t)\} = 1$^[Note that $t$ needs to be defined between $-\infty$ and $\infty$ for this to be true]. Additionally assuming that the first reservoir is initially empty, i.e. $Q^{(1)}(0) = 0/K = 0$, the continuity equation for the first reservoir of @eq-ode-linear-reservoir sets $I = \delta(t)$ and $Q(t=0) = 0$. The ODE can be Laplace transformed:
 
 ```{python}
 t = sp.symbols("t")  # Generalise t for correct dirac delta transform!
@@ -404,9 +406,9 @@ Q_n_solved_nash_simplified = sp.refine(Q_n_solved_nash_simplified, sp.Q.positive
 Q_n_solved_nash_simplified
 ```
 
-Again note the equivalence to the formulation in the theory notes. Interestingly, the solution here assumes an empty first reservoir and a Dirac delta input, while the theory notes assume no input and the first reservoir contains a unit volume $S^{(1)}(t=0) = 1$ m^3^. The two assumptions are equivalent, as the Dirac delta input can be interpreted as this unit input to an empty reservoir. 
+Again note the equivalence to the formulation in the theory notes. Interestingly, the solution here assumes an empty first reservoir and a Dirac delta input, while the theory notes assume no input and the first reservoir containing a unit volume $S^{(1)}(t=0) = 1$ m^3^. The two assumptions are equivalent, as the Dirac delta input can be interpreted as this unit input to an empty reservoir. 
 
-Because the Nash-cascade is the response to an instantaneous input, it can be interpreted as an Instantaneous Unit Hydrograph (IUH)! Also note that the assumption that $n$ is an integer can be relaxed to $n$ being a positive real number. In this case, applying the inverse Laplace transform yields:
+Because the Nash cascade is the response to an instantaneous input, it can be interpreted as an Instantaneous Unit Hydrograph (IUH)! Also note that the assumption that $n$ is an integer can be relaxed to $n$ being a positive real number. In this case, applying the inverse Laplace transform yields:
 ```{python}
 n = sp.symbols("n", positive=True, real=True)
 q_n_s_nash = 1 / ((1 + K * s) ** n)
@@ -414,7 +416,7 @@ Q_n_solved_nash = sp.simplify(sp.inverse_laplace_transform(q_n_s_nash, s, t))
 Q_n_solved_nash
 ```
 
-This allows $n$ to be calibrated as a real number to match the geomorphological characteristics of a catchment. For completeness, we visualise the Nash-cascade for different $n$ values, including non-integer values:
+with $\Gamma(n)$ the gamma function. This allows $n$ to be calibrated as a real number to match the geomorphological characteristics of a catchment. For completeness, we visualise the Nash cascade for different $n$ values, including non-integer values:
 
 ```{python}
 n_num_list = [1, 1.5, 2, 2.5, 3, 5]
@@ -434,13 +436,20 @@ ax.legend()
 
 ## Application: routing via convolution
 
-Defining $u(t) = \frac{1}{(n-1)!K}(\frac{t}{K})^{n-1} \exp{(-t/K)}$ following the nash cascade, the outflow $Q(t)$ is given by the convolution of $u(t)$ with the input $I(t)$:
+Defining $u(t) = \frac{1}{\Gamma(n)K}(\frac{t}{K})^{n-1} \exp{(-t/K)}$ following the Nash cascade (see `Q_n_solved_nash` above), the outflow $Q(t)$ is given by the convolution of $u(t)$ with the input $I(t)$:
 
 $$
 Q(t) = (u * I)(t) = \int_0^t u(\tau) I(t-\tau) d\tau
 $$
 
 Note that this convolution concept is only valid because the system is **linear** and hence the [**principle of superposition**](https://en.wikipedia.org/wiki/Superposition_principle) holds!
+
+```{python}
+u_nash_func = sp.lambdify((t, n, K), Q_n_solved_nash, "numpy")
+
+def integrand_func(tau, t, n, K):
+    return I_func(tau) * u_nash_func(t - tau, n, K)
+```
 
 Define a toy input $I(t)$:
 ```{python}
@@ -470,30 +479,28 @@ ax.plot(t_eval_hr, I_hr, color="blue", label=r"$I(t)$", alpha=0.8)
 ax.scatter(t_array, I_array_m3h, color="black", label="Array data", zorder=3)
 ax.set_xlim(0, np.max(t_array) * 1.1)
 ax.set_xlabel(r"$t$ [h]")
+ax.set_ylabel(r"$I$ [m$^3$/h]")
 ax.legend()
 ```
 
-Now wen can numerically integrate the convolution with [`scipy.integrate.quad`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html) to get $Q(t)$ for different $n$ values:
+Now wen can numerically^[Alternatively, you can obtain a discrete representation of the convolution as done in @bootsma2025daemons] integrate the convolution with [`scipy.integrate.quad`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html) to get $Q(t)$ for different $n$ values:
 ```{python}
-u_nash_func = sp.lambdify((t, n, K), Q_n_solved_nash, "numpy")
-
-
-def integrand_func(tau, t, n, K):
-    return I_func(tau) * u_nash_func(t - tau, n, K)
-
-
 Q_numerical_dict = {}
 for n_num in n_num_list:
     print("Integrating for n =", n_num)
     Q_numerical_ = np.zeros_like(t_eval)
     for i, t_ in enumerate(t_eval):
         Q_numerical_[i] = scipy.integrate.quad(
-            integrand_func, 0, t_, args=(t_, n_num, K_num), points=t_array[t_array <= t_]
-        )[0] # Use points argument to handle discontinuities in I_func
+            integrand_func,
+            0,
+            t_,
+            args=(t_, n_num, K_num),
+            points=t_array[t_array <= t_],
+        )[0]  # Use points argument to handle discontinuities in I_func
     Q_numerical_dict[n_num] = Q_numerical_
 ```
 
-Now we can plot the input and output:
+Plotting the input and output:
 ```{python}
 fig, ax = plt.subplots()
 for n_num, Q_numerical_ in Q_numerical_dict.items():

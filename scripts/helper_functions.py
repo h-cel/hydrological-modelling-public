@@ -1,17 +1,27 @@
 import subprocess
 import sys
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
 import rioxarray  # noqa: F401
 import xarray as xr
 
-sys.path.append(
-    subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
-)
+try:
+    sys.path.append(
+        subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
+    )
+    import grass.script as gs
+    import grass.script.array as ga
 
-import grass.script as gs
-import grass.script.array as ga
+except Exception:  # noqa: BLE001
+    warnings.warn(
+        "Could not find GRASS GIS Python path. Make sure GRASS GIS is installed and "
+        "accessible. Functions relying on GRASS GIS might not work.",
+        RuntimeWarning,
+    )
+    gs = None
+    ga = None
 
 
 def get_data_array_from_grass(raster_name: str) -> xr.DataArray:

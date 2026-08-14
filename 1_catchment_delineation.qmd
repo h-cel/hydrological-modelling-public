@@ -24,6 +24,10 @@ Note that:
     - The output of a previous function (e.g. `OUTPUT_NAME` in the example above) can be used as input for a subsequent function. For example, if you want to use the output of `r.import` as input (called `elevation`) for a slope calculation with `r.slope.aspect`, you would call `tools.r_slope_aspect(elevation="OUTPUT_NAME", slope="SLOPE", overwrite=True)`.
     - In `scripts/helper_functions.py`, two helper functions are defined: `get_data_array_from_raster` gives you an [`xarray.DataArray`](https://docs.xarray.dev/en/stable/user-guide/data-structures.html#dataarray) given the name (e.g. `"OUTPUT_NAME"`) of a GRASS raster layer and `plot_grass_raster` makes a plot of a GRASS raster layer (given its name as again). Use these functions to check intermediate results. 
 
+::: {.callout-warning}
+As of 14/08/2026, installing GRASS on Windows via conda-forge can fail. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed [here](https://github.com/OSGeo/grass/issues/7615). 
+:::
+
 Irrespective of the choice of interface, an overview of all GRASS functions can be found in [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html). Specific tips for each interface will be denoted by their logo in the steps below.
 
 1. Start by loading the DTM (see @sec-study-area-dtm). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately $x_{\mathrm{min}}=$ `{python} XMIN` m, $x_{\mathrm{max}}$ = `{python} XMAX` m, $y_{\mathrm{min}}$ = `{python} YMIN` m, $y_{\mathrm{max}}$ = `{python} YMAX` m). 

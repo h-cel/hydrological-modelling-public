@@ -7,7 +7,7 @@ import rootutils
 
 sys.path.append(
     subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
-)
+)  # If this line fails (most likely on Windows), make the exercise with QGIS instead
 
 import grass.script as gs
 from grass.tools import Tools

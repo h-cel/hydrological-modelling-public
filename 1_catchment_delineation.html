@@ -278,7 +278,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>As of 14/08/2026, installing GRASS on Windows via conda-forge can fail. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed <a href="https://github.com/OSGeo/grass/issues/7615">here</a>.</p>
+<p>As of 14/08/2026, installing GRASS on Windows is not always stable. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed <a href="https://github.com/OSGeo/grass/issues/7615">here</a>.</p>
 </div>
 </div>
 <p>Irrespective of the choice of interface, an overview of all GRASS functions can be found in <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>. Specific tips for each interface will be denoted by their logo in the steps below.</p>
@@ -289,13 +289,13 @@ Warning
 </ul></li>
 <li>Spatially gap-fill the DTM (i.e.&nbsp;make sure there are no missing values).
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fillnulls.html"><code>r.fillnulls</code></a> function to fill in missing values.</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fillnulls.html"><code>r.fillnulls</code></a> function to fill in missing values. If the function fails (likely on Windows), consider choosing a different interpolation method than the default.</li>
 <li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Fill nodata</code> tool (from GDAL).</li>
 </ul></li>
 <li>Filter the digital elevation model for sinks (or depressions) and fill them. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fill.dir.html"><code>r.fill.dir</code></a> function.</li>
 <li>Calculate the flow direction and accumulation into each grid cell of the domain. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.watershed.html"><code>r.watershed</code></a> function. Make sure that D8 is used as flow direction algorithm. Further more, ensure that the minimum size of an exterior watershed basins is set to 500. Keep both the accumulation (i.e.&nbsp;how many cells drain into each cell) and the flow direction map as outputs.<br>
 </li>
-<li>Check if the accumulation map aligns with the actual river network of the Zwalm catchment from the <em>Vlaamse Hydrografische Atlas</em> (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>). In the attributes of the shapefile, you can filter in <code>"NAMEN"</code> for <code>"Zwalmbeek - Dorenbosbeek"</code> to only withhold the main Zwalm river.
+<li>Check if the accumulation map aligns with the actual river network of the Zwalm catchment from the <em>Vlaamse Hydrografische Atlas</em> (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>).
 <ul>
 <li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <code>get_data_array_from_raster</code> to get the accumulation map as an <code>xarray.DataArray</code>. Use <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.read_file.html#geopandas.read_file"><code>geopandas.read_file</code></a> to read in the river network shapefile.</li>
 </ul></li>

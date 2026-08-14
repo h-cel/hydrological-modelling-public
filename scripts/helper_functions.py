@@ -1,3 +1,5 @@
+import os
+import stat
 import subprocess
 import sys
 import warnings
@@ -33,6 +35,12 @@ else:
     )
     gs = None
     ga = None
+
+
+def remove_readonly(func, path, _):
+    "Clear the readonly bit and reattempt the removal"
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 
 def get_data_array_from_grass(raster_name: str) -> xr.DataArray:

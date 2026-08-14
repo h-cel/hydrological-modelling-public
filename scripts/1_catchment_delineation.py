@@ -10,7 +10,7 @@ import rootutils
 ROOT_PATH = rootutils.find_root(search_from=__file__, indicator=".git")
 sys.path.append(str(ROOT_PATH / "scripts"))
 
-from helper_functions import find_grass_python_path
+from helper_functions import find_grass_python_path, remove_readonly
 
 # Add GRASS GIS Python path to sys.path
 grass_python_path = find_grass_python_path()
@@ -30,7 +30,7 @@ grass_project_dir = ROOT_PATH / "grass_project"
 
 # %% Create a new GRASS project and session every time the script is run
 if grass_project_dir.exists():
-    shutil.rmtree(grass_project_dir)
+    shutil.rmtree(grass_project_dir, onexc=remove_readonly)
 gs.create_project(path=grass_project_dir, epsg=31370)
 
 session = gs.setup.init(grass_project_dir)

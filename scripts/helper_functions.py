@@ -7,14 +7,25 @@ import numpy as np
 import rioxarray  # noqa: F401
 import xarray as xr
 
-try:
-    sys.path.append(
-        subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
-    )
+
+def find_grass_python_path():
+    for command in (
+        ["grass", "--config", "python_path"],
+        ["conda", "run", "grass", "--config", "python_path"],
+    ):
+        try:
+            return subprocess.check_output(command, text=True).strip()
+        except Exception:
+            continue
+    return None
+
+
+grass_python_path = find_grass_python_path()
+if grass_python_path is not None:
+    sys.path.append(grass_python_path)
     import grass.script as gs
     import grass.script.array as ga
-
-except Exception:  # noqa: BLE001
+else:
     warnings.warn(
         "Could not find GRASS GIS Python path. Make sure GRASS GIS is installed and "
         "accessible. Functions relying on GRASS GIS might not work.",

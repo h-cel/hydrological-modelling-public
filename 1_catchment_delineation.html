@@ -268,6 +268,19 @@ Tip&nbsp;4.1
 <li>In <code>scripts/helper_functions.py</code>, two helper functions are defined: <code>get_data_array_from_raster</code> gives you an <a href="https://docs.xarray.dev/en/stable/user-guide/data-structures.html#dataarray"><code>xarray.DataArray</code></a> given the name (e.g.&nbsp;<code>"OUTPUT_NAME"</code>) of a GRASS raster layer and <code>plot_grass_raster</code> makes a plot of a GRASS raster layer (given its name as again). Use these functions to check intermediate results.</li>
 </ul></li>
 </ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As of 14/08/2026, installing GRASS on Windows via conda-forge can fail. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed <a href="https://github.com/OSGeo/grass/issues/7615">here</a>.</p>
+</div>
+</div>
 <p>Irrespective of the choice of interface, an overview of all GRASS functions can be found in <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>. Specific tips for each interface will be denoted by their logo in the steps below.</p>
 <ol type="1">
 <li>Start by loading the DTM (see <a href="0_study_area_and_data.html#sec-study-area-dtm" class="quarto-xref"><span>Section 3.2</span></a>). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately <span class="math inline">\(x_{\mathrm{min}}=\)</span> 98000 m, <span class="math inline">\(x_{\mathrm{max}}\)</span> = 116000 m, <span class="math inline">\(y_{\mathrm{min}}\)</span> = 160000 m, <span class="math inline">\(y_{\mathrm{max}}\)</span> = 180000 m).

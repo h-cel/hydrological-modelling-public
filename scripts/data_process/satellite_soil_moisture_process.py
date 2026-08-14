@@ -80,10 +80,10 @@ def main():
         .compute()
     )
     da_spatial_avg_noise = (
-        1
-        / nr_pixels_filtered
-        * np.sqrt(
-            (ds_clipped_filtered[VARIABLE_NAME_NOISE] ** 2).sum(
+        np.sqrt(
+            1
+            / nr_pixels_filtered
+            * (ds_clipped_filtered[VARIABLE_NAME_NOISE] ** 2).sum(
                 dim=["lat", "lon"], skipna=True
             )
         )

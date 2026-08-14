@@ -10,6 +10,10 @@ data/*
 !data/parameters_new.csv
 !data/parameters_old.csv
 !data/parameter_conversion.py
+!data/solutions
+
+# Agents
+.claude/settings.json
 
 # GRASS environment
 grass_project/*

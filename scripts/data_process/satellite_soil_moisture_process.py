@@ -26,7 +26,7 @@ rioxarray.set_options(convention=rioxarray.enum.Convention.CF)
 def main():
     # %% Read in
     ds = xr.open_mfdataset(
-        SATELLITE_SOIL_MOISTURE_RAW_DIR.glob("*/*.nc"),
+        SATELLITE_SOIL_MOISTURE_RAW_DIR.glob("*.nc"),
         decode_coords="all",
         chunks="auto",
     ).rename({"t": "time", "x": "lon", "y": "lat"})

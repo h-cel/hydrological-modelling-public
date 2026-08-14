@@ -34,6 +34,12 @@ df_param_new.loc[df_param_new["Parameter"] == "alpha", numerical_columns] = [
     default_alpha,
 ]
 
+# %% Manual changes following experiments by Lucas Boeyeksn
+df_param_new.loc[df_param_new["Parameter"] == "lambda", "Minimum"] = 0.1
+df_param_new.loc[df_param_new["Parameter"] == "Smax", "Maximum"] = 730.0
+df_param_new.loc[df_param_new["Parameter"] == "kappa_2", "Minimum"] = 25.0
+df_param_new.loc[df_param_new["Parameter"] == "kappa_2", "Maximum"] = 250.0
+df_param_new.loc[df_param_new["Parameter"] == "kappa_1", "Minimum"] = 0.16
 
 # %%  Round the numerical values to 2 significant digits
 df_param_new[numerical_columns] = df_param_new[numerical_columns].apply(

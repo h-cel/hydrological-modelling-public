@@ -1,4 +1,5 @@
 # %% Imports
+import os
 import shutil
 import subprocess
 import sys
@@ -23,6 +24,7 @@ else:
         "accessible. Functions relying on GRASS GIS will not work."
     )
 
+os.environ.setdefault("HOME", os.environ.get("USERPROFILE", ""))
 
 grass_project_dir = ROOT_PATH / "grass_project"
 

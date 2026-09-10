@@ -140,7 +140,7 @@ Some general tips and recommendations:
 
 ::: {.callout-important icon="false" title="Challenge"}
 
-The forward Euler scheme presented above is the simplest available numerical method to solve the ODEs. [`SciPy`](https://docs.scipy.org/doc/scipy/index.html) offers more advanced numerical time integration methods. Investigate how the choice of time integration method affects the model outcome.
+The forward Euler scheme presented above is the simplest available numerical method to solve the ODEs. [`SciPy`](https://docs.scipy.org/doc/scipy/index.html) offers more advanced numerical time integration methods in `scipy.integrate.solve_ivp`. Investigate how the choice of time integration method affects the model outcome.
 
 :::
 

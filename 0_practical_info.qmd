@@ -15,6 +15,22 @@ This assignment is provided to you in two formats, up to you which one you prefe
 1. A website at [https://h-cel.github.io/hydrological-modelling-public/](https://h-cel.github.io/hydrological-modelling-public/)
 2. A PDF document, which you can download from [https://h-cel.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf](https://h-cel.github.io/hydrological-modelling-public/Exercises-Hydrological-Modelling.pdf)
 
+Throughout the assignment, text formatted as 
+
+::: {.callout-tip}
+
+*A hint* 
+:::
+
+contains tips and recommendations to help you with the exercises. If you need an extra challenge, you can find these in text blocks formatted as
+
+::: {.callout-important icon="false" title="Challenge"}
+
+*A challenge* 
+:::
+
+These challenges are always optional and are meant for those who are interested. 
+
 ## Working with Quarto and Python 
 
 A general introduction to Quarto and Python is given in... LINK TO DEPARTMENT WIDE INTRO HERE LATER. 

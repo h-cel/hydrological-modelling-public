@@ -30,7 +30,7 @@ from great_tables import GT
 
 from shapely.geometry import box
 
-MAP_SOURCE = cx.providers.CartoDB.Positron
+MAP_SOURCE = cx.providers.Esri.WorldStreetMap
 root_path = rootutils.find_root()
 processed_data_dir = root_path / "data" / "processed"
 plt.style.use("figurestyling.mplstyle")
@@ -88,7 +88,7 @@ bbox_zwalm.plot(ax=iax, color="none", edgecolor="red", linewidth=1.5)
 ```
 
 As mentioned in @sec-practical-info, all the processed data is available at `data/processed`. If interested, you can inspect (and execute) all downloading
-and processing steps yourself by following the instructions in `scripts/data_download/README.md` and `scripts/data_process/README.md`.
+and processing steps yourself by following the instructions in `scripts/data_download/README.md` and `scripts/data_process/README.md` of the repository.
 
 In the next section, more information is given on the data sources and processing steps for the different types of provided data. Note that all geographic data is provided in the [Belgian Lambert 72](https://epsg.io/31370) (BD72, EPSG:31370) coordinate reference system (CRS).
 
@@ -208,4 +208,4 @@ df_ssm = pd.read_csv(
 print(list(df_ssm.columns))
 ```
 
-with `time` the date of acquistion, `ssm` the spatially averaged $SSM$ and `noise` is the spatially averaged standard deviation of the $SSM$ following  a simple mean^[Alternatively, one could follow the [rules of propagation of uncertainty](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). In that case, any function $f$, their standard deviation is given by $\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}$ assuming **no covariance** between $x,y,z\cdots$ and linearly approximating $f$. Note that an average is a linear function, so here this is not an approximation. With the average $\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i$ as $f$, $\frac{\partial f}{\partial x_i} = \frac1N$ and so $\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2$. This assumption of no covariance is a strong one however, which does not necessarily hold up for soil moisture retrievals which exhibit spatial correlation. Therefore, we make the safe assumption of perfectly correlated pixels, which increases the estimated uncertainty to $\sigma_{\bar{x}}^2 = \frac{1}{N} \sum_{i=1}^N \sigma_i^2$].
+with `time` the date of acquistion, `ssm` the spatially averaged $SSM$ and `noise` is the spatially averaged standard deviation of the $SSM$ following  a simple mean^[Alternatively, one could follow the [rules of propagation of uncertainty](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). In that case, any function $f$, the standard deviation is given by $\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}$ assuming **no covariance** between $x,y,z\cdots$ and linearly approximating $f$. Note that an average is a linear function, so here this is not an approximation. With the average $\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i$ as $f$, $\frac{\partial f}{\partial x_i} = \frac1N$ and so $\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2$. This assumption of no covariance is a strong one however, which does not necessarily hold up for soil moisture retrievals which exhibit spatial correlation. Therefore, we make the safe assumption of perfectly correlated pixels, which increases the estimated uncertainty to $\sigma_{\bar{x}}^2 = \frac{1}{N} \sum_{i=1}^N \sigma_i^2$].

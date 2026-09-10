@@ -25,7 +25,7 @@ Note that:
     - In `scripts/helper_functions.py`, two helper functions are defined: `get_data_array_from_raster` gives you an [`xarray.DataArray`](https://docs.xarray.dev/en/stable/user-guide/data-structures.html#dataarray) given the name (e.g. `"OUTPUT_NAME"`) of a GRASS raster layer and `plot_grass_raster` makes a plot of a GRASS raster layer (given its name as again). Use these functions to check intermediate results. 
 
 ::: {.callout-warning}
-As of 14/08/2026, installing GRASS on Windows is not always stable. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed [here](https://github.com/OSGeo/grass/issues/7615). 
+As of 14/08/2026, installing GRASS on Windows via conda is not always stable. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed [here](https://github.com/OSGeo/grass/issues/7615). Consider using QGIS instead for now. 
 :::
 
 Irrespective of the choice of interface, an overview of all GRASS functions can be found in [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html). Specific tips for each interface will be denoted by their logo in the steps below.

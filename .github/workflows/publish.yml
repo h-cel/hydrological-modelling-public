@@ -27,7 +27,7 @@ jobs:
         run: echo "ENV_NAME=$(yq '.name' environment.yml)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Python with Miniconda
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           environment-file: environment.yml
           activate-environment: ${{ steps.get-env-name.outputs.ENV_NAME }}

@@ -253,7 +253,7 @@ window.Quarto = {
 <li>Approximate <span class="math inline">\(\nabla \psi^{k}\)</span> as <span class="math display">\[\nabla \psi^{(k)} = \left[\frac{\psi^{(k)'}_1 - \psi^{(k)}}{p_1^{(k)'} - p_1^{(k)}}, \frac{\psi^{(k)'}_2 - \psi^{(k)}}{p_2^{(k)'} - p_2^{(k)}}, \ldots, \frac{\psi^{(k)'}_n - \psi^{(k)}}{p_n^{(k)'} - p_n^{(k)}}\right]^T\]</span></li>
 </ol></li>
 <li>Normalise the gradient vector: <span class="math display">\[\overline{\nabla \psi^{(k)}} = \frac{\nabla \psi^{(k)}}{||\nabla \psi^{(k)}||} = \frac{\nabla \psi^{(k)}}{\sqrt{{\nabla \psi^{(k)}}^T \nabla \psi^{(k)}}}\]</span></li>
-<li>Calculate a new iteration of the parameter vector as <span class="math display">\[\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}\]</span> with <span class="math inline">\(\omega\)</span> the the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical <span class="math inline">\(\omega\)</span> is used which decreases with each iteration: <span class="math display">\[\omega^{(k)} = \gamma^k \omega^{(0)}\]</span> with <span class="math inline">\(\gamma = 0.99\)</span> and <span class="math inline">\(\omega^{(0)} = 10^{-7}\)</span>.</li>
+<li>Calculate a new iteration of the parameter vector as <span class="math display">\[\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}\]</span> with <span class="math inline">\(\omega\)</span> the the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical <span class="math inline">\(\omega\)</span> is used which decreases with each iteration: <span class="math display">\[\omega^{(k)} = \gamma^k \omega^{(0)}\]</span> with <span class="math inline">\(\gamma =\)</span> 0.99 and <span class="math inline">\(\omega^{(0)} =\)</span> 0.01.</li>
 </ol>
 <p>The iteration steps outlined above should be repeated until convergence or a maximum number of iterations is reached.</p>
 <p>Given the information above, now implement the steepest descent algorithm and use it to calibrate the hydrological model from <a href="2_model_implementation.html" class="quarto-xref"><span>Chapter 5</span></a>. Evaluate the performance of the calibrated model using relevant metrics and figures. Discuss the performance of the calibrated model and the usefulness of the calibration algorithm.</p>
@@ -270,7 +270,6 @@ Tip
 <p>Some general tips and recommendations:</p>
 <ul>
 <li>As steepest descent is a local optimization algorithm, it is sensitive to local minima.</li>
-<li>The performance of a hydrological model typically depends on the initial state variables.</li>
 <li>The output of a hydrological model can be more sensitive to specific parameters.</li>
 <li>The choice of the objective function has a significant impact on the final calibration results.</li>
 <li>The criterium to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.</li>

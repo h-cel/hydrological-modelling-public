@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -287,17 +322,29 @@ Tip
 <p>A general introduction to Quarto and Python is given in… LINK TO DEPARTMENT WIDE INTRO HERE LATER.</p>
 <p>The idea of this exercise set is that you will use <a href="https://quarto.org/">Quarto</a> to combine your code and your scientific report in a single document. The goal is to write a report following the principles of <a href="https://open-science-training-handbook.github.io/Open-Science-Training-Handbook_EN/02OpenScienceBasics/04ReproducibleResearchAndDataAnalysis.html">reproducible research</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, where others have access to all the data and code needed to obtain the same results as the one you present.</p>
 <p>In these practicals, you will therefore <strong>not</strong> write a report from scratch (in Microsoft Word, Google Docs…), but instead you’ll extend the provided <code>.qmd</code> files for each exercise. The files of interested are numbered from <code>1_...qmd</code> to <code>6_...qmd</code>. Here you can add <a href="https://quarto.org/docs/computations/python.html">Python code</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> for your figures and write your discussion in <a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown</a>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div id="tip-code-org" class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Tip&nbsp;2.1
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Don’t perform al your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
+<p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>scr/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
+<div id="e5129d6f" class="cell" data-execution_count="1">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(STEP_FACTOR)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.01</code></pre>
+</div>
+</div>
 </div>
 </div>
 </section>

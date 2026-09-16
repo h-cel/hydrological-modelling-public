@@ -44,7 +44,7 @@
     "href": "0_practical_info.html#evaluation",
     "title": "2  Practical information",
     "section": "2.3 Evaluation",
-    "text": "2.3 Evaluation\nHand in your report of this assignment via Ufora by ADD DATE LATER. Please hand in:\n\nA PDF version of your report, which is rendered via Quarto.\nThe full set of files (i.e. repository) including your solution as a .zip file.\n\nYour report should be written scientifically and should contain at least the following:\n\nA summary of the results with reference to relevant figures and metrics, and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections Results and discussion in 1...qmd to 5...qmd for writing this part down.\nA conclusion about the modelling exercise as a whole, which is written in the 6_conclusion.qmd file.\nTo support your discussion, it is valuable to include references to relevant scientific papers. To add a reference, please include the relevant source in its bibxtex format to references.bib. More information on how to handle citations in Quarto can be found here. The bibtex format is explained in this guide. By means of example, one scientific article, Moore (2007), is already included.\n\n\n\n\n\nMoore, R. J. 2007. “The PDM Rainfall-Runoff Model.” Hydrology and Earth System Sciences 11 (1): 483–99. https://doi.org/10.5194/hess-11-483-2007.",
+    "text": "2.3 Evaluation\nHand in your report of this assignment via Ufora by ADD DATE LATER. Please hand in:\n\nA PDF version of your report, which is rendered via Quarto.\nThe full set of files (i.e. repository) including your solution as a .zip file.\n\nYour report should be written scientifically and should contain at least the following:\n\nPer exercise, a summary of the results with reference to relevant figures and metrics and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections Results and discussion in 1...qmd to 5...qmd for writing this part down.\nA conclusion about the modelling exercise as a whole, which is written in the 6_conclusion.qmd file.\nTo support your discussion, it is valuable to include references to relevant scientific papers. To add a reference, please include the relevant source in its bibxtex format to references.bib. More information on how to handle citations in Quarto can be found here. The bibtex format is explained in this guide. By means of example, one scientific article, Moore (2007), is already included.\n\n\n\n\n\nMoore, R. J. 2007. “The PDM Rainfall-Runoff Model.” Hydrology and Earth System Sciences 11 (1): 483–99. https://doi.org/10.5194/hess-11-483-2007.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Practical information</span>"
     ]
@@ -212,21 +212,31 @@
   {
     "objectID": "4_model_uncertainty.html",
     "href": "4_model_uncertainty.html",
-    "title": "7  Exercise 4:Uncertainty analysis of the model output",
+    "title": "7  Exercise 4: Uncertainty analysis of the model output",
     "section": "",
-    "text": "7.1 Assignment",
+    "text": "7.1 Assignment\nAs discussed in the theory notes, uncertainty can be broadly categorised as either aleatoric or epistemic. In this exercise, we will explore the use of the Generalised Likelihood Uncertainty Estimation (GLUE) method to quantify the effect of the parameter uncertainty on the model output. In other words, the model structure and the forcing data are both fixed, and the uncertainty introduced due to these components is not considered here. In this case, the GLUE methodology proceeds as follows:\nWith the information above, implement the GLUE methodology for the conceptual rainfall-runoff model developed in Chapter 5.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4:Uncertainty analysis of the model output</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4: Uncertainty analysis of the model output</span>"
+    ]
+  },
+  {
+    "objectID": "4_model_uncertainty.html#assignment",
+    "href": "4_model_uncertainty.html#assignment",
+    "title": "7  Exercise 4: Uncertainty analysis of the model output",
+    "section": "",
+    "text": "A high number (\\(N_{\\text{tot}}\\)) of parameter sets \\(\\mathbf{p}_{\\mathrm{i}}\\) (with \\(i \\in  1, 2,\\ldotp, N_{\\text{tot}}\\)) is generated using an effective sampling technique. If there is no a priori knowledge about the parameter values, a uniform sampling between the maximum and minimum feasible parameter value is performed. If there is some information available about the a priori distribution of the parameters, a non-uniform sampling can be performed.\nRun a model simulation for each parameter set \\(\\mathbf{p}_{\\mathrm{i}}\\).\nEvaluate the model performance for each parameter set \\(\\mathbf{p}_{\\mathrm{i}}\\) using a likelihood measure \\(L(\\mathbf{p}_{\\mathrm{i}})\\). In this exercise, the NSE will be used.\nA critical likelihood threshold \\(L_{\\text{crit}}\\) is defined to classify parameter sets as behavioural or non-behavioural. \\(L_{\\text{crit}} =\\) 0.4 can be used in this exercise.\nAt each timestep, an empirical cumulative distribution function (ECDF) of the model output (i.e. discharge) is constructed using the behavioural simulations. The ECDF at timestep \\(t\\) is defined as:\\[ P(\\hat{Q}(t) \\leq q) = F(q) = \\frac{\\sum_{i=1}^{N_{\\text{beh}}} L\\left(\\mathbf{p}_{\\mathrm{i}} | \\{\\hat{Q}(t) &lt; q\\}\\right)}{\\sum_{i=1}^{N_{\\text{beh}}} L\\left(\\mathbf{p}_{\\mathrm{i}}\\right)} \\] with \\(N_{\\text{beh}}\\) the number of behavioural parameter sets and \\(\\hat{Q(t)}\\) the modelled discharge at timestep \\(t\\).\nBased on the ECDF, both uncertainty bounds for the prediction interval (e.g. 95%) and the median prediction can be derived.\n\n\n\n\n\n\n\n\nTip\n\n\n\nWhen choosing \\(N_{\\text{tot}}\\), it is important to balance the computational cost against the quality of the uncertainty estimate, which is determined by \\(N_{\\text{beh}}\\)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4: Uncertainty analysis of the model output</span>"
     ]
   },
   {
     "objectID": "4_model_uncertainty.html#results-and-discussion",
     "href": "4_model_uncertainty.html#results-and-discussion",
-    "title": "7  Exercise 4:Uncertainty analysis of the model output",
+    "title": "7  Exercise 4: Uncertainty analysis of the model output",
     "section": "7.2 Results and discussion",
     "text": "7.2 Results and discussion",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4:Uncertainty analysis of the model output</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Exercise 4: Uncertainty analysis of the model output</span>"
     ]
   },
   {

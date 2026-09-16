@@ -129,7 +129,7 @@ With all of the information above, implement the model based on @eq-soil-reservo
 
 Some general tips and recommendations:
 
-- Implement the model in a separate file `scripts/model.py` as a function. You need to be able to reuse the model in the following exercises. 
+- Implement the model in a separate file `src/hydromod/model.py` as a function. You need to be able to reuse the model in the following exercises.
 - Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period.
 - Take into account the physical limitations of the state variables. 
 - Take into account the impact of initialisation of the state variables

@@ -5,6 +5,8 @@
 0_study_area_and_data_files/
 1_catchment_delineation_files/
 2_model_implementation_files/
+/.quarto/
+*.quarto_ipynb*
 
 data/*
 !data/processed/
@@ -227,6 +229,4 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-/.quarto/
 
-**/*.quarto_ipynb

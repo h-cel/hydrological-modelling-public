@@ -39,9 +39,20 @@ The idea of this exercise set is that you will use [Quarto](https://quarto.org/)
 
 In these practicals, you will therefore **not** write a report from scratch (in Microsoft Word, Google Docs...), but instead you'll extend the provided `.qmd` files for each exercise. The files of interested are numbered from `1_...qmd` to `6_...qmd`. Here you can add  [Python code](https://quarto.org/docs/computations/python.html)^[As an example of how this is used in practice, see e.g. the source file `0_study_area_and_data.qmd` for @sec-study-area] for your figures and write your discussion in [Markdown](https://quarto.org/docs/authoring/markdown-basics.html).  
 
-::: {.callout-tip}
+::: {#tip-code-org .callout-tip}
 
 Don't perform al your computations inside of the `.qmd` files! Instead, make a regular `.py` file inside of the `scripts` folder for each exercise. From these `.py` files, you can save the results (e.g. metrics, output data) in (for example) a `data/solutions` folder. From this folder, you can then import the necessary results in the `.qmd` files to write your report and make your figures. 
+
+For functions that you reuse across multiple exercises, it is recommended to add these in a `.py` file inside of the `scr/hydromod` folder. This way, you can easily import these both in your `.qmd` files and in `.py` files inside the `scripts` folder. For example, in `src/hydromod/constants.py`, a constant `STEP_FACTOR` is defined. We can import this constant here by using:
+
+```{python}
+# | echo: true
+
+from hydromod.constants import STEP_FACTOR
+
+print(STEP_FACTOR)
+```
+
 :::
 
 ## Evaluation 

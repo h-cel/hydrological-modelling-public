@@ -5,11 +5,9 @@ import sys
 
 import rootutils
 
-# Robust access to functions from helper_functions.py
-ROOT_PATH = rootutils.find_root(search_from=__file__, indicator=".git")
-sys.path.append(str(ROOT_PATH / "scripts"))
+from hydromod.helper_functions import find_grass_python_path, remove_readonly
 
-from helper_functions import find_grass_python_path, remove_readonly
+ROOT_PATH = rootutils.find_root(search_from=__file__, indicator=".git")
 
 # Add GRASS GIS Python path to sys.path
 grass_python_path = find_grass_python_path()

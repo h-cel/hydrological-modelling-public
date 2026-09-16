@@ -1,7 +1,7 @@
 # Exercise 3: Calibration of the model {#sec-calibration}
 
 ```{python}
-from scripts.conf import STEP_FACTOR, STEP_FACTOR_DECAY
+from hydromod.constants import STEP_FACTOR, STEP_FACTOR_DECAY
 ```
 
 ## Assignment

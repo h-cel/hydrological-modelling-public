@@ -28,6 +28,7 @@ Some general tips and recommendations:
 - The output of a hydrological model can be more sensitive to specific parameters.
 - The choice of the objective function has a significant impact on the final calibration results.
 - The criterium to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.
+- Think about what the effect is of normalising the gradient vector. Is there an argument for not normalising it? 
 - Calibration can take some computation time. Therefore, it is recommended to perform your calibration in a separate Python file `3_calibration.py`. Save the best parameter sets in e.g. a `.csv` file. 
 
 ::: 

@@ -1,5 +1,28 @@
-# Exercise 4:Uncertainty analysis of the model output {#sec-uncertainty}
+# Exercise 4: Uncertainty analysis of the model output {#sec-uncertainty}
+
+```{python}
+from scripts.conf import NSE_THRESHOLD_BEHAVIOURAL
+```
 
 ## Assignment
+
+As discussed in the theory notes, uncertainty can be broadly categorised as either aleatoric or epistemic. In this exercise, we will explore the use of the **Generalised Likelihood Uncertainty Estimation (GLUE)** method to quantify the effect of the parameter uncertainty on the model output. In other
+words, the model structure and the forcing data are both fixed, and the uncertainty introduced due to these components is not considered here. In this case, the GLUE methodology proceeds as follows:
+
+1. A high number ($N_{\text{tot}}$) of parameter sets $\mathbf{p}_{\mathrm{i}}$ (with $i \in  1, 2,\ldotp, N_{\text{tot}}$) is generated using an effective
+sampling technique. If there is no a priori knowledge about the parameter values, a uniform sampling between the maximum and minimum feasible parameter value is performed. If there is some information available about the a priori distribution of the parameters, a non-uniform sampling can be performed.
+2. Run a model simulation for each parameter set $\mathbf{p}_{\mathrm{i}}$.
+3. Evaluate the model performance for each parameter set $\mathbf{p}_{\mathrm{i}}$ using a likelihood measure $L(\mathbf{p}_{\mathrm{i}})$. In this exercise, the NSE will be used. 
+4. A critical likelihood threshold $L_{\text{crit}}$ is defined to classify parameter sets as behavioural or non-behavioural. $L_{\text{crit}} =$ `{python} NSE_THRESHOLD_BEHAVIOURAL` can be used in this exercise. 
+5. At each timestep, an empirical cumulative distribution function (ECDF) of the model output (i.e. discharge) is constructed using the behavioural simulations. The ECDF at timestep $t$ is defined as:$$ P(\hat{Q}(t) \leq q) = F(q) = \frac{\sum_{i=1}^{N_{\text{beh}}} L\left(\mathbf{p}_{\mathrm{i}} | \{\hat{Q}(t) < q\}\right)}{\sum_{i=1}^{N_{\text{beh}}} L\left(\mathbf{p}_{\mathrm{i}}\right)} $$ with $N_{\text{beh}}$ the number of behavioural parameter sets and $\hat{Q(t)}$ the modelled discharge at timestep $t$.
+6. Based on the ECDF, both uncertainty bounds for the prediction interval (e.g. 95%) and the median prediction can be derived.  
+
+With the information above, implement the GLUE methodology for the conceptual rainfall-runoff model developed in @sec-implementation. 
+
+::: {.callout-tip}
+
+When choosing $N_{\text{tot}}$, it is important to balance the computational cost against the quality of the uncertainty estimate, which is determined by $N_{\text{beh}}$
+
+:::
 
 ## Results and discussion

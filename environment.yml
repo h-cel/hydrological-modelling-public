@@ -8,6 +8,7 @@ dependencies:
   - numpy=2.4
   - sympy=1.14
   - geopandas=1.1
+  - statsmodels=0.15
   - rioxarray=0.22
   - jupyter-cache=1.0
   - owslib=0.35

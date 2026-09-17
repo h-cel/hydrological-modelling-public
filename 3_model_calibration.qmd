@@ -13,14 +13,14 @@ As discussed in Chapter 3 of the theory notes, many different calibration algori
     a. Calculate $\psi^{(k)}$, the value of $\psi$ at $\mathbf{p}^{(k)}$.
     b. Perturb each parameter $p_i^{(k)}$ as $$p_i^{(k)'} = 1.001 p_i^{(k)} $$ and calculate the corresponding value of the objective function $\psi^{(k)'}_i$. 
     c. Approximate $\nabla \psi^{k}$ as $$\nabla \psi^{(k)} = \left[\frac{\psi^{(k)'}_1 - \psi^{(k)}}{p_1^{(k)'} - p_1^{(k)}}, \frac{\psi^{(k)'}_2 - \psi^{(k)}}{p_2^{(k)'} - p_2^{(k)}}, \ldots, \frac{\psi^{(k)'}_n - \psi^{(k)}}{p_n^{(k)'} - p_n^{(k)}}\right]^T$$
-3. Normalise the gradient vector: $$\overline{\nabla \psi^{(k)}} = \frac{\nabla \psi^{(k)}}{||\nabla \psi^{(k)}||} = \frac{\nabla \psi^{(k)}}{\sqrt{{\nabla \psi^{(k)}}^T \nabla \psi^{(k)}}}$$
+3. Optionally (see @tip-calibration), normalise the gradient vector: $$\overline{\nabla \psi^{(k)}} = \frac{\nabla \psi^{(k)}}{||\nabla \psi^{(k)}||} = \frac{\nabla \psi^{(k)}}{\sqrt{{\nabla \psi^{(k)}}^T \nabla \psi^{(k)}}}$$
 4. Calculate a new iteration of the parameter vector as $$\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}$$ with $\omega$ the the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical $\omega$ is used which decreases with each iteration: $$\omega^{(k)} = \gamma^k \omega^{(0)}$$ with $\gamma =$ `{python} STEP_FACTOR_DECAY` and $\omega^{(0)} =$ `{python} STEP_FACTOR`. 
 
 The iteration steps outlined above should be repeated until convergence or a maximum number of iterations is reached. 
 
 Given the information above, now implement the steepest descent algorithm and use it to calibrate the hydrological model from @sec-implementation. Evaluate the performance of the calibrated model using relevant metrics and figures. Discuss the performance of the calibrated model and the usefulness of the calibration algorithm.
 
-::: {.callout-tip}
+::: {#tip-calibration .callout-tip}
 
 Some general tips and recommendations:
 

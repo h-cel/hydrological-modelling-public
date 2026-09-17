@@ -80,6 +80,9 @@ def main():
         job_dict[year] = job.job_id
         job.start()
         logger.info(f"Job for {year} started with ID {job.job_id}")
+        time.sleep(
+            5
+        )  # Wait for 5 seconds before starting the next job to avoid overwhelming the server
 
     # Save job IDs to a text file for reference
     job_ids_file = SATELLITE_SOIL_MOISTURE_RAW_DIR / "job_ids.csv"

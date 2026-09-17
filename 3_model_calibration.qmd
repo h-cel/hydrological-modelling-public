@@ -8,7 +8,7 @@ from hydromod.constants import STEP_FACTOR, STEP_FACTOR_DECAY
 
 As discussed in Chapter 3 of the theory notes, many different calibration algorithms exist: gradient-based, gradient-free (i.e. direct search), population-based... For this exercise, we'll focus on implementing a simple gradient-based method: steepest descent (also called [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent)). As an objective function ($\psi$), the Root Mean Squared Error (RMSE) is used. The algorithm is summarised as follows:
 
-1. The parameter vector is denoted by $\mathbf{p}^{(k)} = [p_1^{(k)}, p_2^{(k)}, \ldots, p_n^{(k)}]^T$ with $n$ the number of parameters and $k$ the iteration number.
+1. The parameter vector is denoted by $\mathbf{p}^{(k)} = [p_1^{(k)}, p_2^{(k)}, \ldots, p_n^{(k)}]^T$ with $n$ the number of parameters and $k$ the iteration number. Instead of using the raw values of the parameters, each parameter is scaled to the range $[0, 1]$ using their minimum and maximum values (see @tbl-parameters). For notational simplicity, these scaled parameters are still denoted by $\mathbf{p}^{(k)}$.
 2. For each iteration, calculate the gradient of $\psi$ with respect to $\mathbf{p}^{(k)}$ called $\nabla \psi^{(k)}$. The gradient is approximated numerically using the finite difference method. 
     a. Calculate $\psi^{(k)}$, the value of $\psi$ at $\mathbf{p}^{(k)}$.
     b. Perturb each parameter $p_i^{(k)}$ as $$p_i^{(k)'} = 1.001 p_i^{(k)} $$ and calculate the corresponding value of the objective function $\psi^{(k)'}_i$. 

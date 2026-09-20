@@ -338,7 +338,7 @@ Tip&nbsp;2.1
 <div class="callout-body-container callout-body">
 <p>Don’t perform al your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
 <p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>scr/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
-<div id="5daf7011" class="cell" data-execution_count="1">
+<div id="20e88ff6" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
@@ -354,7 +354,8 @@ Tip&nbsp;2.1
 </section>
 <section id="evaluation" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="evaluation"><span class="header-section-number">2.3</span> Evaluation</h2>
-<p>Hand in your report of this assignment via Ufora by ADD DATE LATER. Please hand in:</p>
+<p>The evaluation of your work will be both orally and in writing.</p>
+<p>For the <strong>written examination</strong>, hand in the following by <strong>Sunday 13/12 23:59</strong> on Ufora:</p>
 <ul>
 <li>A PDF version of your report, which is rendered via Quarto.</li>
 <li>The full set of files (i.e.&nbsp;repository) including your solution as a <code>.zip</code> file.</li>
@@ -363,9 +364,12 @@ Tip&nbsp;2.1
 <ul>
 <li>Per exercise, a summary of the results with reference to relevant figures and metrics and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections <code>Results and discussion</code> in <code>1...qmd</code> to <code>5...qmd</code> for writing this part down.</li>
 <li>A conclusion about the modelling exercise as a whole, which is written in the <code>6_conclusion.qmd</code> file.</li>
-<li>Figures and tables should be labeled and referenced in the text (see <a href="https://www.galileo.fbw.ugent.be/write/what-to-do-with-layout-tables-and-figures/?lang=en">Galileo</a> for more information). Please consult the <a href="https://olivierbonte.github.io/imecos_software_guide/quarto.html">aforementioned Quarto tutorial</a> to see how this can be achieved in <code>.qmd</code> files.</li>
+<li>Figures and tables should be labelled and referenced in the text (see <a href="https://www.galileo.fbw.ugent.be/write/what-to-do-with-layout-tables-and-figures/?lang=en">Galileo</a> for more information). Please consult the <a href="https://olivierbonte.github.io/imecos_software_guide/quarto.html">aforementioned Quarto tutorial</a> to see how this can be achieved in <code>.qmd</code> files.</li>
 <li>To support your discussion, it is valuable to include references to relevant scientific papers. To add a reference, please include the relevant source in its bibxtex format to <code>references.bib</code>. More information on how to handle citations in Quarto can be found <a href="https://quarto.org/docs/authoring/citations.html">here</a>. The bibtex format is explained in <a href="https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex#The_bibliography_file">this guide</a>. By means of example, one scientific article, <span class="citation" data-cites="moore2007">Moore (<a href="references.html#ref-moore2007" role="doc-biblioref">2007</a>)</span>, is already included.</li>
+<li>Contrary to a full report/paper (see <a href="https://www.galileo.fbw.ugent.be/write/what-are-the-components-of-a-paper/?lang=en">Galileo</a> for a structure overview), you don’t have to write an abstract, introduction and methods section. The concept is that these are already present in the assignment themselves. This allows you to focus on the results and discussion. Note that if you e.g.&nbsp;tackle one of the challenges and want to add a short extra methodology section, this is of course allowed: you can add a extra section (<code>## ...</code>) before <code>## Results and discussion</code>. `</li>
 </ul>
+<p>The <strong>oral examination</strong> will be held during the exam of this course (date TBD). It will consist of a discussion on your report and code. The focus will be on methodological choices you made, how you interpreted your results and the scientific discussion.</p>
+<p>Lastly, note that following the <a href="https://olivierbonte.github.io/imecos_software_guide/genai.html">guidelines on the use of Generative AI tools</a>, you are allowed to use GenAI tools to help you with this report. Remember though that you are still responsible for the content of your report and code, and will be orally evaluated on your capacity to explain your work. Please mention at the end of your report (in the <code>6_conclusion.qmd</code> file in a new section) which GenAI tools you used (if any) and for what purpose.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">

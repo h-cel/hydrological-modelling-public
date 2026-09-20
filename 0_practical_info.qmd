@@ -60,7 +60,9 @@ print(STEP_FACTOR)
 
 ## Evaluation 
 
-Hand in your report of this assignment via Ufora by ADD DATE LATER. Please hand in:
+The evaluation of your work will be both orally and in writing.
+
+For the **written examination**, hand in the following by **Sunday 13/12 23:59** on Ufora:
 
 - A PDF version of your report, which is rendered via Quarto. 
 - The full set of files (i.e. repository) including your solution as a `.zip` file. 
@@ -69,5 +71,10 @@ Your report should be written **scientifically** and should contain at least the
 
 - Per exercise, a summary of the results with reference to relevant figures and metrics and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections `Results and discussion` in `1...qmd` to `5...qmd` for writing this part down. 
 - A conclusion about the modelling exercise as a whole, which is written in the `6_conclusion.qmd` file.
-- Figures and tables should be labeled and referenced in the text (see [Galileo](https://www.galileo.fbw.ugent.be/write/what-to-do-with-layout-tables-and-figures/?lang=en) for more information). Please consult the [aforementioned Quarto tutorial](https://olivierbonte.github.io/imecos_software_guide/quarto.html) to see how this can be achieved in `.qmd` files. 
+- Figures and tables should be labelled and referenced in the text (see [Galileo](https://www.galileo.fbw.ugent.be/write/what-to-do-with-layout-tables-and-figures/?lang=en) for more information). Please consult the [aforementioned Quarto tutorial](https://olivierbonte.github.io/imecos_software_guide/quarto.html) to see how this can be achieved in `.qmd` files. 
 - To support your discussion, it is valuable to include references to relevant scientific papers. To add a reference, please include the relevant source in its bibxtex format to `references.bib`. More information on how to handle citations in Quarto can be found [here](https://quarto.org/docs/authoring/citations.html). The bibtex format is explained in [this guide](https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex#The_bibliography_file). By means of example, one scientific article, @moore2007, is already included. 
+- Contrary to a full report/paper (see [Galileo](https://www.galileo.fbw.ugent.be/write/what-are-the-components-of-a-paper/?lang=en) for a structure overview), you don't have to write an abstract, introduction and methods section. The concept is that these are already present in the assignment themselves. This allows you to focus on the results and discussion. Note that if you e.g. tackle one of the challenges and want to add a short extra methodology section, this is of course allowed: you can add a extra section (`## ...`) before `## Results and discussion`. `
+
+The **oral examination** will be held during the exam of this course (date TBD). It will consist of a discussion on your report and code. The focus will be on methodological choices you made, how you interpreted your results and the scientific discussion. 
+
+Lastly, note that following the [guidelines on the use of Generative AI tools](https://olivierbonte.github.io/imecos_software_guide/genai.html), you are allowed to use GenAI tools to help you with this report. Remember though that you are still responsible for the content of your report and code, and will be orally evaluated on your capacity to explain your work. Please mention at the end of your report (in the `6_conclusion.qmd` file in a new section) which GenAI tools you used (if any) and for what purpose.

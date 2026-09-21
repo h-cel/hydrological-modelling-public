@@ -14,7 +14,7 @@ As discussed in Chapter 3 of the theory notes, many different calibration algori
     b. Perturb each (scaled) parameter $p_i^{(k)}$ by adding a small step size $h$: $$p_i^{(k)'} = p_i^{(k)} + h$$ with $h$ the square root of machine epsilon^[In Python, the machine epsilon for floating point numbers can be found using [`numpy.finfo`](https://numpy.org/doc/stable/reference/generated/numpy.finfo.html): `np.finfo(float).eps`]. Calculate the corresponding value of the objective function $\psi^{(k)'}_i$.
     c. Approximate $\nabla \psi^{(k)}$ as $$\nabla \psi^{(k)} = \frac{1}{h}\left[\psi^{(k)'}_1 - \psi^{(k)}, \psi^{(k)'}_2 - \psi^{(k)}, \ldots, \psi^{(k)'}_n - \psi^{(k)}\right]^T$$
 3. Optionally (see @tip-calibration), normalise the gradient vector: $$\overline{\nabla \psi^{(k)}} = \frac{\nabla \psi^{(k)}}{||\nabla \psi^{(k)}||} = \frac{\nabla \psi^{(k)}}{\sqrt{{\nabla \psi^{(k)}}^T \nabla \psi^{(k)}}}$$
-4. Calculate a new iteration of the parameter vector as $$\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}$$ with $\omega$ the the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical $\omega$ is used which decreases with each iteration: $$\omega^{(k)} = \gamma^k \omega^{(0)}$$ with $\gamma =$ `{python} STEP_FACTOR_DECAY` and $\omega^{(0)} =$ `{python} STEP_FACTOR`. 
+4. Calculate a new iteration of the parameter vector as $$\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}$$ with $\omega$ the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical $\omega$ is used which decreases with each iteration: $$\omega^{(k)} = \gamma^k \omega^{(0)}$$ with $\gamma =$ `{python} STEP_FACTOR_DECAY` and $\omega^{(0)} =$ `{python} STEP_FACTOR`. 
 
 The iteration steps outlined above should be repeated until convergence or a maximum number of iterations is reached. 
 
@@ -24,10 +24,10 @@ Given the information above, now implement the steepest descent algorithm and us
 
 Some general tips and recommendations:
 
-- As steepest descent is a local optimization algorithm, it is sensitive to local minima.
+- As steepest descent is a local optimisation algorithm, it is sensitive to local minima.
 - The output of a hydrological model can be more sensitive to specific parameters.
 - The choice of the objective function has a significant impact on the final calibration results.
-- The criterium to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.
+- The criterion to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.
 - Think about what the effect is of normalising the gradient vector. Is there an argument for not normalising it? 
 - Calibration can take some computation time. Therefore, it is recommended to perform your calibration in a separate Python file `3_calibration.py`. Save the best parameter sets in e.g. a `.csv` file. 
 

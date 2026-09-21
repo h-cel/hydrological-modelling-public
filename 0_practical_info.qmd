@@ -67,6 +67,8 @@ For the **written examination**, hand in the following by **Sunday 13/12 23:59**
 - A PDF version of your report, which is rendered via Quarto. 
 - The full set of files (i.e. repository) including your solution as a `.zip` file. 
 
+By **Tuesday 10/11 23:59**, you can hand in a draft version of your results and discussion for one exercise for feedback. This will not be graded and only serves as a way to help you with writing your report and using Quarto. 
+
 Your report should be written **scientifically** and should contain at least the following:
 
 - Per exercise, a summary of the results with reference to relevant figures and metrics and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections `Results and discussion` in `1...qmd` to `5...qmd` for writing this part down. 

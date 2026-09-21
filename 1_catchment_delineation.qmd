@@ -30,9 +30,9 @@ As of 14/08/2026, installing GRASS on Windows via conda is not always stable. Th
 
 Irrespective of the choice of interface, an overview of all GRASS functions can be found in [tool manual](https://grass.osgeo.org/grass85/manuals/full_index.html). Specific tips for each interface will be denoted by their logo in the steps below.
 
-1. Start by loading the DTM (see @sec-study-area-dtm). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately $x_{\mathrm{min}}=$ `{python} XMIN` m, $x_{\mathrm{max}}$ = `{python} XMAX` m, $y_{\mathrm{min}}$ = `{python} YMIN` m, $y_{\mathrm{max}}$ = `{python} YMAX` m). 
+1. Start by loading the DTM (see @sec-study-area-dtm). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately $x_{\mathrm{min}}=$ `{python} XMIN` m, $x_{\mathrm{max}}$ = `{python} XMAX` m, $y_{\mathrm{min}}$ = `{python} YMIN` m, $y_{\mathrm{max}}$ = `{python} YMAX` m).
     - ![Python](figures/python-logo-only.png){height=1em} Use the [`r.import`](https://grass.osgeo.org/grass85/manuals/r.import.html) function to load in raster data. 
-2. Spatially gap-fill the DTM (i.e. make sure there are no missing values). 
+2. Check if there any missing values in the DTM. If so, spatially gap-fill it: 
     - ![Python](figures/python-logo-only.png){height=1em} Use the [`r.fillnulls`](https://grass.osgeo.org/grass85/manuals/r.fillnulls.html) function to fill in missing values. If the function fails (likely on Windows), consider choosing a different interpolation method than the default. 
     - ![QGIS](figures/qgis-icon.png){height=1em} Use the `Fill nodata` tool (from GDAL).
 3. Filter the digital elevation model for sinks (or depressions) and fill them. Use the [`r.fill.dir`](https://grass.osgeo.org/grass85/manuals/r.fill.dir.html) function.

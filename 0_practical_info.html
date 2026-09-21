@@ -338,7 +338,7 @@ Tip&nbsp;2.1
 <div class="callout-body-container callout-body">
 <p>Don’t perform al your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
 <p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>scr/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
-<div id="f829a38d" class="cell" data-execution_count="1">
+<div id="331b9b08" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>

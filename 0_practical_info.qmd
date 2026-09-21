@@ -1,6 +1,6 @@
 # Practical information {#sec-practical-info}
 
-Before diving into the exercises, some practical information is provided on how to effectively set up your working environment.
+Before diving into the exercises, some practical information is provided on how to effectively set up your working environment and how these exercises will be evaluated.
 
 ## The repository
 
@@ -62,7 +62,7 @@ print(STEP_FACTOR)
 
 ## Evaluation 
 
-The evaluation of your work will be both orally and in writing.
+The evaluation of your work will be both orally and in writing. Both forms of evaluation expect individual submissions/participation, but you are of course strongly encouraged to discuss the exercises with your colleagues during the practicals.
 
 For the **written examination**, hand in the following by **Sunday 13/12 23:59** on Ufora:
 

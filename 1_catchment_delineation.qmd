@@ -10,7 +10,7 @@ The delineation of a catchment based on a digital elevation model is often one o
 
 
 ::: {#tip-coordinates .callout-tip}
-The outlet of the Zwalm catchment is located in the vicinity of $x$=101673 m and $y$=17537 m
+The outlet of the Zwalm catchment is located in the vicinity of $x$=101673 m and $y$=175377 m
 :::
 
 For this geospatial analysis, [GRASS](https://grass.osgeo.org/) will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. There are multiple ways of using GRASS. In this exercise, you can choose between 2 ways of interacting with GRASS: 

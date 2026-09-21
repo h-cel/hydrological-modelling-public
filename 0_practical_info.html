@@ -270,7 +270,7 @@ div.csl-indent {
 </header>
 
 
-<p>Before diving into the exercises, some practical information is provided on how to effectively set up your working environment.</p>
+<p>Before diving into the exercises, some practical information is provided on how to effectively set up your working environment and how these exercises will be evaluated.</p>
 <section id="the-repository" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-repository"><span class="header-section-number">2.1</span> The repository</h2>
 <p>All code used to create this assignment is available at <a href="https://github.com/h-cel/hydrological-modelling-public">https://github.com/h-cel/hydrological-modelling-public</a>. This collection of files is called a <strong>repository</strong>. To get started, go to the URL above, click on the green <code>Code</code> button and select <code>Download ZIP</code> (see <a href="#fig-screenshot-download-button" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). Unzip the downloaded file and place the resulting folder at a location of your choice. This folder contains all the files you need to complete the exercises.</p>
@@ -342,7 +342,7 @@ Tip&nbsp;2.1
 <div class="callout-body-container callout-body">
 <p>Don’t perform all your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
 <p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>src/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
-<div id="1e70f0a2" class="cell" data-execution_count="1">
+<div id="524cbffb" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
@@ -358,7 +358,7 @@ Tip&nbsp;2.1
 </section>
 <section id="evaluation" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="evaluation"><span class="header-section-number">2.3</span> Evaluation</h2>
-<p>The evaluation of your work will be both orally and in writing.</p>
+<p>The evaluation of your work will be both orally and in writing. Both forms of evaluation expect individual submissions/participation, but you are of course strongly encouraged to discuss the exercises with your colleagues during the practicals.</p>
 <p>For the <strong>written examination</strong>, hand in the following by <strong>Sunday 13/12 23:59</strong> on Ufora:</p>
 <ul>
 <li>A PDF version of your report, which is rendered via Quarto.</li>

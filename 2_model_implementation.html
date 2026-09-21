@@ -414,9 +414,9 @@ Q_1(t) = \kappa_1 S_1(t)
 <p>where <span class="math inline">\(\kappa_1\)</span> [1/d] the reciprocal of the residence time. The total discharge <span class="math inline">\(Q\)</span> [mm/d] is then calculated as the sum of the outflow from the fast and slow reacting reservoir: <span id="eq-discharge"><span class="math display">\[
 Q(t) = Q_1(t) + Q_2(t)
 \tag{5.11}\]</span></span></p>
-<p><a href="#eq-soil-reservoir" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>, <a href="#eq-fast-reacting-reservoir" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, and <a href="#eq-slow-reacting-reservoir" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> can be denoted as a general non-linear, continuous-time state-space model: <span class="math display">\[
+<p><a href="#eq-soil-reservoir" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>, <a href="#eq-fast-reacting-reservoir" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, and <a href="#eq-slow-reacting-reservoir" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> can be denoted as a general non-linear, continuous-time state-space model: <span id="eq-state-space"><span class="math display">\[
 \frac{d\mathbf{x}}{dt} = \mathcal{f}(\mathbf{x}, \mathbf{{f}}, \mathbf{p})
-\]</span></p>
+\tag{5.12}\]</span></span></p>
 <p>with <span class="math inline">\(\mathcal{f}\)</span> a non-linear function, <span class="math inline">\(\mathbf{x} = [S, S_1, S_2]^T\)</span> the state vector, <span class="math inline">\(\mathbf{f} = [P, E_p]^T\)</span> the forcing vector, and <span class="math inline">\(\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T\)</span> the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>: <span class="math display">\[
 \mathbf{x}(t+\Delta t) = \mathbf{x}(t) + \mathcal{f}(\mathbf{x}(t), \mathbf{f}(t), \mathbf{p})\Delta t
 \]</span> The time step <span class="math inline">\(\Delta t\)</span> is set to 1 day, which is the same as the time step of the forcing data.</p>
@@ -437,7 +437,7 @@ Tip
 <li>Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period.</li>
 <li>Take into account the physical limitations of the state variables.</li>
 <li>Take into account the impact of initialisation of the state variables</li>
-<li>Not a single figure or metric can summarize the model performance. Nevertheless, some metrics and/or figures are (partially) linked to each other.</li>
+<li>Not a single figure or metric can summarise the model performance. Nevertheless, some metrics and/or figures are (partially) linked to each other.</li>
 </ul>
 </div>
 </div>

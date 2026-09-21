@@ -259,8 +259,8 @@ Tip&nbsp;4.1
 </div>
 <p>For this geospatial analysis, <a href="https://grass.osgeo.org/">GRASS</a> will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. There are multiple ways of using GRASS. In this exercise, you can choose between 2 ways of interacting with GRASS:</p>
 <ul>
-<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> With QGIS as Graphical User Inteface (GUI), all GRASS functionality can be accessed via the Procesing Toolbox</li>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> The Python GRASS interface allows programmatic access to GRASS functionality. For an in depth introduction, we refer to the <a href="https://grass.osgeo.org/grass85/manuals/python_intro.html">documentation</a>. In this exercise, we will use the <code>grass.tools</code> interface. The initial setup of the GRASS environment is provided in <code>scripts/1_catchment_delineation.py</code>, to which you can add your own code. All tools are accessible via the <code>tools</code> variable defined there. For example if you want ot use the <code>r.import</code> function, you would call <code>tools.r_import(input="PATH_TO_FILE",output="OUTPUT_NAME", overwrite=True)</code>. Note that:
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> With QGIS as Graphical User Interface (GUI), all GRASS functionality can be accessed via the Processing Toolbox</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> The Python GRASS interface allows programmatic access to GRASS functionality. For an in depth introduction, we refer to the <a href="https://grass.osgeo.org/grass85/manuals/python_intro.html">documentation</a>. In this exercise, we will use the <code>grass.tools</code> interface. The initial setup of the GRASS environment is provided in <code>scripts/1_catchment_delineation.py</code>, to which you can add your own code. All tools are accessible via the <code>tools</code> variable defined there. For example if you want to use the <code>r.import</code> function, you would call <code>tools.r_import(input="PATH_TO_FILE",output="OUTPUT_NAME", overwrite=True)</code>. Note that:
 <ul>
 <li>It is recommended to set the <code>overwrite=True</code> argument for all functions.</li>
 <li>It is a general convention that the <code>.</code> defined in the GRASS function name (as found in the <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>)is replaced by <code>_</code> in the Python function name.</li>
@@ -287,25 +287,25 @@ Warning
 <ul>
 <li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.import.html"><code>r.import</code></a> function to load in raster data.</li>
 </ul></li>
-<li>Spatially gap-fill the DTM (i.e.&nbsp;make sure there are no missing values).
+<li>Check if there any missing values in the DTM. If so, spatially gap-fill it:
 <ul>
 <li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fillnulls.html"><code>r.fillnulls</code></a> function to fill in missing values. If the function fails (likely on Windows), consider choosing a different interpolation method than the default.</li>
 <li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Fill nodata</code> tool (from GDAL).</li>
 </ul></li>
 <li>Filter the digital elevation model for sinks (or depressions) and fill them. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fill.dir.html"><code>r.fill.dir</code></a> function.</li>
-<li>Calculate the flow direction and accumulation into each grid cell of the domain. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.watershed.html"><code>r.watershed</code></a> function. Make sure that D8 is used as flow direction algorithm. Further more, ensure that the minimum size of an exterior watershed basins is set to 500. Keep both the accumulation (i.e.&nbsp;how many cells drain into each cell) and the flow direction map as outputs.<br>
+<li>Calculate the flow direction and accumulation into each grid cell of the domain. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.watershed.html"><code>r.watershed</code></a> function. Make sure that D8 is used as flow direction algorithm. Furthermore, ensure that the minimum size of an exterior watershed basins is set to 500. Keep both the accumulation (i.e.&nbsp;how many cells drain into each cell) and the flow direction map as outputs.<br>
 </li>
 <li>Check if the accumulation map aligns with the actual river network of the Zwalm catchment from the <em>Vlaamse Hydrografische Atlas</em> (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>).
 <ul>
 <li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <code>get_data_array_from_raster</code> to get the accumulation map as an <code>xarray.DataArray</code>. Use <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.read_file.html#geopandas.read_file"><code>geopandas.read_file</code></a> to read in the river network shapefile.</li>
 </ul></li>
-<li>Find the point with the largest accumulation that is located within the Zwalm river network. Rasterise the river network to the same grid as the accumulation map to do so. This point is the outlet of the catchment.
+<li>Find the point with the largest accumulation.
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://corteva.github.io/geocube/stable/geocube.html#make-geocube"><code>make_geocube</code></a> function from the <a href="https://corteva.github.io/geocube/stable/index.html"><code>geocube</code></a> package. Use the <code>like</code> argument.<br>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Rasterise the river network to the same grid as the accumulation map and extract the maximum. This point is the outlet of the catchment. Use the <a href="https://corteva.github.io/geocube/stable/geocube.html#make-geocube"><code>make_geocube</code></a> function from the <a href="https://corteva.github.io/geocube/stable/index.html"><code>geocube</code></a> package. Use the <code>like</code> argument.<br>
 </li>
-<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Rasterize (vector to raster)</code> tool (from GDAL).</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> QGIS allows for a more visual inspection of the accumulation map. Rasterising the river network is therefore not strictly necessary and one can instead visually determine the point of largest accumulation near the Scheldt. If one would nonetheless want to rasterise the river network, use the <code>Rasterize (vector to raster)</code> tool (from GDAL).</li>
 </ul></li>
-<li>Given the outlet determined in the previous step, delineate the catchment using <a href="https://grass.osgeo.org/grass85/manuals/r.water.outlet.html"><code>r.water.outlet</code></a>. Vectorize the resulting raster map of the catchment.
+<li>Given the outlet determined in the previous step, delineate the catchment using <a href="https://grass.osgeo.org/grass85/manuals/r.water.outlet.html"><code>r.water.outlet</code></a>. Vectorise the resulting raster map of the catchment.
 <ul>
 <li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Convert the output raster to an <code>xarray.DataArray</code> using a helper function. Subsequently, the <a href="https://corteva.github.io/geocube/stable/geocube.html#geocube.vector.vectorize"><code>vectorize</code></a> function from the <code>geocube</code> package can be applied.</li>
 <li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Polygonize (raster to vector)</code> tool (from GDAL).</li>

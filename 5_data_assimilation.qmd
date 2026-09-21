@@ -2,4 +2,83 @@
 
 ## Assignment
 
+In Chapter 6 of the theory notes, data assimilation is introduced as a method that combines model predictions and observations to obtain an updated ("a posteriori") estimate of the model states. For this exercise, the satellite-derived surface soil moisture observations introduced in @sec-study-area-ssm, denoted $y(t)$ [%], are assimilated into the calibrated hydrological model using the extended Kalman filter (EKF). Use the highest performing parameter set from @sec-calibration for this exercise. 
+
+### Bias-correcting the satellite soil moisture observations
+
+$y$ is only representative of the unsaturated soil reservoir $S$. With $\mathbf x(t) = [S(t), S_1(t), S_2(t)]^T$ the state vector, the (linear) observation operator is:
+
+$$
+\mathbf H = \left [ \displaystyle \frac{100}{S_{\mathrm{max}}} ~~~ 0 ~~~ 0 \right ]
+$$ {#eq-da-obs-matrix}
+
+so that $\mathbf{Hx}(t)$ is the model equivalent of the observation. To account for the difference between $\mathbf{Hx}(t)$ (calibrated model) and $y(t)$, a bias correction is applied by rescaling using the first two statistical moments.
+
+$$
+y^*(t) = \frac{\sigma_{\mathbf{Hx}}}{\sigma_y} \left ( y(t) - \bar y \right ) + \overline{\mathbf{Hx}}
+$$ {#eq-da-bias-correction}
+
+
+$y^*(t)$ values that are outside of the physically meaningful range can be disregarded. Also rescale the observation uncertainty $\sigma_y$ accordingly. 
+
+
+### Data assimilation with the extended Kalman filter (EKF)
+
+The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [S_k, S_{1,k}, S_{2,k}]^T$ and $\mathbf y_k = [y^*_k]$, so that, unlike $S$, neither $S_1$ nor $S_2$ are directly observed. Since $\mathbf H$ (@eq-da-obs-matrix) is already linear, only the (non-linear) rainfall-runoff model itself needs to be linearised for the EKF-application. Note that the filter only starts distinguishing an a priori from an a posteriori estimate from the second time step onwards, since the first time step is used to initialise it:
+
+1. Initialise the state vector and error matrices.
+    a. The a posteriori state estimate $\hat{\mathbf x}_1^+$: the initial conditions used for the calibrated model (@sec-calibration).
+    b. The (initial) error covariance matrix $\mathbf P_1^+$ starts with the values $(0.2\,S_{\mathrm{max}})^2$, $(0.2\,S_{2,\mathrm{max}})^2$ and $(0.2\,S_{2,\mathrm{max}})^2$ on the diagonal. 
+    c. The process noise covariance matrix $\mathbf Q_k$: diagonal and constant in time at 1% of the storage capacities.
+    d. The observation noise covariance matrix $\mathbf R_k = [\sigma_{y^*_k}^2]$: time-varying, following directly from the observation uncertainty (@sec-study-area-ssm).
+2. Compute the a priori error covariance matrix $\mathbf P_k^-$, using the state transition matrix $\mathbf A_k$ (the Jacobian of the RHS $\mathbf{f} = [f_1, f_2, f_3]^T$  of the governing ODEs from @eq-state-space). As in @sec-calibration, $\mathbf A_k$ is obtained via forward finite differences with step size $h$. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$:
+    $$
+    \mathbf A_k = \left [
+    \begin{array}{lll}
+    \displaystyle \frac{f_1(S',S_1,S_2) - f_1(S,S_1,S_2)}{h}
+    &
+    \displaystyle \frac{f_1(S,S_1',S_2) - f_1(S,S_1,S_2)}{h}
+    &
+    \displaystyle \frac{f_1(S,S_1,S_2') - f_1(S,S_1,S_2)}{h}
+    \\
+    \displaystyle \frac{f_2(S',S_1,S_2) - f_2(S,S_1,S_2)}{h}
+    &
+    \displaystyle \frac{f_2(S,S_1',S_2) - f_2(S,S_1,S_2)}{h}
+    &
+    \displaystyle \frac{f_2(S,S_1,S_2') - f_2(S,S_1,S_2)}{h}
+    \\
+    \displaystyle \frac{f_3(S',S_1,S_2) - f_3(S,S_1,S_2)}{h}
+    &
+    \displaystyle \frac{f_3(S,S_1',S_2) - f_3(S,S_1,S_2)}{h}
+    &
+    \displaystyle \frac{f_3(S,S_1,S_2') - f_3(S,S_1,S_2)}{h}
+    \end{array}
+    \right ]
+    $$. 
+    
+3. The a prior error covariance matrix is computed as:
+    $$\mathbf P_k^- = \mathbf A_{k-1} \mathbf P_{k-1}^+ \mathbf A_{k-1}^T + \mathbf Q_{k-1}
+    $$
+4. If an observation is available, update the state vector and error covariance, with $\mathbf K_k$ the Kalman gain and $(\mathbf y_k - \mathbf H \hat{\mathbf x}_k^-)$ the innovation:
+    $$
+    \left \{
+    \begin{aligned}
+    \mathbf K_k &= \mathbf P_k^- \mathbf H^\mathrm{T} \left [ \mathbf H \mathbf P_k^- \mathbf H^\mathrm{T} + \mathbf R_k \right ]^{-1} \\
+    \hat{\mathbf x}_k^+ &= \hat{\mathbf x}_k^- + \mathbf K_k \left ( \mathbf y_k - \mathbf H \hat{\mathbf x}_k^- \right ) \\
+    \mathbf P_k^+ &= \left [ \mathbf I - \mathbf K_k \mathbf H \right ] \mathbf P_k^-
+    \end{aligned}
+    \right .
+    $$ {#eq-da-update}
+5. Otherwise, there is no update: $\hat{\mathbf x}_k^+ = \hat{\mathbf x}_k^-$ and $\mathbf P_k^+ = \mathbf P_k^-$.
+6. Repeat steps 2 to 5 for each time step.
+
+Implement the above, and use it to assimilate the satellite soil moisture observations into the calibrated hydrological model. Evaluate and discuss the impact of the assimilation on both the updated model states and the resulting discharge, using relevant metrics and figures.
+
+::: {.callout-tip}
+
+- Inspect the Kalman gain to see how much weight is given to the observations versus the model predictions.
+- In your implementation, make sure that the calculation of fluxes given the a posteriori state is correctly handled. 
+
+:::
+
 ## Results and discussion

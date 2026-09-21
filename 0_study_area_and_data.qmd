@@ -180,7 +180,7 @@ To read in `forcings_discharge.csv`, checkout the documentation for [`pandas.rea
 
 :::
 
-## Satellite soil moisture 
+## Satellite soil moisture {#sec-study-area-ssm}
 
 In @sec-assimilation, the goal is to improve the hydrological model predictions by assimilating observations of soil moisture. Here, we'll use satellite-derived surface soil moisture ($SSM$), which is provided in the folder `data/processed/satellite_soil_moisture`. 
 

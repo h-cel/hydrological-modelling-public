@@ -9,12 +9,12 @@ from hydromod.constants import STEP_FACTOR, STEP_FACTOR_DECAY
 As discussed in Chapter 3 of the theory notes, many different calibration algorithms exist: gradient-based, gradient-free (i.e. direct search), population-based... For this exercise, we'll focus on implementing a simple gradient-based method: steepest descent (also called [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent)). As an objective function ($\psi$), the Root Mean Squared Error (RMSE) is used. The algorithm is summarised as follows:
 
 1. The parameter vector is denoted by $\mathbf{p}^{(k)} = [p_1^{(k)}, p_2^{(k)}, \ldots, p_n^{(k)}]^T$ with $n$ the number of parameters and $k$ the iteration number. Instead of using the raw values of the parameters, each parameter is scaled to the range $[0, 1]$ using their minimum and maximum values (see @tbl-parameters). For notational simplicity, these scaled parameters are still denoted by $\mathbf{p}^{(k)}$.
-2. For each iteration, calculate the gradient of $\psi$ with respect to $\mathbf{p}^{(k)}$ called $\nabla \psi^{(k)}$. The gradient is approximated numerically using the finite difference method. 
+2. For each iteration, calculate the gradient of $\psi$ with respect to $\mathbf{p}^{(k)}$ called $\nabla \psi^{(k)}$. The gradient is approximated numerically using the finite difference method. Since the parameters have already been scaled to $[0,1]$ in step 1, a single, small absolute step size $h$ can be used to perturb every parameter, rather than a parameter-specific relative perturbation.
     a. Calculate $\psi^{(k)}$, the value of $\psi$ at $\mathbf{p}^{(k)}$.
-    b. Perturb each parameter $p_i^{(k)}$ as $$p_i^{(k)'} = 1.001 p_i^{(k)} $$ and calculate the corresponding value of the objective function $\psi^{(k)'}_i$. 
-    c. Approximate $\nabla \psi^{k}$ as $$\nabla \psi^{(k)} = \left[\frac{\psi^{(k)'}_1 - \psi^{(k)}}{p_1^{(k)'} - p_1^{(k)}}, \frac{\psi^{(k)'}_2 - \psi^{(k)}}{p_2^{(k)'} - p_2^{(k)}}, \ldots, \frac{\psi^{(k)'}_n - \psi^{(k)}}{p_n^{(k)'} - p_n^{(k)}}\right]^T$$
+    b. Perturb each (scaled) parameter $p_i^{(k)}$ by adding a small step size $h$: $$p_i^{(k)'} = p_i^{(k)} + h$$ with $h$ the square root of machine epsilon^[In Python, the machine epsilon for floating point numbers can be found using [`numpy.finfo`](https://numpy.org/doc/stable/reference/generated/numpy.finfo.html): `np.finfo(float).eps`]. Calculate the corresponding value of the objective function $\psi^{(k)'}_i$.
+    c. Approximate $\nabla \psi^{(k)}$ as $$\nabla \psi^{(k)} = \frac{1}{h}\left[\psi^{(k)'}_1 - \psi^{(k)}, \psi^{(k)'}_2 - \psi^{(k)}, \ldots, \psi^{(k)'}_n - \psi^{(k)}\right]^T$$
 3. Optionally (see @tip-calibration), normalise the gradient vector: $$\overline{\nabla \psi^{(k)}} = \frac{\nabla \psi^{(k)}}{||\nabla \psi^{(k)}||} = \frac{\nabla \psi^{(k)}}{\sqrt{{\nabla \psi^{(k)}}^T \nabla \psi^{(k)}}}$$
-4. Calculate a new iteration of the parameter vector as $$\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}$$ with $\omega$ the the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical $\omega$ is used which decreases with each iteration: $$\omega^{(k)} = \gamma^k \omega^{(0)}$$ with $\gamma =$ `{python} STEP_FACTOR_DECAY` and $\omega^{(0)} =$ `{python} STEP_FACTOR`. 
+4. Calculate a new iteration of the parameter vector as $$\mathbf{p}^{(k+1)} = \mathbf{p}^{(k)} - \omega \overline{\nabla \psi^{(k)}}$$ with $\omega$ the adaptation speed (also called step factor or step size), which is always a positive number. For simplicity, a decaying, empirical $\omega$ is used which decreases with each iteration: $$\omega^{(k)} = \gamma^k \omega^{(0)}$$ with $\gamma =$ `{python} STEP_FACTOR_DECAY` and $\omega^{(0)} =$ `{python} STEP_FACTOR`. 
 
 The iteration steps outlined above should be repeated until convergence or a maximum number of iterations is reached. 
 
@@ -24,10 +24,10 @@ Given the information above, now implement the steepest descent algorithm and us
 
 Some general tips and recommendations:
 
-- As steepest descent is a local optimization algorithm, it is sensitive to local minima.
+- As steepest descent is a local optimisation algorithm, it is sensitive to local minima.
 - The output of a hydrological model can be more sensitive to specific parameters.
 - The choice of the objective function has a significant impact on the final calibration results.
-- The criterium to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.
+- The criterion to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.
 - Think about what the effect is of normalising the gradient vector. Is there an argument for not normalising it? 
 - Calibration can take some computation time. Therefore, it is recommended to perform your calibration in a separate Python file `3_calibration.py`. Save the best parameter sets in e.g. a `.csv` file. 
 

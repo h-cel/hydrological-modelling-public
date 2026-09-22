@@ -52,7 +52,7 @@ start_year = int(df_fd.index.year.min())
 end_year = int(df_fd.index.year.max())
 ```
 
-For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the center of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in @fig-zwalmbeek. During the period `{python} start_year`-`{python} end_year`, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see @sec-study-area-forcings-discharge for more information). The average annual rainfall and potential evapotranspiration of the catchment are `{python} f"{yearly_mean.precipitation:.0f}"` mm and `{python} f"{yearly_mean.potential_evapotranspiration:.0f}"` mm respectively, typical values for Belgium.
+For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the centre of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in @fig-zwalmbeek. During the period `{python} start_year`-`{python} end_year`, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see @sec-study-area-forcings-discharge for more information). The average annual rainfall and potential evapotranspiration of the catchment are `{python} f"{yearly_mean.precipitation:.0f}"` mm and `{python} f"{yearly_mean.potential_evapotranspiration:.0f}"` mm respectively, typical values for Belgium.
 
 ```{python}
 # | echo: false
@@ -173,18 +173,18 @@ column_names = ["", *df_fd.columns]
 print(column_names)
 ```
 
-Note that the first column without a name is the index column, which contains the date. The corret interpretation of the date is that the data value corresponds to the daily sum ($P$ and $E_\mathrm{p}$) or daily mean ($Q$) of the day indicated by the date. For example, the value of $P$ on 2020-01-01 corresponds to the total precipitation that fell during that day.
+Note that the first column without a name is the index column, which contains the date. The correct interpretation of the date is that the data value corresponds to the daily sum ($P$ and $E_\mathrm{p}$) or daily mean ($Q$) of the day indicated by the date. For example, the value of $P$ on 2020-01-01 corresponds to the total precipitation that fell during that day.
 
 ::: {.callout-tip}
 To read in `forcings_discharge.csv`, checkout the documentation for [`pandas.read_csv()`](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html), specifically of the `index_col` and `parse_dates` parameters, to correctly read in the dataset.
 
 :::
 
-## Satellite soil moisture 
+## Satellite soil moisture {#sec-study-area-ssm}
 
 In @sec-assimilation, the goal is to improve the hydrological model predictions by assimilating observations of soil moisture. Here, we'll use satellite-derived surface soil moisture ($SSM$), which is provided in the folder `data/processed/satellite_soil_moisture`. 
 
-The original data source is the SSM product at 1 km spatial resolution over Europe form the [Copernicus Land Monitoring Service](https://land.copernicus.eu/en) [@clms2026]. An example of the original data for one example date is shown in @fig-ssm-original. The $SSM$ values are expressed in percent saturation and are representative of the top few centimeters (~5cm) of the soil. 
+The original data source is the SSM product at 1 km spatial resolution over Europe from the [Copernicus Land Monitoring Service](https://land.copernicus.eu/en) [@clms2026]. An example of the original data for one example date is shown in @fig-ssm-original. The $SSM$ values are expressed in percent saturation and are representative of the top few centimetres (~5cm) of the soil. 
 
 ```{python}
 # | label: fig-ssm-original
@@ -209,7 +209,7 @@ cx.add_basemap(
 )
 ```
 
-For ease of use, the dataset has been processed to a timeseries by taking the average $SSM$ value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is found is called  `sattelite_soil_moisture.cv`, which has following columns:
+For ease of use, the dataset has been processed to a timeseries by taking the average $SSM$ value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is called `satellite_soil_moisture.csv`, which has following columns:
 
 ```{python}
 df_ssm = pd.read_csv(
@@ -219,4 +219,4 @@ df_ssm = pd.read_csv(
 print(list(df_ssm.columns))
 ```
 
-with `time` the date of acquistion, `ssm` the spatially averaged $SSM$ and `noise` is the spatially averaged standard deviation of the $SSM$ following  a simple mean^[Alternatively, one could follow the [rules of propagation of uncertainty](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). In that case, any function $f$, the standard deviation is given by $\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}$ assuming **no covariance** between $x,y,z\cdots$ and linearly approximating $f$. Note that an average is a linear function, so here this is not an approximation. With the average $\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i$ as $f$, $\frac{\partial f}{\partial x_i} = \frac1N$ and so $\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2$. This assumption of no covariance is a strong one however, which does not necessarily hold up for soil moisture retrievals which exhibit spatial correlation. Therefore, we make the safe assumption of perfectly correlated pixels, which increases the estimated uncertainty to $\sigma_{\bar{x}}^2 = \frac{1}{N} \sum_{i=1}^N \sigma_i^2$].
+with `time` the date of acquisition, `ssm` the spatially averaged $SSM$ and `noise` is the spatially averaged standard deviation of the $SSM$ following  a simple mean^[Alternatively, one could follow the [rules of propagation of uncertainty](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). In that case, any function $f$, the standard deviation is given by $\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}$ assuming **no covariance** between $x,y,z\cdots$ and linearly approximating $f$. Note that an average is a linear function, so here this is not an approximation. With the average $\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i$ as $f$, $\frac{\partial f}{\partial x_i} = \frac1N$ and so $\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2$. This assumption of no covariance is a strong one however, which does not necessarily hold up for soil moisture retrievals which exhibit spatial correlation. Therefore, we make the safe assumption of perfectly correlated pixels, which increases the estimated uncertainty to $\sigma_{\bar{x}}^2 = \frac{1}{N} \sum_{i=1}^N \sigma_i^2$].

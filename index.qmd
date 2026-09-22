@@ -10,7 +10,7 @@ The objective of the practical exercises of this course is to illustrate some of
 4. The analysis of uncertainty in the model output of the model (@sec-uncertainty)
 5. Assimilation of observations into the model (@sec-assimilation).
 
-Needless to say that for each step, there are many options, and that the choice for e.g. a specific model, calibration algorithm, or evaluation criterium depends on the specific situation, the aim of the modelling exercise, and the personal taste of the modeller. For an extensive -- yet non-exhaustive -- overview of different techniques in hydrological modelling, we refer to the theoretical course notes and specialized literature.  
+Needless to say that for each step, there are many options, and that the choice for e.g. a specific model, calibration algorithm, or evaluation criterion depends on the specific situation, the aim of the modelling exercise, and the personal taste of the modeller. For an extensive -- yet non-exhaustive -- overview of different techniques in hydrological modelling, we refer to the theoretical course notes and specialised literature.  
 
 The aim of the practicals is to:
 

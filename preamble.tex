@@ -3,6 +3,11 @@
 
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 
+% Prevent floats from drifting across subsection boundaries causing page overflow
+\usepackage{placeins}
+\let\origsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\origsubsection}
+
 \titlehead{%
     \includegraphics[height=3cm]{figures/logo_UGent_EN_RGB_2400_color.png}%
     \hfill%

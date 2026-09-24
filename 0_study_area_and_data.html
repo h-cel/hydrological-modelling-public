@@ -268,7 +268,7 @@ window.Quarto = {
 </header>
 
 
-<p>For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the centre of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in <a href="#fig-zwalmbeek" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. During the period 2009-2025, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see <a href="#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for more information). The average annual rainfall and potential evapotranspiration of the catchment are 892 mm and 561 mm respectively, typical values for Belgium.</p>
+<p>For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the centre of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in <a href="#fig-zwalmbeek" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. During the period 2009-2025, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see <a href="#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for more information). The average annual rainfall and potential evapotranspiration of the catchment are 783 mm and 561 mm respectively, typical values for Belgium.</p>
 <div id="cell-fig-zwalmbeek" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-stderr">
 <pre><code>Downloading file 'NUTS_RG_10M_2024_3035.gpkg' from 'https://gisco-services.ec.europa.eu/distribution/v2/nuts/gpkg/NUTS_RG_10M_2024_3035.gpkg' to '/home/runner/.cache/geodatasets'.</code></pre>
@@ -301,7 +301,7 @@ Figure&nbsp;3.1: The Zwalmbeek and its location within Belgium, as denoted by th
 <p>Both meteorological forcings and observed discharge are provided in the folder <code>data/processed/forcings_discharge</code>. All this data is retrieved from <a href="https://waterinfo.vlaanderen.be/">Waterinfo</a>, a website which combines hydro(meteorological) data from both the Flanders Environment Agency and Flanders Hydraulics Research. Programmatic access to the data is possible via the Python package <a href="https://fluves.github.io/pywaterinfo/#"><code>pywaterinfo</code></a>, as demonstrated (for your information only) in <code>scripts/data_download/waterinfo_download.py</code>.</p>
 <p>The combined forcings and discharge dataset is provided in the CSV file <code>forcings_discharge.csv</code>. An overview of the the original data sources is given in <a href="#tbl-waterinfo-meta" class="quarto-xref">Table&nbsp;<span>3.1</span></a>. Note that mm is equivalent to mm/d because of the daily time resolution. The locations of the different measurement stations are additionally shown in <a href="#fig-waterinfo-sites" class="quarto-xref">Figure&nbsp;<span>3.2</span></a>. Some processing details:</p>
 <ul>
-<li>The variable Precipitation (<span class="math inline">\(P\)</span>) of catchment is a combination of rainfall gauge and radar data, representative for the Zwalm catchment. The gaps in this dataset are filled with precipitation data from the Pluviometer in Maarke-Kerkem.</li>
+<li>Precipitation (<span class="math inline">\(P\)</span>) is the areal average of four rain gauges (Elst, Maarke-Kerkem, Zingem and Ronse) using Thiessen polygons as weighting factors<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, clipped to the Zwalm catchment as delineated by the Flemish government. When a gauge has no data for a given day, the Thiessen weights are recomputed with the remaining gauges. The Thiessen weights for each gauge when all gauges are available, are given in <a href="#tbl-waterinfo-meta" class="quarto-xref">Table&nbsp;<span>3.1</span></a>.</li>
 <li>Potential evapotranspiration (<span class="math inline">\(E_\mathrm{p}\)</span>) is estimated using the Penman equation at a meteorological station. Missing values are gapfilled with the daily, smoothed climatology of <span class="math inline">\(E_\mathrm{p}\)</span>. Smoothing occurs by applying a moving average with a centred window of 11 days.</li>
 <li>River discharge (<span class="math inline">\(Q\)</span>) is measured near the mouth of the Zwalmbeek in the village of Nederzwalm. No gapfilling is applied to this variable, as it is only used for model evaluation, not as a model input.</li>
 </ul>
@@ -313,62 +313,62 @@ Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, r
 </figcaption>
 <div aria-describedby="tbl-waterinfo-meta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display" data-execution_count="4">
-<div id="yeujjqlcln" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="cspbkcydwv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>
-#yeujjqlcln table {
+#cspbkcydwv table {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
         }
 
-#yeujjqlcln thead, tbody, tfoot, tr, td, th { border-style: none; }
+#cspbkcydwv thead, tbody, tfoot, tr, td, th { border-style: none; }
  tr { background-color: transparent; }
-#yeujjqlcln p { margin: 0; padding: 0; }
- #yeujjqlcln .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
- #yeujjqlcln .gt_caption { padding-top: 4px; padding-bottom: 4px; }
- #yeujjqlcln .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
- #yeujjqlcln .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
- #yeujjqlcln .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #yeujjqlcln .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #yeujjqlcln .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #yeujjqlcln .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
- #yeujjqlcln .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
- #yeujjqlcln .gt_column_spanner_outer:first-child { padding-left: 0; }
- #yeujjqlcln .gt_column_spanner_outer:last-child { padding-right: 0; }
- #yeujjqlcln .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
- #yeujjqlcln .gt_spanner_row { border-bottom-style: hidden; }
- #yeujjqlcln .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
- #yeujjqlcln .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
- #yeujjqlcln .gt_from_md> :first-child { margin-top: 0; }
- #yeujjqlcln .gt_from_md> :last-child { margin-bottom: 0; }
- #yeujjqlcln .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
- #yeujjqlcln .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
- #yeujjqlcln .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
- #yeujjqlcln .gt_row_group_first td { border-top-width: 2px; }
- #yeujjqlcln .gt_row_group_first th { border-top-width: 2px; }
- #yeujjqlcln .gt_striped { color: #333333; background-color: #F4F4F4; }
- #yeujjqlcln .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #yeujjqlcln .gt_summary_row { color: #333333; background-color: #FFFFFF; text-transform: inherit; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; }
- #yeujjqlcln .gt_first_summary_row { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; }
- #yeujjqlcln .gt_last_summary_row_top { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #yeujjqlcln .gt_grand_summary_row { color: #333333; background-color: #FFFFFF; text-transform: inherit; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; }
- #yeujjqlcln .gt_first_grand_summary_row_bottom { border-top-style: double; border-top-width: 6px; border-top-color: #D3D3D3; }
- #yeujjqlcln .gt_last_grand_summary_row_top { border-bottom-style: double; border-bottom-width: 6px; border-bottom-color: #D3D3D3; }
- #yeujjqlcln .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #yeujjqlcln .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
- #yeujjqlcln .gt_left { text-align: left; }
- #yeujjqlcln .gt_center { text-align: center; }
- #yeujjqlcln .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
- #yeujjqlcln .gt_font_normal { font-weight: normal; }
- #yeujjqlcln .gt_font_bold { font-weight: bold; }
- #yeujjqlcln .gt_font_italic { font-style: italic; }
- #yeujjqlcln .gt_super { font-size: 65%; }
- #yeujjqlcln .gt_footnotes { color: font-color(#FFFFFF); background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #yeujjqlcln .gt_footnote { margin: 0px; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; }
- #yeujjqlcln .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #yeujjqlcln .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
- #yeujjqlcln .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
- #yeujjqlcln .gt_asterisk { font-size: 100%; vertical-align: 0; }
+#cspbkcydwv p { margin: 0; padding: 0; }
+ #cspbkcydwv .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
+ #cspbkcydwv .gt_caption { padding-top: 4px; padding-bottom: 4px; }
+ #cspbkcydwv .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
+ #cspbkcydwv .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
+ #cspbkcydwv .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
+ #cspbkcydwv .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #cspbkcydwv .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
+ #cspbkcydwv .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
+ #cspbkcydwv .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
+ #cspbkcydwv .gt_column_spanner_outer:first-child { padding-left: 0; }
+ #cspbkcydwv .gt_column_spanner_outer:last-child { padding-right: 0; }
+ #cspbkcydwv .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
+ #cspbkcydwv .gt_spanner_row { border-bottom-style: hidden; }
+ #cspbkcydwv .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
+ #cspbkcydwv .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
+ #cspbkcydwv .gt_from_md> :first-child { margin-top: 0; }
+ #cspbkcydwv .gt_from_md> :last-child { margin-bottom: 0; }
+ #cspbkcydwv .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
+ #cspbkcydwv .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
+ #cspbkcydwv .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
+ #cspbkcydwv .gt_row_group_first td { border-top-width: 2px; }
+ #cspbkcydwv .gt_row_group_first th { border-top-width: 2px; }
+ #cspbkcydwv .gt_striped { color: #333333; background-color: #F4F4F4; }
+ #cspbkcydwv .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #cspbkcydwv .gt_summary_row { color: #333333; background-color: #FFFFFF; text-transform: inherit; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; }
+ #cspbkcydwv .gt_first_summary_row { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; }
+ #cspbkcydwv .gt_last_summary_row_top { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #cspbkcydwv .gt_grand_summary_row { color: #333333; background-color: #FFFFFF; text-transform: inherit; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; }
+ #cspbkcydwv .gt_first_grand_summary_row_bottom { border-top-style: double; border-top-width: 6px; border-top-color: #D3D3D3; }
+ #cspbkcydwv .gt_last_grand_summary_row_top { border-bottom-style: double; border-bottom-width: 6px; border-bottom-color: #D3D3D3; }
+ #cspbkcydwv .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
+ #cspbkcydwv .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
+ #cspbkcydwv .gt_left { text-align: left; }
+ #cspbkcydwv .gt_center { text-align: center; }
+ #cspbkcydwv .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
+ #cspbkcydwv .gt_font_normal { font-weight: normal; }
+ #cspbkcydwv .gt_font_bold { font-weight: bold; }
+ #cspbkcydwv .gt_font_italic { font-style: italic; }
+ #cspbkcydwv .gt_super { font-size: 65%; }
+ #cspbkcydwv .gt_footnotes { color: font-color(#FFFFFF); background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
+ #cspbkcydwv .gt_footnote { margin: 0px; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; }
+ #cspbkcydwv .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
+ #cspbkcydwv .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
+ #cspbkcydwv .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
+ #cspbkcydwv .gt_asterisk { font-size: 100%; vertical-align: 0; }
  
 </style>
 
@@ -379,32 +379,58 @@ Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, r
 <th id="unit" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Units</th>
 <th id="name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Station</th>
 <th id="id" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Station ID</th>
+<th id="thiessen_weight" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Thiessen weight</th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_left">Precipitation</td>
 <td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Maarke-Kerkem_P</td>
-<td class="gt_row gt_left">P06_014</td>
+<td class="gt_row gt_left">Elst OTT_P</td>
+<td class="gt_row gt_left">plu06a-1066</td>
+<td class="gt_row gt_right">0.74</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left">Precipitation of catchment</td>
+<td class="gt_row gt_left">Precipitation</td>
 <td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Nederzwalm/Zwalmbeek</td>
-<td class="gt_row gt_left">L06_342</td>
+<td class="gt_row gt_left">Maarke-Kerkem_P</td>
+<td class="gt_row gt_left">P06_014</td>
+<td class="gt_row gt_right">0.09</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left">Precipitation</td>
+<td class="gt_row gt_left">mm</td>
+<td class="gt_row gt_left">Zingem_P</td>
+<td class="gt_row gt_left">P06_040</td>
+<td class="gt_row gt_right">0.17</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left">Precipitation</td>
+<td class="gt_row gt_left">mm</td>
+<td class="gt_row gt_left">Ronse OTT_P</td>
+<td class="gt_row gt_left">plu12a-1066</td>
+<td class="gt_row gt_right">0.00</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left">Potential Evapotranspiration</td>
 <td class="gt_row gt_left">mm</td>
 <td class="gt_row gt_left">Waregem_ME</td>
 <td class="gt_row gt_left">ME05_019</td>
+<td class="gt_row gt_right"></td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left">River Discharge</td>
 <td class="gt_row gt_left">m³/s</td>
 <td class="gt_row gt_left">Nederzwalm/Zwalmbeek</td>
 <td class="gt_row gt_left">L06_342</td>
+<td class="gt_row gt_right"></td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left">Precipitation of catchment</td>
+<td class="gt_row gt_left">mm</td>
+<td class="gt_row gt_left">Nederzwalm/Zwalmbeek</td>
+<td class="gt_row gt_left">L06_342</td>
+<td class="gt_row gt_right"></td>
 </tr>
 </tbody>
 </table>
@@ -421,7 +447,7 @@ Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, r
 <div id="fig-waterinfo-sites" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-waterinfo-sites-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="0_study_area_and_data_files/figure-html/fig-waterinfo-sites-output-1.png" width="491" height="284" class="figure-img">
+<img src="0_study_area_and_data_files/figure-html/fig-waterinfo-sites-output-1.png" width="491" height="364" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-waterinfo-sites-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3.2: The Zwalmbeek and the measurement locations as denoted by their station ID
@@ -431,12 +457,17 @@ Figure&nbsp;3.2: The Zwalmbeek and the measurement locations as denoted by their
 </div>
 </div>
 <p>Consequently, following columns are present in <code>forcings_discharge.csv</code>:</p>
-<div id="5bec57f6" class="cell" data-execution_count="6">
+<div id="77518d40" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-stdout">
-<pre><code>['', 'precipitation', 'potential_evapotranspiration', 'river_discharge']</code></pre>
+<pre><code>['',
+ 'precipitation',
+ 'potential_evapotranspiration',
+ 'river_discharge',
+ 'precipitation_vmm_catchment']</code></pre>
 </div>
 </div>
-<p>Note that the first column without a name is the index column, which contains the date. The correct interpretation of the date is that the data value corresponds to the daily sum (<span class="math inline">\(P\)</span> and <span class="math inline">\(E_\mathrm{p}\)</span>) or daily mean (<span class="math inline">\(Q\)</span>) of the day indicated by the date. For example, the value of <span class="math inline">\(P\)</span> on 2020-01-01 corresponds to the total precipitation that fell during that day.</p>
+<p>Note that the first column without a name is the index column, which contains the date. The column <code>precipitation_vmm_catchment</code> is an alternative catchment precipitation product of the Flanders Environment Agency (Precipitation of catchment in <a href="#tbl-waterinfo-meta" class="quarto-xref">Table&nbsp;<span>3.1</span></a>), gapfilled with the Maarke-Kerkem gauge. It is only provided for comparison, for what follows use <code>precipitation</code>.</p>
+<p>The correct interpretation of the date is that the data value corresponds to the daily sum (<span class="math inline">\(P\)</span> and <span class="math inline">\(E_\mathrm{p}\)</span>) or daily mean (<span class="math inline">\(Q\)</span>) of the day indicated by the date. For example, the value of <span class="math inline">\(P\)</span> on 2020-01-01 corresponds to the total precipitation that fell during that day.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -470,12 +501,12 @@ Figure&nbsp;3.3: Satellite-derived surface soil moisture data at 1 km spatial re
 </div>
 </div>
 <p>For ease of use, the dataset has been processed to a timeseries by taking the average <span class="math inline">\(SSM\)</span> value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is called <code>satellite_soil_moisture.csv</code>, which has following columns:</p>
-<div id="3b6f5b49" class="cell" data-execution_count="8">
+<div id="47fb9d0d" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>['time', 'ssm', 'noise']</code></pre>
 </div>
 </div>
-<p>with <code>time</code> the date of acquisition, <code>ssm</code> the spatially averaged <span class="math inline">\(SSM\)</span> and <code>noise</code> is the spatially averaged standard deviation of the <span class="math inline">\(SSM\)</span> following a simple mean<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>with <code>time</code> the date of acquisition, <code>ssm</code> the spatially averaged <span class="math inline">\(SSM\)</span> and <code>noise</code> is the spatially averaged standard deviation of the <span class="math inline">\(SSM\)</span> following a simple mean<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -496,7 +527,8 @@ Vlaamse Milieumaatschappij. 2026. <span>“Vlaamse Hydrografische Atlas – Wate
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Alternatively, one could follow the <a href="https://en.wikipedia.org/wiki/Propagation_of_uncertainty">rules of propagation of uncertainty</a>. In that case, any function <span class="math inline">\(f\)</span>, the standard deviation is given by <span class="math inline">\(\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}\)</span> assuming <strong>no covariance</strong> between <span class="math inline">\(x,y,z\cdots\)</span> and linearly approximating <span class="math inline">\(f\)</span>. Note that an average is a linear function, so here this is not an approximation. With the average <span class="math inline">\(\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i\)</span> as <span class="math inline">\(f\)</span>, <span class="math inline">\(\frac{\partial f}{\partial x_i} = \frac1N\)</span> and so <span class="math inline">\(\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2\)</span>. This assumption of no covariance is a strong one however, which does not necessarily hold up for soil moisture retrievals which exhibit spatial correlation. Therefore, we make the safe assumption of perfectly correlated pixels, which increases the estimated uncertainty to <span class="math inline">\(\sigma_{\bar{x}}^2 = \frac{1}{N} \sum_{i=1}^N \sigma_i^2\)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See the <a href="https://studiekiezer.ugent.be/studiefiche/nl/I003109/2026">Hydrology course in the Bachelor</a> for more information on this technique<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Alternatively, one could follow the <a href="https://en.wikipedia.org/wiki/Propagation_of_uncertainty">rules of propagation of uncertainty</a>. In that case, any function <span class="math inline">\(f\)</span>, the standard deviation is given by <span class="math inline">\(\sigma_{f}={\sqrt {\left({\frac {\partial f}{\partial x}}\right)^{2}\sigma_{x}^{2}+\left({\frac {\partial f}{\partial y}}\right)^{2}\sigma_{y}^{2}+\left({\frac {\partial f}{\partial z}}\right)^{2}\sigma_{z}^{2}+\cdots }}\)</span> assuming <strong>no covariance</strong> between <span class="math inline">\(x,y,z\cdots\)</span> and linearly approximating <span class="math inline">\(f\)</span>. Note that an average is a linear function, so here this is not an approximation. With the average <span class="math inline">\(\bar{x} = \frac{1}{N} \sum_{i=1}^N x_i\)</span> as <span class="math inline">\(f\)</span>, <span class="math inline">\(\frac{\partial f}{\partial x_i} = \frac1N\)</span> and so <span class="math inline">\(\sigma^2_{\bar{x}} =\sum_{i=1}^N \left(\frac{\partial \bar{x}}{\partial x_i} \right)^2\sigma_i^2  = \frac{1}{N^2} \sum_{i=1}^N \sigma_i^2\)</span>. This assumption of no covariance is a strong one however, which does not necessarily hold up for soil moisture retrievals which exhibit spatial correlation. Therefore, we make the safe assumption of perfectly correlated pixels, which increases the estimated uncertainty to <span class="math inline">\(\sigma_{\bar{x}}^2 = \frac{1}{N} \sum_{i=1}^N \sigma_i^2\)</span><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

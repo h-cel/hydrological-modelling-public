@@ -23,6 +23,7 @@ DTM_SPATIAL_RESOLUTION_UPSCALED = 10.0  # in meters
 # Forcings and discharge data info
 FILENAME_FORCINGS_DISCHARGE = "forcings_discharge.csv"
 FILENAME_FORCINGS_DISCHARGE_META = "forcings_discharge_meta.csv"
+VARIABLE_NAME_PRECIPITATION_VMM_CATCHMENT = "precipitation_vmm_catchment"
 EP_MINIMUM = -1.0  # mm/day, below this value is not realistic data
 EP_TRESHOLD = (
     0.0  # mm/day, for simplicity set data below threshold (above minimum) to zero
@@ -41,6 +42,7 @@ METADATA_MAP = {
 
 # Catchment info
 CATCHMENT_NAME = "ZWALM"
+CATCHMENT_A0CODE = "A0_VL11_63"  # Afstroomzone van ZWALM, used for Thiessen weights
 
 # Satellite soil moisture
 FILENAME_SATELLITE_SOIL_MOISTURE = "satellite_soil_moisture.csv"

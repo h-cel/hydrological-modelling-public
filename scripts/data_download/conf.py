@@ -56,10 +56,25 @@ TOTAL_AGG = "Total"
 MEAN_AGG = "Mean"
 FILENAME_WATERINFO_TEMPLATE = "{variable}_{station_id}_{time_spacing}.csv"
 FILENAME_WATERINFO_META_TEMPLATE = "{variable}_meta_{station_id}_{time_spacing}.csv"
+TIMEZONE_DAILY_AGG = "Etc/GMT-1"  # UTC+1 (POSIX sign), days of daily aggregation
 
 # Pluvio station info
-STATION_ID_MAARKE_KERKEM = "P06_014"
 PRECIPITATION_LONGNAME = "Precipitation"
+STATION_ID_MAARKE_KERKEM = "P06_014"
+STATION_ID_ZINGEM = "P06_040"
+STATION_ID_ELST = "plu06a-1066"
+STATION_ID_RONSE = "plu12a-1066"
+PRECIPITATION_PARAMETER_LONGNAME_PER_PROVIDER = {
+    "vmm": "Precipitation",
+    "hic": "Rainfall",
+}
+# Rain gauges for Thiessen average
+PRECIPITATION_GAUGES_PROVIDERS = {
+    STATION_ID_ELST: "hic",
+    STATION_ID_MAARKE_KERKEM: "vmm",
+    STATION_ID_ZINGEM: "vmm",
+    STATION_ID_RONSE: "hic",
+}
 
 # Meteo station info
 STATION_ID_WAREGEM = "ME05_019"

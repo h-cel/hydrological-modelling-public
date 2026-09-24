@@ -12,12 +12,14 @@ from conf import (
     POTENTIAL_EVAPOTRANSPIRATION_SUFFIX,
     PRECIPITATION_CATCHMENT_LONGNAME,
     PRECIPITATION_CATCHMENT_SUFFIX,
+    PRECIPITATION_GAUGES_PROVIDERS,
     PRECIPITATION_LONGNAME,
+    PRECIPITATION_PARAMETER_LONGNAME_PER_PROVIDER,
     PRECIPITATION_RAW_DIR,
-    STATION_ID_MAARKE_KERKEM,
     STATION_ID_NEDERZWALM,
     STATION_ID_WAREGEM,
     TIMESPACING_DICT,
+    TIMEZONE_DAILY_AGG,
     TOTAL_AGG,
     logger,
 )
@@ -36,7 +38,9 @@ def _parse_date_columns(
     return df
 
 
-def _download_daily_timeseries(vmm, station_info: pd.DataFrame) -> pd.DataFrame:
+def _download_daily_timeseries(
+    waterinfo: Waterinfo, station_info: pd.DataFrame
+) -> pd.DataFrame:
     """Download full daily timeseries for a filtered station_info DataFrame with exactly 1 entry."""
     if len(station_info) != 1:
         raise ValueError(
@@ -44,7 +48,7 @@ def _download_daily_timeseries(vmm, station_info: pd.DataFrame) -> pd.DataFrame:
         )
     ts_id = station_info["ts_id"].values[0]
     return (
-        vmm
+        waterinfo
         .get_timeseries_values(
             ts_id=ts_id,
             start=station_info["from"].dt.date.values[0],
@@ -52,7 +56,13 @@ def _download_daily_timeseries(vmm, station_info: pd.DataFrame) -> pd.DataFrame:
         )
         .reset_index()
         .assign(
-            Timestamp=lambda df: pd.to_datetime(pd.to_datetime(df["Timestamp"]).dt.date)
+            Timestamp=lambda df: pd.to_datetime(
+                # values stamped 23:00 UTC of the previous day -> convert to local time
+                pd
+                .to_datetime(df["Timestamp"])
+                .dt.tz_convert(TIMEZONE_DAILY_AGG)
+                .dt.date
+            )
         )
         .set_index("Timestamp")
     )
@@ -91,6 +101,7 @@ def main():
     DISCHARGE_RAW_DIR.mkdir(parents=True, exist_ok=True)
     POTENTIAL_EVAPOTRANSPIRATION_RAW_DIR.mkdir(parents=True, exist_ok=True)
     vmm = Waterinfo("vmm", cache=True)
+    waterinfo_clients = {"vmm": vmm, "hic": Waterinfo("hic", cache=True)}
 
     logger.info("Starting downloads from pywaterinfo")
     # %% Nederzwalm/Zwalmbeek (L06_342)
@@ -130,25 +141,31 @@ def main():
         STATION_ID_NEDERZWALM,
     )
 
-    # %% Maarke-Kerkem (P06_014)
-    logger.info(
-        f"Downloading {PRECIPITATION_LONGNAME} for station {STATION_ID_MAARKE_KERKEM}"
-    )
-    station_info_mk = _parse_date_columns(
-        vmm.get_timeseries_list(STATION_ID_MAARKE_KERKEM)
-    )
-    station_info_mk_precip = station_info_mk.query(
-        f"stationparameter_longname == '{PRECIPITATION_LONGNAME}'"
-        f" and ts_shortname == '{DAILY_AGG}.{TOTAL_AGG}'"
-    )
-    df_mk_precip = _download_daily_timeseries(vmm, station_info_mk_precip)
-    _write_timeseries(
-        df_mk_precip,
-        station_info_mk_precip,
-        PRECIPITATION_RAW_DIR,
-        PRECIPITATION_LONGNAME,
-        STATION_ID_MAARKE_KERKEM,
-    )
+    # %% Rain gauges (Thiessen)
+    for station_id, provider in PRECIPITATION_GAUGES_PROVIDERS.items():
+        waterinfo = waterinfo_clients[provider]
+        parameter_longname = PRECIPITATION_PARAMETER_LONGNAME_PER_PROVIDER[provider]
+        logger.info(
+            f"Downloading {parameter_longname} for station {station_id} ({provider})"
+        )
+        station_info_gauge = _parse_date_columns(
+            waterinfo.get_timeseries_list(station_id)
+        )
+        # parameter filter excludes vmm's "Neerslagde Kort" Day.Total series
+        station_info_gauge_precip = station_info_gauge.query(
+            f"stationparameter_longname == '{parameter_longname}'"
+            f" and ts_shortname == '{DAILY_AGG}.{TOTAL_AGG}'"
+        )
+        df_gauge_precip = _download_daily_timeseries(
+            waterinfo, station_info_gauge_precip
+        )
+        _write_timeseries(
+            df_gauge_precip,
+            station_info_gauge_precip,
+            PRECIPITATION_RAW_DIR,
+            PRECIPITATION_LONGNAME,
+            station_id,
+        )
 
     # %% Waregem (ME05_019)
     logger.info(

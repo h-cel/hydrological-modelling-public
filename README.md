@@ -2,7 +2,9 @@
 
 This repository contains the assignment and processed data for the computer practicals of the course [Hydrological Modelling](https://studiekiezer.ugent.be/2026/studiefiche/en/I002659) at Ghent University. The [public repository](https://github.com/h-cel/hydrological-modelling-public) does not contain solutions to the exercise. Solutions can be found in the `solutions` branch of a a [private repository](https://github.com/h-cel/hydrological-modelling), access to which can be granted upon [contacting me](mailto:olivier.bonte@hotmail.com).
 
-## Installation instructions (local setup) (local setup)
+*For students, please follow the installation instructions at [https://h-cel.github.io/hydrological-modelling-public/0_practical_info.html](https://h-cel.github.io/hydrological-modelling-public/0_practical_info.html)*
+
+## Installation instructions (local setup)
 
 First, make a local copy of this repository using
 
@@ -18,14 +20,14 @@ Next, make sure you have (Mini)Conda installed (download links found [here](http
 
 ```
 conda env create -f environment.yml
-conda activate quarto_template
+conda activate hydromod_env
 ```
 This ensures that the correct version of Python is used in your CLI.
 
 Next, it is recommended that following Quarto tools are installed:
 
 - In this repository, a final output is rendered to pdf. Therefore, [a LaTeX distribution is needed](https://quarto.org/docs/output-formats/pdf-basics.html#prerequisites). Install the [TinyTex distribution](https://yihui.org/tinytex/), a lightweight version of [TeX Live](https://www.tug.org/texlive/), with following command in the CLI: `quarto install tinytex`. This should be more straightforward than managing your own [Tex distribution](https://www.latex-project.org/get/#tex-distributions).
-- To render the diagrams, made with [Mermaid](https://mermaid.js.org/intro/), [quarto needs the Chrome or Edge browser](https://quarto.org/docs/authoring/diagrams.html#chrome-install). If you don't have Chrome or Edge in your local device and prefer to keep it that way, you can install a [Chrome Headless Shell](https://developer.chrome.com/blog/chrome-headless-shell) via quarto in the CLI with `quarto install chrome-headless-shell`
+
 
 To check if these installations were successful, run
 ```
@@ -35,31 +37,4 @@ in the CLI. You should see
 ```
 [✓] Checking LaTeX....................OK
 ```
-for LaTex and
-```
-[✓] Checking Chrome Headless....................OK
-```
-for Chrome. 
-
-## Hosting as a website with Github Actions and GitHub Pages
-
-For this purpose, your clone or fork of this repository should be on GitHub. 
-
-### Activating Github Pages
-
-For this template, the website is hosted using [GitHub Pages](https://quarto.org/docs/publishing/github-pages.html). 
-
-For your own use, start by running
-```
-quarto publish gh-pages
-```
-This wil automate the process of setting up a `gh-pages` branch from which the website is hosted. 
-
-### Automating the publishing with Github Actions
-
-Although you could publish every change manually with the command above, it is more convenient to automate this process with [Github Actions](https://github.com/features/actions). This is also eliminates the need to have rendered versions of your Quarto Book checked in to version control. 
-
-The workflow to automate the publishing (including rendering) of this book is defined in [`.github/workflows/publish.yml`](.github/workflows/publish.yml). Also the installation of the needed dependencies (similar to what is described [above](#installation-instructions-local-setup)) is included here. For your own repository, you might need to change the *Read and write permissions* of your repo for this work, for more info please see the [corresponding Quarto documentation](https://quarto.org/docs/publishing/github-pages.html#publish-action). 
-
-
 

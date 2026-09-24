@@ -13,12 +13,12 @@ The DTM used is *Digitaal Hoogtemodel Vlaanderen II, DTM, raster, 1 m*. For the 
 
 Download file: [`waterinfo_download.py`](waterinfo_download.py)
 
-[Waterinfo](https://www.waterinfo.vlaanderen.be/) is primary Flemish source of hydrological data. For this exercise, all data is at a daily temporal resolution. Programmatic access is carried out using [pywaterinfo](https://github.com/fluves/pywaterinfo). Following variables are downloaded:
+[Waterinfo](https://www.waterinfo.vlaanderen.be/) is primary Flemish source of hydrological data. For this exercise, all data is at a daily temporal resolution. Daily values are aggregated over UTC+1 days and stamped at 23:00 UTC of the previous day, so timestamps are converted to UTC+1 before taking the date. Programmatic access is carried out using [pywaterinfo](https://github.com/fluves/pywaterinfo). Following variables are downloaded:
 
 - Discharge: Daily average discharge [$`\text{m}^3`$/s] measured at Nederzwalm/Zwalmbeek (L06_342)
 - Precipitation: Daily total precipitation [mm] 
     - Catchment rainfall (merging radar + pluviograph) for L06_342
-    - Pluviograph rainfall from Maarke-Kerkem (P06_014)
+    - Pluviograph rainfall from Elst (plu06a-1066), Maarke-Kerkem (P06_014), Zingem (P06_040) and Ronse (plu12a-1066)
 - Potential evapotranspiration: Daily total potential evapotranspiration [mm] calculated with the Penman method at the meteorological station in Waregem (ME05_019)
 
 ## Vlaamse Hydrografische Atlas (VHA)

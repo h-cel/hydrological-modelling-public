@@ -20,7 +20,7 @@ Processing file: [`forcings_and_discharge_process.py`](forcings_and_discharge_pr
 
 First, a common period of full years over all 3 variables (precipitation, potential evapotranspiration and discharge) is determined. 
 
-For precipitation, the catchment rainfall is preferred over the pluviograph rainfall. When no catchment rainfall is available for a given time step, the pluviograph rainfall is used instead. The potential evapotranspiration is gapfilled using a smoothed climatology. For discharge, no gapfilling is applied, only values below zero are set to zero. 
+Precipitation is the Thiessen average of the four pluviographs, with polygons clipped to the Zwalm catchment of the Flemish government (`A0_VL11_63` in `afstroomgebied.shp`). For each day, the weights are recomputed from the gauges with data. The individual gauges are not used to determine the common period. The VMM catchment rainfall (gapfilled with Maarke-Kerkem) is kept as `precipitation_vmm_catchment` for comparison. Processing stops with an error if a day has no data from any gauge. The potential evapotranspiration is gapfilled using a smoothed climatology. For discharge, no gapfilling is applied, only values below zero are set to zero. 
 
 ## Satellite soil moisture
 

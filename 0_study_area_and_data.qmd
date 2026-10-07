@@ -82,7 +82,7 @@ ax.ticklabel_format(useMathText=True, scilimits=(0, 0))
 # Following https://geopandas.org/en/latest/gallery/inset_map.html
 iax = ax.inset_axes([0.05, 0.5, 0.4, 0.4], xticks=[], yticks=[])
 # get GeoDataFrame of Belgium from geodatasets
-europe = gpd.read_file(gds.get_path("eurostat.nuts_rg_10m_2024_3035"))
+europe = gpd.read_file(gds.get_url("eurostat.nuts_rg_10m_2024_3035"))
 country_level = 0  # only keep country level, not regions
 country_code_belgium = "BE"
 belgium = europe[

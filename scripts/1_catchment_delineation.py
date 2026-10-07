@@ -7,7 +7,7 @@ import rootutils
 
 from hydromod.helper_functions import find_grass_python_path, remove_readonly
 
-ROOT_PATH = rootutils.find_root(search_from=__file__, indicator=".git")
+ROOT_PATH = rootutils.find_root(search_from=__file__, indicator="pyproject.toml")
 
 # Add GRASS GIS Python path to sys.path
 grass_python_path = find_grass_python_path()

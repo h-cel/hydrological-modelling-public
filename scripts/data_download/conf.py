@@ -13,7 +13,7 @@ logger.add(
 )
 
 # General paths
-ROOT_PATH = rootutils.find_root(search_from=__file__, indicator=".git")
+ROOT_PATH = rootutils.find_root(search_from=__file__, indicator="pyproject.toml")
 DATA_DIR = ROOT_PATH / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 DTM_RAW_DIR = RAW_DATA_DIR / "digital_terrain_model"

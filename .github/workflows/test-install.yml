@@ -1,7 +1,5 @@
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 6 * * 1" # Every Monday at 06:00 UTC
   push:
     branches: main
     paths: # Only run the workflow if one of these files has changed

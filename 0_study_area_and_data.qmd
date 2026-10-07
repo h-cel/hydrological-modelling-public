@@ -27,7 +27,6 @@ from scripts.data_download.conf import (
     FILENAME_AFSTROOMGEBIED,
     FILENAME_VHA,
 )
-from great_tables import GT
 
 from shapely.geometry import box
 
@@ -120,22 +119,25 @@ The combined forcings and discharge dataset is provided in the CSV file `forcing
 
 ```{python}
 # | label: tbl-waterinfo-meta
+# | output: asis
 # | tbl-cap: "Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each variable has a corresponding measurement station, denoted by a unique station ID."
 df_meta = pd.read_csv(
     FORCINGS_DISCHARGE_PROCESSED_DIR / FILENAME_FORCINGS_DISCHARGE_META,
     index_col=0,
 )
 df_meta.reset_index(inplace=True, names="Variable")
-df_table = df_meta[["Variable", "unit", "name", "id", "thiessen_weight"]]
-gt = (
-    GT(df_table)
-    .cols_label(
-        name="Station", id="Station ID", unit="Units", thiessen_weight="Thiessen weight"
-    )
-    .fmt_number(columns="thiessen_weight", decimals=2)
-    .sub_missing(columns="thiessen_weight", missing_text="")
+df_table = df_meta[["Variable", "unit", "name", "id", "thiessen_weight"]].rename(
+    columns={
+        "name": "Station",
+        "id": "Station ID",
+        "unit": "Units",
+        "thiessen_weight": "Thiessen weight",
+    }
 )
-gt
+df_table["Thiessen weight"] = df_table["Thiessen weight"].map(
+    lambda w: "" if pd.isna(w) else f"{w:.2f}"
+)
+print(df_table.to_markdown(index=False))
 ```
 
 ```{python}

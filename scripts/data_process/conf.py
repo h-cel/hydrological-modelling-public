@@ -4,7 +4,7 @@ from importlib.machinery import SourceFileLoader
 
 import rootutils
 
-root_path = rootutils.find_root(search_from=__file__, indicator=".git")
+root_path = rootutils.find_root(search_from=__file__, indicator="pyproject.toml")
 conf_module = SourceFileLoader(
     "conf", os.path.join(root_path, "scripts", "data_download", "conf.py")
 ).load_module()

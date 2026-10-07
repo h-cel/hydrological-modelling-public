@@ -89,7 +89,7 @@ $$ {#eq-partitioning-excess-precipitation}
 The part of the effective precipitation reaching $S_2$ is:
 
 $$
-P_2(t) = \alpha\frac{S(t)}{S_{\mathrm{max}}}P_{\mathrm{eff}}(t)
+P_2(t) = \alpha\frac{S(t)}{S_{\mathrm{max}}}P_{\mathrm{exc}}(t)
 $$
 
 with $\alpha$ [-] a dimensionless model parameter. $P_1$ is then calculated as the remaining part of the effective precipitation using @eq-partitioning-excess-precipitation.

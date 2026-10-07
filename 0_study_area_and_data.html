@@ -48,7 +48,7 @@ div.csl-indent {
 }</style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -94,9 +94,6 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -270,14 +267,11 @@ window.Quarto = {
 
 <p>For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the centre of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in <a href="#fig-zwalmbeek" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. During the period 2009-2025, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see <a href="#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for more information). The average annual rainfall and potential evapotranspiration of the catchment are 783 mm and 561 mm respectively, typical values for Belgium.</p>
 <div id="cell-fig-zwalmbeek" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-stderr">
-<pre><code>Downloading file 'NUTS_RG_10M_2024_3035.gpkg' from 'https://gisco-services.ec.europa.eu/distribution/v2/nuts/gpkg/NUTS_RG_10M_2024_3035.gpkg' to '/home/runner/.cache/geodatasets'.</code></pre>
-</div>
 <div class="cell-output cell-output-display">
 <div id="fig-zwalmbeek" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-zwalmbeek-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="0_study_area_and_data_files/figure-html/fig-zwalmbeek-output-2.png" width="264" height="395" class="figure-img">
+<img src="0_study_area_and_data_files/figure-html/fig-zwalmbeek-output-1.png" width="264" height="395" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-zwalmbeek-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3.1: The Zwalmbeek and its location within Belgium, as denoted by the red box (CRS: EPSG:31370).
@@ -305,142 +299,83 @@ Figure&nbsp;3.1: The Zwalmbeek and its location within Belgium, as denoted by th
 <li>Potential evapotranspiration (<span class="math inline">\(E_\mathrm{p}\)</span>) is estimated using the Penman equation at a meteorological station. Missing values are gapfilled with the daily, smoothed climatology of <span class="math inline">\(E_\mathrm{p}\)</span>. Smoothing occurs by applying a moving average with a centred window of 11 days.</li>
 <li>River discharge (<span class="math inline">\(Q\)</span>) is measured near the mouth of the Zwalmbeek in the village of Nederzwalm. No gapfilling is applied to this variable, as it is only used for model evaluation, not as a model input.</li>
 </ul>
-<div class="cell" data-execution_count="4">
 <div id="tbl-waterinfo-meta" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="4">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-waterinfo-meta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each variable has a corresponding measurement station, denoted by a unique station ID.
 </figcaption>
 <div aria-describedby="tbl-waterinfo-meta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div id="lmffgsoczm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>
-#lmffgsoczm table {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
-
-#lmffgsoczm thead, tbody, tfoot, tr, td, th { border-style: none; }
- tr { background-color: transparent; }
-#lmffgsoczm p { margin: 0; padding: 0; }
- #lmffgsoczm .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
- #lmffgsoczm .gt_caption { padding-top: 4px; padding-bottom: 4px; }
- #lmffgsoczm .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
- #lmffgsoczm .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
- #lmffgsoczm .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #lmffgsoczm .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #lmffgsoczm .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #lmffgsoczm .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
- #lmffgsoczm .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
- #lmffgsoczm .gt_column_spanner_outer:first-child { padding-left: 0; }
- #lmffgsoczm .gt_column_spanner_outer:last-child { padding-right: 0; }
- #lmffgsoczm .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
- #lmffgsoczm .gt_spanner_row { border-bottom-style: hidden; }
- #lmffgsoczm .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
- #lmffgsoczm .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
- #lmffgsoczm .gt_from_md> :first-child { margin-top: 0; }
- #lmffgsoczm .gt_from_md> :last-child { margin-bottom: 0; }
- #lmffgsoczm .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
- #lmffgsoczm .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
- #lmffgsoczm .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
- #lmffgsoczm .gt_row_group_first td { border-top-width: 2px; }
- #lmffgsoczm .gt_row_group_first th { border-top-width: 2px; }
- #lmffgsoczm .gt_striped { color: #333333; background-color: #F4F4F4; }
- #lmffgsoczm .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #lmffgsoczm .gt_summary_row { color: #333333; background-color: #FFFFFF; text-transform: inherit; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; }
- #lmffgsoczm .gt_first_summary_row { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; }
- #lmffgsoczm .gt_last_summary_row_top { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #lmffgsoczm .gt_grand_summary_row { color: #333333; background-color: #FFFFFF; text-transform: inherit; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; }
- #lmffgsoczm .gt_first_grand_summary_row_bottom { border-top-style: double; border-top-width: 6px; border-top-color: #D3D3D3; }
- #lmffgsoczm .gt_last_grand_summary_row_top { border-bottom-style: double; border-bottom-width: 6px; border-bottom-color: #D3D3D3; }
- #lmffgsoczm .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #lmffgsoczm .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
- #lmffgsoczm .gt_left { text-align: left; }
- #lmffgsoczm .gt_center { text-align: center; }
- #lmffgsoczm .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
- #lmffgsoczm .gt_font_normal { font-weight: normal; }
- #lmffgsoczm .gt_font_bold { font-weight: bold; }
- #lmffgsoczm .gt_font_italic { font-style: italic; }
- #lmffgsoczm .gt_super { font-size: 65%; }
- #lmffgsoczm .gt_footnotes { color: font-color(#FFFFFF); background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #lmffgsoczm .gt_footnote { margin: 0px; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; }
- #lmffgsoczm .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #lmffgsoczm .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
- #lmffgsoczm .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
- #lmffgsoczm .gt_asterisk { font-size: 100%; vertical-align: 0; }
- 
-</style>
-
-<table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 9%">
+<col style="width: 23%">
+<col style="width: 14%">
+<col style="width: 20%">
+</colgroup>
 <thead>
-<tr class="gt_col_headings header">
-<th id="Variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable</th>
-<th id="unit" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Units</th>
-<th id="name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Station</th>
-<th id="id" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Station ID</th>
-<th id="thiessen_weight" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Thiessen weight</th>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Units</th>
+<th style="text-align: left;">Station</th>
+<th style="text-align: left;">Station ID</th>
+<th style="text-align: right;">Thiessen weight</th>
 </tr>
 </thead>
-<tbody class="gt_table_body">
+<tbody>
 <tr class="odd">
-<td class="gt_row gt_left">Precipitation</td>
-<td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Elst OTT_P</td>
-<td class="gt_row gt_left">plu06a-1066</td>
-<td class="gt_row gt_right">0.74</td>
+<td style="text-align: left;">Precipitation</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">Elst OTT_P</td>
+<td style="text-align: left;">plu06a-1066</td>
+<td style="text-align: right;">0.74</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left">Precipitation</td>
-<td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Maarke-Kerkem_P</td>
-<td class="gt_row gt_left">P06_014</td>
-<td class="gt_row gt_right">0.09</td>
+<td style="text-align: left;">Precipitation</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">Maarke-Kerkem_P</td>
+<td style="text-align: left;">P06_014</td>
+<td style="text-align: right;">0.09</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left">Precipitation</td>
-<td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Zingem_P</td>
-<td class="gt_row gt_left">P06_040</td>
-<td class="gt_row gt_right">0.17</td>
+<td style="text-align: left;">Precipitation</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">Zingem_P</td>
+<td style="text-align: left;">P06_040</td>
+<td style="text-align: right;">0.17</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left">Precipitation</td>
-<td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Ronse OTT_P</td>
-<td class="gt_row gt_left">plu12a-1066</td>
-<td class="gt_row gt_right">0.00</td>
+<td style="text-align: left;">Precipitation</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">Ronse OTT_P</td>
+<td style="text-align: left;">plu12a-1066</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left">Potential Evapotranspiration</td>
-<td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Waregem_ME</td>
-<td class="gt_row gt_left">ME05_019</td>
-<td class="gt_row gt_right"></td>
+<td style="text-align: left;">Potential Evapotranspiration</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">Waregem_ME</td>
+<td style="text-align: left;">ME05_019</td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left">River Discharge</td>
-<td class="gt_row gt_left">m³/s</td>
-<td class="gt_row gt_left">Nederzwalm/Zwalmbeek</td>
-<td class="gt_row gt_left">L06_342</td>
-<td class="gt_row gt_right"></td>
+<td style="text-align: left;">River Discharge</td>
+<td style="text-align: left;">m³/s</td>
+<td style="text-align: left;">Nederzwalm/Zwalmbeek</td>
+<td style="text-align: left;">L06_342</td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left">Precipitation of catchment</td>
-<td class="gt_row gt_left">mm</td>
-<td class="gt_row gt_left">Nederzwalm/Zwalmbeek</td>
-<td class="gt_row gt_left">L06_342</td>
-<td class="gt_row gt_right"></td>
+<td style="text-align: left;">Precipitation of catchment</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">Nederzwalm/Zwalmbeek</td>
+<td style="text-align: left;">L06_342</td>
+<td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
-
-
-</div>
-</div>
 </div>
 </figure>
-</div>
 </div>
 <div id="cell-fig-waterinfo-sites" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
@@ -457,7 +392,7 @@ Figure&nbsp;3.2: The Zwalmbeek and the measurement locations as denoted by their
 </div>
 </div>
 <p>Consequently, following columns are present in <code>forcings_discharge.csv</code>:</p>
-<div id="dd15b331" class="cell" data-execution_count="6">
+<div id="a2234fc9" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-stdout">
 <pre><code>['',
  'precipitation',
@@ -501,7 +436,7 @@ Figure&nbsp;3.3: Satellite-derived surface soil moisture data at 1 km spatial re
 </div>
 </div>
 <p>For ease of use, the dataset has been processed to a timeseries by taking the average <span class="math inline">\(SSM\)</span> value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is called <code>satellite_soil_moisture.csv</code>, which has following columns:</p>
-<div id="a672de4a" class="cell" data-execution_count="8">
+<div id="c078c1c7" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>['time', 'ssm', 'noise']</code></pre>
 </div>

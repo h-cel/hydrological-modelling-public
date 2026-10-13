@@ -30,6 +30,7 @@ book:
     - 6_conclusion.qmd
     - references.qmd
 number-sections: true
+lang: en 
 
 bibliography: references.bib
 jupyter: python3

@@ -342,7 +342,7 @@ Tip&nbsp;2.1
 <div class="callout-body-container callout-body">
 <p>Don’t perform all your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
 <p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>src/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
-<div id="f967dda5" class="cell" data-execution_count="1">
+<div id="0862ecc2" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
@@ -373,6 +373,20 @@ Tip&nbsp;2.1
 <li>To support your discussion, it is valuable to include references to relevant scientific papers. To add a reference, please include the relevant source in its bibtex format to <code>references.bib</code>. More information on how to handle citations in Quarto can be found <a href="https://quarto.org/docs/authoring/citations.html">here</a>. The bibtex format is explained in <a href="https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex#The_bibliography_file">this guide</a>. By means of example, one scientific article, <span class="citation" data-cites="moore2007">Moore (<a href="references.html#ref-moore2007" role="doc-biblioref">2007</a>)</span>, is already included.</li>
 <li>Contrary to a full report/paper (see <a href="https://www.galileo.fbw.ugent.be/write/what-are-the-components-of-a-paper/?lang=en">Galileo</a> for a structure overview), you don’t have to write an abstract, introduction and methods section. The concept is that these are already present in the assignment themselves. This allows you to focus on the results and discussion. Note that if you e.g.&nbsp;tackle one of the challenges and want to add a short extra methodology section, this is of course allowed: you can add an extra section (<code>## ...</code>) before <code>## Results and discussion</code>. `</li>
 </ul>
+<p>As the official instruction language of the course is Dutch, you are allowed to write your report in <strong>Dutch or English</strong>.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Cross-referencing in Dutch">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Cross-referencing in Dutch
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When cross-referencing <a href="https://olivierbonte.github.io/imecos_software_guide/quarto.html#referencing-a-figure">figures</a> or <a href="https://olivierbonte.github.io/imecos_software_guide/quarto.html#referencing-a-figure">tables</a> in your report, you’ll notice that by default English terms are used. E.g. <code>@fig-screenshot-download-button</code> will be rendered as <a href="#fig-screenshot-download-button" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>. This is because the language of this document for Quarto is set to English (see <code>lang: en</code> in <code>_quarto.yml</code>). The easiest way to deal with this is to use custom prefixes (see <a href="https://quarto.org/docs/authoring/cross-references.html#references">here</a> for details). For example, using <code>[Figuur @fig-screenshot-download-button]</code> will be rendered as <a href="#fig-screenshot-download-button" class="quarto-xref">Figuur&nbsp;<span>2.1</span></a>.</p>
+</div>
+</div>
 <p>The <strong>oral examination</strong> will be held during the exam of this course (date TBD). It will consist of a discussion on your report and code. The focus will be on methodological choices you made, how you interpreted your results and the scientific discussion.</p>
 <p>Lastly, note that following the <a href="https://olivierbonte.github.io/imecos_software_guide/genai.html">guidelines on the use of Generative AI tools</a>, you are allowed to use GenAI tools to help you with this report. Remember though that you are still responsible for the content of your report and code, and will be orally evaluated on your capacity to explain your work. Please mention at the end of your report (in the <code>6_conclusion.qmd</code> file in a new section) which GenAI tools you used (if any) and for what purpose.</p>
 

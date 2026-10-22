@@ -2,6 +2,7 @@
 
 ```{python}
 from hydromod.constants import STEP_FACTOR, STEP_FACTOR_DECAY
+from scripts.conf import START_YEAR_CALIBRATION, END_YEAR_CALIBRATION
 ```
 
 ## Assignment
@@ -18,7 +19,7 @@ As discussed in Chapter 3 of the theory notes, many different calibration algori
 
 The iteration steps outlined above should be repeated until convergence or a maximum number of iterations is reached. 
 
-Given the information above, now implement the steepest descent algorithm and use it to calibrate the hydrological model from @sec-implementation. Evaluate the performance of the calibrated model using relevant metrics and figures. Discuss the performance of the calibrated model and the usefulness of the calibration algorithm.
+Given the information above, now implement the steepest descent algorithm and use it to calibrate the hydrological model from @sec-implementation. You can use the period `{python} START_YEAR_CALIBRATION` - `{python} END_YEAR_CALIBRATION` for calibration and the remainder of the dataset for validation. Evaluate the performance of the calibrated model using relevant metrics and figures. Discuss the performance of the calibrated model and the usefulness of the calibration algorithm.
 
 ::: {#tip-calibration .callout-tip}
 
@@ -29,6 +30,7 @@ Some general tips and recommendations:
 - The choice of the objective function has a significant impact on the final calibration results.
 - The criterion to stop the iterations is typically also a subjective choice, and can therefore also impact the final calibration results.
 - Think about what the effect is of normalising the gradient vector. Is there an argument for not normalising it? 
+- As in @sec-implementation, take into account the effect of the initial conditions. 
 - Calibration can take some computation time. Therefore, it is recommended to perform your calibration in a separate Python file `3_calibration.py`. Save the best parameter sets in e.g. a `.csv` file. 
 
 ::: 

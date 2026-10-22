@@ -1,2 +1,6 @@
+# P2: model implementation
+START_YEAR_CALIBRATION = 2009
+END_YEAR_CALIBRATION = 2020
+
 # P4: uncertainty analysis
 NSE_THRESHOLD_BEHAVIOURAL = 0.4

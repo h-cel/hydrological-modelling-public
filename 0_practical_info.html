@@ -101,7 +101,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f58de8df0a5a44e479ee786b976d0e87.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-57ee12371a55138af539981169048edf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -327,9 +327,9 @@ Tip
 <li>Python and VS code tutorial: <a href="https://olivierbonte.github.io/imecos_software_guide/python_vs_code.html">https://olivierbonte.github.io/imecos_software_guide/python_vs_code.html</a></li>
 <li>Quarto tutorial: <a href="https://olivierbonte.github.io/imecos_software_guide/quarto.html">https://olivierbonte.github.io/imecos_software_guide/quarto.html</a></li>
 </ul>
-<p>Make sure to use the conda environment provided in <code>environment.yml</code>. After following the guides above, you should be able to run the code in the <code>.qmd</code> files and render them into a PDF report.</p>
-<p>The idea of this exercise set is that you will use <a href="https://quarto.org/">Quarto</a> to combine your code and your scientific report in a single document. The goal is to write a report following the principles of <a href="https://open-science-training-handbook.github.io/Open-Science-Training-Handbook_EN/02OpenScienceBasics/04ReproducibleResearchAndDataAnalysis.html">reproducible research</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, where others have access to all the data and code needed to obtain the same results as the one you present.</p>
-<p>In these practicals, you will therefore <strong>not</strong> write a report from scratch (in Microsoft Word, Google Docs…), but instead you’ll extend the provided <code>.qmd</code> files for each exercise. The files of interest are numbered from <code>1_...qmd</code> to <code>6_...qmd</code>. Here you can add <a href="https://quarto.org/docs/computations/python.html">Python code</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> for your figures and write your discussion in <a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown</a>.</p>
+<p>Make sure to use the conda environment provided in <code>environment.yml</code> (<code>hydromod_env</code>)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. After following the guides above, you should be able to run the code in the <code>.qmd</code> files and render them into a PDF report.</p>
+<p>The idea of this exercise set is that you will use <a href="https://quarto.org/">Quarto</a> to combine your code and your scientific report in a single document. The goal is to write a report following the principles of <a href="https://open-science-training-handbook.github.io/Open-Science-Training-Handbook_EN/02OpenScienceBasics/04ReproducibleResearchAndDataAnalysis.html">reproducible research</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, where others have access to all the data and code needed to obtain the same results as the one you present.</p>
+<p>In these practicals, you will therefore <strong>not</strong> write a report from scratch (in Microsoft Word, Google Docs…), but instead you’ll extend the provided <code>.qmd</code> files for each exercise. The files of interest are numbered from <code>1_...qmd</code> to <code>6_...qmd</code>. Here you can add <a href="https://quarto.org/docs/computations/python.html">Python code</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for your figures and write your discussion in <a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown</a>.</p>
 <div id="tip-code-org" class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -342,7 +342,7 @@ Tip&nbsp;2.1
 <div class="callout-body-container callout-body">
 <p>Don’t perform all your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
 <p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>src/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
-<div id="642374bc" class="cell" data-execution_count="1">
+<div id="2e433dc8" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
@@ -400,8 +400,9 @@ Moore, R. J. 2007. <span>“The PDM Rainfall-Runoff Model.”</span> <em>Hydrolo
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>This concept is introduced in your course on <a href="https://studiekiezer.ugent.be/2026/studiefiche/en/I002440">Data Science</a> in the 2nd Bachelor year of Bioscience Engineering, where you made a Quarto/Rmarkdown presentation/report for a data analysis<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>As an example of how this is used in practice, see e.g.&nbsp;the source file <code>0_study_area_and_data.qmd</code> for <a href="0_study_area_and_data.html" class="quarto-xref"><span>Chapter 3</span></a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Only the experimental Python route for GRASS in <a href="1_catchment_delineation.html" class="quarto-xref"><span>Chapter 4</span></a>, and the data download and processing scripts, need the heavier developer environment in <code>environment_dev.yml</code> (<code>hydromod_env_dev</code>)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This concept is introduced in your course on <a href="https://studiekiezer.ugent.be/2026/studiefiche/en/I002440">Data Science</a> in the 2nd Bachelor year of Bioscience Engineering, where you made a Quarto/Rmarkdown presentation/report for a data analysis<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>As an example of how this is used in practice, see e.g.&nbsp;the source file <code>0_study_area_and_data.qmd</code> for <a href="0_study_area_and_data.html" class="quarto-xref"><span>Chapter 3</span></a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

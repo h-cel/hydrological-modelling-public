@@ -66,7 +66,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f58de8df0a5a44e479ee786b976d0e87.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-57ee12371a55138af539981169048edf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -266,21 +266,30 @@ window.Quarto = {
 
 
 <p>For these exercises, a hydrological dataset of the Zwalm catchment will be used. The Zwalm catchment is located in the centre of Belgium and can be considered a medium-scale catchment. Its main tributary, the Zwalmbeek, is visualised in <a href="#fig-zwalmbeek" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. During the period 2009-2025, a dataset of daily precipitation, potential evapotranspiration and discharge is at your disposal (see <a href="#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a> for more information). The average annual rainfall and potential evapotranspiration of the catchment are 783 mm and 561 mm respectively, typical values for Belgium.</p>
-<div id="cell-fig-zwalmbeek" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display">
 <div id="fig-zwalmbeek" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-zwalmbeek-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="0_study_area_and_data_files/figure-html/fig-zwalmbeek-output-1.png" width="264" height="395" class="figure-img">
+<img src="figures/study_area/zwalmbeek.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-zwalmbeek-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3.1: The Zwalmbeek and its location within Belgium, as denoted by the red box (CRS: EPSG:31370).
 </figcaption>
 </figure>
 </div>
+<p>As mentioned in <a href="0_practical_info.html" class="quarto-xref"><span>Chapter 2</span></a>, all the processed data is available at <code>data/processed</code>. If interested, you can inspect all downloading and processing steps yourself by following the instructions in <code>scripts/data_download/README.md</code> and <code>scripts/data_process/README.md</code> of the repository.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled" title="Challenge">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Challenge
 </div>
 </div>
-<p>As mentioned in <a href="0_practical_info.html" class="quarto-xref"><span>Chapter 2</span></a>, all the processed data is available at <code>data/processed</code>. If interested, you can inspect (and execute) all downloading and processing steps yourself by following the instructions in <code>scripts/data_download/README.md</code> and <code>scripts/data_process/README.md</code> of the repository.</p>
+<div class="callout-body-container callout-body">
+<p>If interested, you can run this geospatial processing code yourself. Note that however that you need to install the developer environment in <code>environment_dev.yml</code> and activate it with <code>conda activate hydromod_env_dev</code>. This can be non-trivial on Windows (see <a href="1_catchment_delineation.html#wrn-grass-windows" class="quarto-xref">Warning&nbsp;<span>4.1</span></a> for details).</p>
+</div>
+</div>
 <p>In the next section, more information is given on the data sources and processing steps for the different types of provided data. Note that all geographic data is provided in the <a href="https://epsg.io/31370">Belgian Lambert 72</a> (BD72, EPSG:31370) coordinate reference system (CRS).</p>
 <section id="sec-study-area-catchment-data" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="sec-study-area-catchment-data"><span class="header-section-number">3.1</span> Catchment data</h2>
@@ -299,7 +308,7 @@ Figure&nbsp;3.1: The Zwalmbeek and its location within Belgium, as denoted by th
 <li>Potential evapotranspiration (<span class="math inline">\(E_\mathrm{p}\)</span>) is estimated using the Penman equation at a meteorological station. Missing values are gapfilled with the daily, smoothed climatology of <span class="math inline">\(E_\mathrm{p}\)</span>. Smoothing occurs by applying a moving average with a centred window of 11 days.</li>
 <li>River discharge (<span class="math inline">\(Q\)</span>) is measured near the mouth of the Zwalmbeek in the village of Nederzwalm. No gapfilling is applied to this variable, as it is only used for model evaluation, not as a model input.</li>
 </ul>
-<div id="tbl-waterinfo-meta" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="4">
+<div id="tbl-waterinfo-meta" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-waterinfo-meta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, retrieved from Waterinfo. Each variable has a corresponding measurement station, denoted by a unique station ID.
@@ -374,25 +383,24 @@ Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, r
 </tr>
 </tbody>
 </table>
+<pre><code>/tmp/ipykernel_2895/4035478275.py:5: Pandas4Warning: The inplace keyword in DataFrame.reset_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  df_meta.reset_index(inplace=True, names="Variable")</code></pre>
 </div>
 </figure>
 </div>
-<div id="cell-fig-waterinfo-sites" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display">
 <div id="fig-waterinfo-sites" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-waterinfo-sites-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="0_study_area_and_data_files/figure-html/fig-waterinfo-sites-output-1.png" width="491" height="364" class="figure-img">
+<img src="figures/study_area/waterinfo_sites.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-waterinfo-sites-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3.2: The Zwalmbeek and the measurement locations as denoted by their station ID
 </figcaption>
 </figure>
 </div>
-</div>
-</div>
 <p>Consequently, following columns are present in <code>forcings_discharge.csv</code>:</p>
-<div id="29ef96db" class="cell" data-execution_count="6">
+<div id="478173f5" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>['',
  'precipitation',
@@ -421,22 +429,18 @@ Tip
 <h2 data-number="3.4" class="anchored" data-anchor-id="sec-study-area-ssm"><span class="header-section-number">3.4</span> Satellite soil moisture</h2>
 <p>In <a href="5_data_assimilation.html" class="quarto-xref"><span>Chapter 8</span></a>, the goal is to improve the hydrological model predictions by assimilating observations of soil moisture. Here, we’ll use satellite-derived surface soil moisture (<span class="math inline">\(SSM\)</span>), which is provided in the folder <code>data/processed/satellite_soil_moisture</code>.</p>
 <p>The original data source is the SSM product at 1 km spatial resolution over Europe from the <a href="https://land.copernicus.eu/en">Copernicus Land Monitoring Service</a> <span class="citation" data-cites="clms2026">(<a href="references.html#ref-clms2026" role="doc-biblioref">European Union’s Copernicus Land Monitoring Service 2026</a>)</span>. An example of the original data for one example date is shown in <a href="#fig-ssm-original" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>. The <span class="math inline">\(SSM\)</span> values are expressed in percent saturation and are representative of the top few centimetres (~5cm) of the soil.</p>
-<div id="cell-fig-ssm-original" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-display">
 <div id="fig-ssm-original" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ssm-original-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="0_study_area_and_data_files/figure-html/fig-ssm-original-output-1.png" width="395" height="395" class="figure-img">
+<img src="figures/study_area/ssm_original.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ssm-original-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3.3: Satellite-derived surface soil moisture data at 1 km spatial resolution over the Zwalm catchment.
 </figcaption>
 </figure>
 </div>
-</div>
-</div>
 <p>For ease of use, the dataset has been processed to a timeseries by taking the average <span class="math inline">\(SSM\)</span> value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is called <code>satellite_soil_moisture.csv</code>, which has following columns:</p>
-<div id="c2497c6f" class="cell" data-execution_count="8">
+<div id="c7bd41c9" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>['time', 'ssm', 'noise']</code></pre>
 </div>

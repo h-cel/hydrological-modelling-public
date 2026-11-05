@@ -27,7 +27,7 @@ from shapely.geometry import box
 # %% Constants
 MAP_SOURCE = cx.providers.Esri.WorldStreetMap
 ATTRIBUTION_TEXT_SIZE = 1
-DPI = 300
+DPI = 500
 
 
 # %% Functions

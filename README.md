@@ -38,3 +38,11 @@ in the CLI. You should see
 [✓] Checking LaTeX....................OK
 ```
 
+### Developer / experimental environment
+
+Downloading and processing the data (`scripts/data_download`, `scripts/data_process`), regenerating the study area figures and the experimental GRASS Python route of Exercise 1 need the heavier geospatial stack in `environment_dev.yml`:
+
+```
+conda env create -f environment_dev.yml
+conda activate hydromod_env_dev
+```

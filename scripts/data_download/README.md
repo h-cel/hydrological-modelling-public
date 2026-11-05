@@ -1,6 +1,8 @@
 # Data downloads
 
-Below some extra information on the downloaded datasets. Note that all configuration settings for the download (path names, variables...) are grouped in [`conf.py`](conf.py). All downloaded data is grouped in `data/raw`. To execute all the download tasks at once, run[`main_download.py`](main_download.py). Note that you need a Copernicus Data Space Ecosystem (CDSE) account to download the satellite soil moisture data (see below for details). 
+Below some extra information on the downloaded datasets. Note that all configuration settings for the download (path names, variables...) are grouped in [`conf.py`](conf.py). All downloaded data is grouped in `data/raw`. To execute all the download tasks at once, run[`main_download.py`](main_download.py). Note that you need a Copernicus Data Space Ecosystem (CDSE) account to download the satellite soil moisture data (see below for details).
+
+These scripts require the developer environment (see [environment_dev.yml](../../environment_dev.yml)). 
 
 ## Digital Terrain Model (DTM)
 

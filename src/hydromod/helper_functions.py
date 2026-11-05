@@ -1,3 +1,5 @@
+"""GRASS helpers for the experimental Python route of Exercise 1. Requires environment_dev.yml."""
+
 import os
 import stat
 import subprocess

@@ -2,6 +2,8 @@
 
 Below some extra information on how the downloaded datasets (see [data downloads](../data_download/README.md)) are processed. Configuration settings are again given in [`conf.py`](conf.py). All processed data is grouped in `data/processed`. To execute all the processing tasks at once, run [`main_process.py`](main_process.py).
 
+These scripts require the developer environment (see [environment_dev.yml](../../environment_dev.yml)). 
+
 ## Catchment information
 
 Processing file: [`catchment_info_process.py`](catchment_info_process.py)
@@ -27,3 +29,9 @@ Precipitation is the Thiessen average of the four pluviographs, with polygons cl
 Processing file: [`satellite_soil_moisture_process.py`](satellite_soil_moisture_process.py)
 
 The 1 km satellite soil moisture is first clipped and masked to the catchment area. Only timestamps where more than a fixed percentage (see `conf.py`) of the pixels have values are retained. The surface soil moisture is averaged over the catchment area and the noise is averaged using the rules of uncertainty error propagation. As a final step, the change in percent saturation per day between two timestamps is calculated and when this is too high or low (see `conf.py`), the last timestamp of the two is dropped. 
+
+## Study area figures
+
+Processing file: [`study_area_figures_process.py`](study_area_figures_process.py)
+
+The maps in `0_study_area_and_data.qmd` (Zwalmbeek with Belgium inset, measurement stations, original satellite soil moisture) are generated here and saved as PNG in `figures/study_area`. This keeps the geospatial packages out of the student environment. Requires the other processed data and an internet connection (basemap tiles).

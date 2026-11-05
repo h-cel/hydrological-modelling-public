@@ -3,7 +3,7 @@
 ## Setup
 
 - This repository uses conda for environment management.
-- The environment is defined in the `environment.yml` file. Here you can also find the name of the env
+- There are two environments: `environment.yml` (light student env, `hydromod_env`, sufficient for `quarto render`) and `environment_dev.yml` (`hydromod_env_dev`, needed for `scripts/data_download`, `scripts/data_process` and the GRASS Python route).
 - For running python code, you can use the command `conda activate <env_name>` to activate the environment or use `conda run -n <env_name> python <script.py>` to run a script without activating the environment.
 
 ## Quarto 

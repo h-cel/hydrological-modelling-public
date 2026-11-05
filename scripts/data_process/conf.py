@@ -51,3 +51,9 @@ VARIABLE_NAME_NOISE = "noise"
 MIN_COVERAGE_RATIO = 0.90
 MIN_PCT_DROP_PER_DAY = -7.5
 MAX_PCT_RISE_PER_DAY = 15
+
+# Study area figures
+FIGURES_STUDY_AREA_DIR = root_path / "figures" / "study_area"
+FILENAME_FIG_ZWALMBEEK = "zwalmbeek.png"
+FILENAME_FIG_WATERINFO_SITES = "waterinfo_sites.png"
+FILENAME_FIG_SSM_ORIGINAL = "ssm_original.png"

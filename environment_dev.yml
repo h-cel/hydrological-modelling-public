@@ -1,0 +1,32 @@
+# Developer / experimental environment: data download & processing (scripts/),
+# study area figures and the experimental GRASS Python route (Exercise 1).
+# Students: use environment.yml instead.
+name: hydromod_env_dev
+channels: 
+  - conda-forge
+dependencies:
+  - python=3.13
+  - jupyterlab=4.4
+  - ipykernel<7
+  - matplotlib=3.11
+  - numpy=2.4
+  - pandas=3.1
+  - sympy=1.14
+  - geopandas=1.1
+  - rioxarray=0.22
+  - jupyter-cache=1.0
+  - owslib=0.35
+  - loguru=0.7
+  - contextily=1.7
+  - geodatasets=2026.5
+  - tabulate=0.10
+  - netcdf4=1.7
+  - dask=2026.3 
+  - openeo=0.33
+  - grass=8.5
+  - geocube=0.7
+  - pip
+  - pip:
+    - rootutils==1.0.*
+    - pywaterinfo[cache]==0.9.*
+    - -e .

@@ -40,7 +40,7 @@ As mentioned in @sec-practical-info, all the processed data is available at `dat
 
 ::: {.callout-important icon="false" title="Challenge"}
 
-If interested, you can run this geospatial processing code yourself. Note that however that you need to install the developer environment in `environment_dev.yml` and activate it with `conda activate hydromod_env_dev`. This can be non-trivial on Windows (see @wrn-grass-windows for details). 
+If interested, you can run this geospatial processing code yourself. Note that however that you need to install the developer environment in `environment_dev.yml` and activate it with `conda activate hydromod_env_dev`.
 :::
 
 

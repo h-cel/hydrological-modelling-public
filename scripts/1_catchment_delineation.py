@@ -1,36 +1,48 @@
 # %% Imports
-import os
-import shutil
 import sys
 
+import geopandas as gpd
+import pyflwdir
+import rasterio.features
+import rioxarray
 import rootutils
 
-from hydromod.helper_functions import find_grass_python_path, remove_readonly
-
+# Robust access to functions from scripts/
 ROOT_PATH = rootutils.find_root(search_from=__file__, indicator="pyproject.toml")
+sys.path.append(str(ROOT_PATH / "scripts"))
 
-# Add GRASS GIS Python path to sys.path
-grass_python_path = find_grass_python_path()
-if grass_python_path is not None:
-    sys.path.append(grass_python_path)
-    import grass.script as gs
-    from grass.tools import Tools
-else:
-    raise RuntimeError(
-        "Could not find GRASS GIS Python path. Make sure GRASS GIS is installed and "
-        "accessible. Functions relying on GRASS GIS will not work."
-    )
+# %% Load data
 
-os.environ.setdefault("HOME", os.environ.get("USERPROFILE", ""))
+da_dtm = rioxarray.open_rasterio(...).isel(
+    band=0
+)  # Select the first band if there are multiple bands
+elevtn = da_dtm.values
+nodata = da_dtm.nodata
+transform = da_dtm.rio.transform()
+crs = da_dtm.rio.crs
+gdf_river = gpd.read_file(...)
+gdf_watershed_reference = gpd.read_file(...)
 
-grass_project_dir = ROOT_PATH / "grass_project"
+# %% Check missing values in the DTM and fill if needed
 
-# %% Create a new GRASS project and session every time the script is run
-if grass_project_dir.exists():
-    shutil.rmtree(grass_project_dir, onexc=remove_readonly)
-gs.create_project(path=grass_project_dir, epsg=31370)
+# %% Flow directions and accumulation with pyflwdir
+# https://deltares.github.io/pyflwdir/
+flw = pyflwdir.from_array(...)
 
-session = gs.setup.init(grass_project_dir)
-tools = Tools(session=session)
+# %% Find the point  with the highest accumulation on the river
+shapes = gdf_river.to_crs(crs).geometry
+arr_river = rasterio.features.rasterize(shapes=..., out_shape=..., transform=...)
+idx_max = ...
+x_max, y_max = flw.xy(...)
 
-# %% Solutions
+# %% Delineate the basin upstream of an outlet and vectorize
+
+basins = flw.basins(xy=...)
+
+list_vector_features_basins = list(
+    rasterio.features.shapes(source=..., mask=..., connectivity=..., transform=...)
+)
+
+gdf_watershed = gpd.GeoDataFrame.from_features(..., crs=...)
+
+# %% Repeat delineation for the other outlet point

@@ -20,9 +20,6 @@ data/*
 # Agents
 .claude/settings.json
 
-# GRASS environment
-grass_project/*
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

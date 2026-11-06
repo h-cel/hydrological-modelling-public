@@ -1,5 +1,5 @@
 # Developer / experimental environment: data download & processing (scripts/),
-# study area figures and the experimental GRASS Python route (Exercise 1).
+# study area figures and the pyflwdir catchment delineation (Exercise 1).
 # Students: use environment.yml instead.
 name: hydromod_env_dev
 channels: 
@@ -14,6 +14,7 @@ dependencies:
   - numba=0.68
   - sympy=1.14
   - geopandas=1.1
+  - pyflwdir=0.5
   - rioxarray=0.22
   - jupyter-cache=1.0
   - owslib=0.35
@@ -24,8 +25,6 @@ dependencies:
   - netcdf4=1.7
   - dask=2026.3 
   - openeo=0.33
-  - grass=8.5
-  - geocube=0.7
   - pip
   - pip:
     - rootutils==1.0.*

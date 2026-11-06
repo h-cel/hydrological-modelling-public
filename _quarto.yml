@@ -42,6 +42,7 @@ format:
       - brand
     code-overflow: wrap
     code-fold: show
+    link-external-newwindow: true 
   pdf:
     documentclass: scrreprt
     fontsize: 11pt

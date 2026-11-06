@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-57ee12371a55138af539981169048edf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-387af31c626f98c798a5fa383f4c6d96.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -260,61 +260,59 @@ Tip&nbsp;4.1
 <p>The outlet of the Zwalm catchment is located in the vicinity of <span class="math inline">\(x\)</span>=101673 m and <span class="math inline">\(y\)</span>=175377 m</p>
 </div>
 </div>
-<p>For this geospatial analysis, <a href="https://grass.osgeo.org/">GRASS</a> will be used, a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modelling, hydrology, data management, and imagery processing. There are multiple ways of using GRASS. In this exercise, you can choose between 2 ways of interacting with GRASS:</p>
+<p>You can choose between 2 ways of performing this geospatial analysis:</p>
 <ul>
-<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> With QGIS as Graphical User Interface (GUI), all GRASS functionality can be accessed via the Processing Toolbox</li>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> The Python GRASS interface allows programmatic access to GRASS functionality. For an in depth introduction, we refer to the <a href="https://grass.osgeo.org/grass85/manuals/python_intro.html">documentation</a>. In this exercise, we will use the <code>grass.tools</code> interface. The initial setup of the GRASS environment is provided in <code>scripts/1_catchment_delineation.py</code>, to which you can add your own code. All tools are accessible via the <code>tools</code> variable defined there. For example if you want to use the <code>r.import</code> function, you would call <code>tools.r_import(input="PATH_TO_FILE",output="OUTPUT_NAME", overwrite=True)</code>. Note that:
-<ul>
-<li>It is recommended to set the <code>overwrite=True</code> argument for all functions.</li>
-<li>It is a general convention that the <code>.</code> defined in the GRASS function name (as found in the <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>)is replaced by <code>_</code> in the Python function name.</li>
-<li>The output of a previous function (e.g.&nbsp;<code>OUTPUT_NAME</code> in the example above) can be used as input for a subsequent function. For example, if you want to use the output of <code>r.import</code> as input (called <code>elevation</code>) for a slope calculation with <code>r.slope.aspect</code>, you would call <code>tools.r_slope_aspect(elevation="OUTPUT_NAME", slope="SLOPE", overwrite=True)</code>.</li>
-<li>In <code>src/hydromod/helper_functions.py</code>, two helper functions are defined: <code>get_data_array_from_raster</code> gives you an <a href="https://docs.xarray.dev/en/stable/user-guide/data-structures.html#dataarray"><code>xarray.DataArray</code></a> given the name (e.g.&nbsp;<code>"OUTPUT_NAME"</code>) of a GRASS raster layer and <code>plot_grass_raster</code> makes a plot of a GRASS raster layer (given its name as again). Use these functions to check intermediate results. Following <a href="0_practical_info.html#tip-code-org" class="quarto-xref">Tip&nbsp;<span>2.1</span></a>, you can import these functions in your script by using e.g.&nbsp;<code>from hydromod.helper_functions import plot_grass_raster</code>.</li>
-</ul></li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> With <a href="https://deltares.github.io/pyflwdir/"><code>pyflwdir</code></a>, a pure Python package for flow direction data analysis, combined with <a href="https://vylor.github.io/rioxarray/stable/"><code>rioxarray</code></a>, <a href="https://rasterio.readthedocs.io/en/stable/"><code>rasterio</code></a> and <a href="https://geopandas.org/en/stable/"><code>geopandas</code></a>. A template is provided in <code>scripts/1_catchment_delineation.py</code>, to which you can add your own code. Each code cell in the template corresponds to one or more of the steps below. The <a href="https://deltares.github.io/pyflwdir/latest/">pyflwdir documentation</a> contains several examples which are useful as a starting point.</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> With <a href="https://qgis.org/">QGIS</a> as Graphical User Interface (GUI), using the <a href="https://grass.osgeo.org/">GRASS</a> and <a href="https://gdal.org/en/stable/index.html">GDAL</a> tools available via the Processing Toolbox. An overview of all GRASS functions can be found in the <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>.</li>
 </ul>
-<div id="wrn-grass-windows" class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div id="wrn-dev-env" class="callout callout-style-default callout-warning callout-titled" title="Python option: installation requirements">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning&nbsp;4.1
+Warning&nbsp;4.1: Python option: installation requirements
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>As of 14/08/2026, installing GRASS on Windows via conda is not always stable. Therefore using GRASS from Python might not be possible. The GRASS developer team is aware of this issue, progress can be followed <a href="https://github.com/OSGeo/grass/issues/7615">here</a>. Consider using QGIS instead for now.</p>
-<p>The Python route is experimental and is <strong>not</strong> supported by the environment in <code>environment.yml</code>. It requires the developer environment: <code>conda env create -f environment_dev.yml</code> and <code>conda activate hydromod_env_dev</code>.</p>
+<p>The Python option requires packages that are <strong>not</strong> included in the environment in <code>environment.yml</code>. Install and activate the developer environment instead: <code>conda env create -f environment_dev.yml</code> and <code>conda activate hydromod_env_dev</code>.</p>
 </div>
 </div>
-<p>Irrespective of the choice of interface, an overview of all GRASS functions can be found in <a href="https://grass.osgeo.org/grass85/manuals/full_index.html">tool manual</a>. Specific tips for each interface will be denoted by their logo in the steps below.</p>
+</div>
+<p>Specific tips for each choice of interface are denoted by their logo in the steps below.</p>
 <ol type="1">
-<li>Start by loading the DTM (see <a href="0_study_area_and_data.html#sec-study-area-dtm" class="quarto-xref"><span>Section 3.2</span></a>). Check if it is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately <span class="math inline">\(x_{\mathrm{min}}=\)</span> 98000 m, <span class="math inline">\(x_{\mathrm{max}}\)</span> = 116000 m, <span class="math inline">\(y_{\mathrm{min}}\)</span> = 160000 m, <span class="math inline">\(y_{\mathrm{max}}\)</span> = 180000 m).
+<li>Start by loading the DTM (see <a href="0_study_area_and_data.html#sec-study-area-dtm" class="quarto-xref"><span>Section 3.2</span></a>), the river network from the <em>Vlaamse Hydrografische Atlas</em> and the catchment boundary from the <em>Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027</em> dataset (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>). Check if the DTM is clipped to a reasonable region of interest around the Zwalm river (bounding box of approximately <span class="math inline">\(x_{\mathrm{min}}=\)</span> 98000 m, <span class="math inline">\(x_{\mathrm{max}}\)</span> = 116000 m, <span class="math inline">\(y_{\mathrm{min}}\)</span> = 160000 m, <span class="math inline">\(y_{\mathrm{max}}\)</span> = 180000 m).
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.import.html"><code>r.import</code></a> function to load in raster data.</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <a href="https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray-open-rasterio"><code>rioxarray.open_rasterio</code></a> for raster data and <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.read_file.html#geopandas.read_file"><code>geopandas.read_file</code></a> for vector data.</li>
 </ul></li>
-<li>Check if there any missing values in the DTM. If so, spatially gap-fill it:
+<li>Check if there are any missing values in the DTM. If so, spatially gap-fill it:
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fillnulls.html"><code>r.fillnulls</code></a> function to fill in missing values. If the function fails (likely on Windows), consider choosing a different interpolation method than the default.</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Compare the values with the nodata value. Missing values can be filled with <a href="https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.interpolate_na"><code>rio.interpolate_na</code></a>.</li>
 <li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Fill nodata</code> tool (from GDAL).</li>
 </ul></li>
-<li>Filter the digital elevation model for sinks (or depressions) and fill them. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.fill.dir.html"><code>r.fill.dir</code></a> function.</li>
-<li>Calculate the flow direction and accumulation into each grid cell of the domain. Use the <a href="https://grass.osgeo.org/grass85/manuals/r.watershed.html"><code>r.watershed</code></a> function. Make sure that D8 is used as flow direction algorithm. Furthermore, ensure that the minimum size of an exterior watershed basins is set to 500. Keep both the accumulation (i.e.&nbsp;how many cells drain into each cell) and the flow direction map as outputs.<br>
-</li>
-<li>Check if the accumulation map aligns with the actual river network of the Zwalm catchment from the <em>Vlaamse Hydrografische Atlas</em> (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>).
+<li>Filter the digital elevation model for sinks (or depressions), fill them and calculate the flow direction of each grid cell using the D8 algorithm.
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <code>get_data_array_from_raster</code> to get the accumulation map as an <code>xarray.DataArray</code>. Use <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.read_file.html#geopandas.read_file"><code>geopandas.read_file</code></a> to read in the river network shapefile.</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <a href="https://deltares.github.io/pyflwdir/latest/_generated/pyflwdir.from_dem.html"><code>pyflwdir.from_dem</code></a>, which fills the depressions and derives the D8 flow directions in a single step. The output of this function (here called <code>flw</code>) is a <a href="https://deltares.github.io/pyflwdir/latest/_generated/pyflwdir.FlwdirRaster.html">FlwdirRaster</a>. The flow directions can be retrieved using the <code>to_array()</code> method (<code>flw.to_array()</code>). Check the <a href="https://deltares.github.io/pyflwdir/latest/_examples/flwdir.html#Flow-direction-data">flow direction conventions</a> to interpret the values.</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use <a href="https://grass.osgeo.org/grass85/manuals/r.fill.dir.html"><code>r.fill.dir</code></a> to fill the sinks, followed by <a href="https://grass.osgeo.org/grass85/manuals/r.watershed.html"><code>r.watershed</code></a> for the flow directions. Make sure that D8 is used as flow direction algorithm and that the minimum size of an exterior watershed basin is set to 500.</li>
 </ul></li>
-<li>Find the point with the largest accumulation.
+<li>Calculate the flow accumulation (i.e.&nbsp;how many cells drain into each cell) and check if the accumulation map aligns with the actual river network of the Zwalm catchment.
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Rasterise the river network to the same grid as the accumulation map and extract the maximum. This point is the outlet of the catchment. Use the <a href="https://corteva.github.io/geocube/stable/geocube.html#make-geocube"><code>make_geocube</code></a> function from the <a href="https://corteva.github.io/geocube/stable/index.html"><code>geocube</code></a> package. Use the <code>like</code> argument.<br>
-</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <a href="https://deltares.github.io/pyflwdir/latest/_generated/pyflwdir.FlwdirRaster.upstream_area.html"><code>upstream_area</code></a>.</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> The accumulation map is an output of <code>r.watershed</code> in the previous step.</li>
+</ul></li>
+<li>Find the point with the largest accumulation on the Zwalm river. This point is the outlet of the catchment.
+<ul>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Select the Zwalm river from the river network and rasterise it to the same grid as the DTM using <a href="https://rasterio.readthedocs.io/en/stable/api/rasterio.features.html#rasterio.features.rasterize"><code>rasterio.features.rasterize</code></a>. Tip: use the <a href="https://deltares.github.io/pyflwdir/latest/_generated/pyflwdir.FlwdirRaster.xy.html"><code>xy</code></a> method from pyflwdir to get the coordinates of raster index with the largest accumulation.</li>
 <li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> QGIS allows for a more visual inspection of the accumulation map. Rasterising the river network is therefore not strictly necessary and one can instead visually determine the point of largest accumulation near the Scheldt. If one would nonetheless want to rasterise the river network, use the <code>Rasterize (vector to raster)</code> tool (from GDAL).</li>
 </ul></li>
-<li>Given the outlet determined in the previous step, delineate the catchment using <a href="https://grass.osgeo.org/grass85/manuals/r.water.outlet.html"><code>r.water.outlet</code></a>. Vectorise the resulting raster map of the catchment.
+<li>Given the outlet determined in the previous step, delineate the catchment and vectorise the resulting raster map of the catchment.
 <ul>
-<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Convert the output raster to an <code>xarray.DataArray</code> using a helper function. Subsequently, the <a href="https://corteva.github.io/geocube/stable/geocube.html#geocube.vector.vectorize"><code>vectorize</code></a> function from the <code>geocube</code> package can be applied.</li>
-<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use the <code>Polygonize (raster to vector)</code> tool (from GDAL).</li>
+<li><img src="figures/python-logo-only.png" style="height:1em" alt="Python"> Use <a href="https://deltares.github.io/pyflwdir/latest/_generated/pyflwdir.FlwdirRaster.basins.html"><code>basins</code></a> to delineate the catchment and supply the basin outlet to the function as parameter. Vectorise it with <a href="https://rasterio.readthedocs.io/en/stable/api/rasterio.features.html#rasterio.features.shapes"><code>rasterio.features.shapes</code></a> and convert the result to a <code>GeoDataFrame</code> with <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.from_features.html"><code>geopandas.GeoDataFrame.from_features</code></a>.</li>
+<li><img src="figures/qgis-icon.png" style="height:1em" alt="QGIS"> Use <a href="https://grass.osgeo.org/grass85/manuals/r.water.outlet.html"><code>r.water.outlet</code></a> to delineate the catchment and the <code>Polygonize (raster to vector)</code> tool (from GDAL) to vectorise it.</li>
 </ul></li>
-<li>Repeat step 7 for the coordinates provided in <a href="#tip-coordinates" class="quarto-xref">Tip&nbsp;<span>4.1</span></a>. Compare the resulting catchment boundary with the one obtained in step 7 and with the provided catchment boundary from the <em>Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027</em> dataset (see <a href="0_study_area_and_data.html#sec-study-area-catchment-data" class="quarto-xref"><span>Section 3.1</span></a>). What are the differences between these catchment boundaries? What could be the reasons for these differences?</li>
+<li>Repeat step 6 for the coordinates provided in <a href="#tip-coordinates" class="quarto-xref">Tip&nbsp;<span>4.1</span></a>. Compare the resulting catchment boundary with the one obtained in step 6 and with the provided catchment boundary from the <em>Oppervlaktewaterlichamen en hun afstroomgebieden, 2022-2027</em> dataset. What are the differences between these catchment boundaries? What could be the reasons for these differences?</li>
 <li>Calculate the catchment area.</li>
 </ol>
 <p>In your results and discussion below, make sure to include an overview figure of the Zwalm catchment including the DTM, river network and catchment boundary.</p>

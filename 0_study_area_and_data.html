@@ -66,7 +66,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-57ee12371a55138af539981169048edf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-387af31c626f98c798a5fa383f4c6d96.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -287,7 +287,7 @@ Figure&nbsp;3.1: The Zwalmbeek and its location within Belgium, as denoted by th
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If interested, you can run this geospatial processing code yourself. Note that however that you need to install the developer environment in <code>environment_dev.yml</code> and activate it with <code>conda activate hydromod_env_dev</code>. This can be non-trivial on Windows (see <a href="1_catchment_delineation.html#wrn-grass-windows" class="quarto-xref">Warning&nbsp;<span>4.1</span></a> for details).</p>
+<p>If interested, you can run this geospatial processing code yourself. Note that however that you need to install the developer environment in <code>environment_dev.yml</code> and activate it with <code>conda activate hydromod_env_dev</code>.</p>
 </div>
 </div>
 <p>In the next section, more information is given on the data sources and processing steps for the different types of provided data. Note that all geographic data is provided in the <a href="https://epsg.io/31370">Belgian Lambert 72</a> (BD72, EPSG:31370) coordinate reference system (CRS).</p>
@@ -383,7 +383,7 @@ Table&nbsp;3.1: Metadata of the provided daily forcings and discharge dataset, r
 </tr>
 </tbody>
 </table>
-<pre><code>/tmp/ipykernel_2953/4035478275.py:5: Pandas4Warning: The inplace keyword in DataFrame.reset_index is deprecated and will be removed in a future version (PDEP-8).
+<pre><code>/tmp/ipykernel_3343/4035478275.py:5: Pandas4Warning: The inplace keyword in DataFrame.reset_index is deprecated and will be removed in a future version (PDEP-8).
 See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
   df_meta.reset_index(inplace=True, names="Variable")</code></pre>
 </div>
@@ -400,7 +400,7 @@ Figure&nbsp;3.2: The Zwalmbeek and the measurement locations as denoted by their
 </figure>
 </div>
 <p>Consequently, following columns are present in <code>forcings_discharge.csv</code>:</p>
-<div id="a798a3ad" class="cell" data-execution_count="4">
+<div id="c7ee7394" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>['',
  'precipitation',
@@ -440,7 +440,7 @@ Figure&nbsp;3.3: Satellite-derived surface soil moisture data at 1 km spatial re
 </figure>
 </div>
 <p>For ease of use, the dataset has been processed to a timeseries by taking the average <span class="math inline">\(SSM\)</span> value over the Zwalm catchment and subsequently removing outliers. The resulting final timeseries is called <code>satellite_soil_moisture.csv</code>, which has following columns:</p>
-<div id="f8256767" class="cell" data-execution_count="5">
+<div id="74b5d8f2" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>['time', 'ssm', 'noise']</code></pre>
 </div>

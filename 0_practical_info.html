@@ -327,7 +327,9 @@ Tip
 <li>Python and VS code tutorial: <a href="https://olivierbonte.github.io/imecos_software_guide/python_vs_code.html">https://olivierbonte.github.io/imecos_software_guide/python_vs_code.html</a></li>
 <li>Quarto tutorial: <a href="https://olivierbonte.github.io/imecos_software_guide/quarto.html">https://olivierbonte.github.io/imecos_software_guide/quarto.html</a></li>
 </ul>
-<p>Make sure to use the conda environment provided in <code>environment.yml</code> (<code>hydromod_env</code>)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. After following the guides above, you should be able to run the code in the <code>.qmd</code> files and render them into a PDF report.</p>
+<p>Make sure to use the conda environment provided in <code>environment.yml</code> (<code>hydromod_env</code>)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. After following the guides above, you should be able to run the code in the <code>.qmd</code> files and render them into a PDF report. To get the PDF output, use the command</p>
+<pre><code>quarto render</code></pre>
+<p>in the terminal (with the correct conda environment activated). This will create a PDF report in the <code>_book</code> folder.</p>
 <p>The idea of this exercise set is that you will use <a href="https://quarto.org/">Quarto</a> to combine your code and your scientific report in a single document. The goal is to write a report following the principles of <a href="https://open-science-training-handbook.github.io/Open-Science-Training-Handbook_EN/02OpenScienceBasics/04ReproducibleResearchAndDataAnalysis.html">reproducible research</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, where others have access to all the data and code needed to obtain the same results as the one you present.</p>
 <p>In these practicals, you will therefore <strong>not</strong> write a report from scratch (in Microsoft Word, Google Docs…), but instead you’ll extend the provided <code>.qmd</code> files for each exercise. The files of interest are numbered from <code>1_...qmd</code> to <code>6_...qmd</code>. Here you can add <a href="https://quarto.org/docs/computations/python.html">Python code</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for your figures and write your discussion in <a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown</a>.</p>
 <div id="tip-code-org" class="callout callout-style-default callout-tip callout-titled">
@@ -342,12 +344,12 @@ Tip&nbsp;2.1
 <div class="callout-body-container callout-body">
 <p>Don’t perform all your computations inside of the <code>.qmd</code> files! Instead, make a regular <code>.py</code> file inside of the <code>scripts</code> folder for each exercise. From these <code>.py</code> files, you can save the results (e.g.&nbsp;metrics, output data) in (for example) a <code>data/solutions</code> folder. From this folder, you can then import the necessary results in the <code>.qmd</code> files to write your report and make your figures.</p>
 <p>For functions that you reuse across multiple exercises, it is recommended to add these in a <code>.py</code> file inside of the <code>src/hydromod</code> folder. This way, you can easily import these both in your <code>.qmd</code> files and in <code>.py</code> files inside the <code>scripts</code> folder. For example, in <code>src/hydromod/constants.py</code>, a constant <code>STEP_FACTOR</code> is defined. We can import this constant here by using:</p>
-<div id="22e6becf" class="cell" data-execution_count="1">
+<div id="253eebbe" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(STEP_FACTOR)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hydromod.constants <span class="im">import</span> STEP_FACTOR</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(STEP_FACTOR)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.01</code></pre>
@@ -364,7 +366,7 @@ Tip&nbsp;2.1
 <li>A PDF version of your report, which is rendered via Quarto.</li>
 <li>The full set of files (i.e.&nbsp;repository) including your solution as a <code>.zip</code> file.</li>
 </ul>
-<p>By <strong>Tuesday 10/11 23:59</strong>, you can hand in a draft version of your results and discussion for one exercise for feedback. This will not be graded and only serves as a way to help you with writing your report and using Quarto.</p>
+<p>By <strong>Tuesday 10/11 23:59</strong>, you can hand in a draft version of your results and discussion for one exercise for feedback (hand in under <a href="https://ufora.ugent.be/d2l/lms/dropbox/user/folder_submit_files.d2l?db=149584&amp;grpid=0&amp;isprv=1&amp;bp=1&amp;ou=1389667"><em>Opdrachten</em></a> on Ufora). This will not be graded and only serves as a way to help you with writing your report and using Quarto.</p>
 <p>Your report should be written <strong>scientifically</strong> and should contain at least the following:</p>
 <ul>
 <li>Per exercise, a summary of the results with reference to relevant figures and metrics and a proper discussion. Note that all tasks are related and that the results should be discussed in reference to one another in a scientific manner. The emphasis of the report should be on this part. This part should be used to draw the attention on shortcomings of the different algorithms and make a link to potential alternatives. Use the sections <code>Results and discussion</code> in <code>1...qmd</code> to <code>5...qmd</code> for writing this part down.</li>

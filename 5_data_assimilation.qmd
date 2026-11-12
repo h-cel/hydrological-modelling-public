@@ -12,14 +12,15 @@ $$
 \mathbf H = \left [ \displaystyle \frac{100}{S_{\mathrm{max}}} ~~~ 0 ~~~ 0 \right ]
 $$ {#eq-da-obs-matrix}
 
-so that $\mathbf{Hx}(t)$ is the model equivalent of the observation. To account for the difference between $\mathbf{Hx}(t)$ (calibrated model) and $y(t)$, a bias correction is applied by rescaling using the first two statistical moments.
+so that $\mathbf{Hx}(t)$ is the model equivalent of the observation. To account for the difference between $\mathbf{Hx}(t)$ (calibrated model) and $y(t)$, a bias correction is applied by rescaling using the first two statistical moments
 
 $$
 y^*(t) = \frac{\sigma_{\mathbf{Hx}}}{\sigma_y} \left ( y(t) - \bar y \right ) + \overline{\mathbf{Hx}}
 $$ {#eq-da-bias-correction}
 
+where $\overline{\ldots}$ and $\sigma_{\ldots}$ denote the mean and standard deviation, respectively.
 
-$y^*(t)$ values that are outside of the physically meaningful range can be disregarded. Also rescale the observation uncertainty $\sigma_y$ accordingly. 
+$y^*(t)$ values that are outside of the physically meaningful range can be disregarded. Also rescale the observation uncertainty $\sigma_v(t)$ (@sec-study-area-ssm) accordingly to $\sigma_{v^*}(t)$.
 
 
 ### Data assimilation with the extended Kalman filter (EKF)
@@ -30,7 +31,7 @@ The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [S_k,
     a. The a posteriori state estimate $\hat{\mathbf x}_1^+$: the initial conditions used for the calibrated model (@sec-calibration).
     b. The (initial) error covariance matrix $\mathbf P_1^+$ starts with the values $(0.2\,S_{\mathrm{max}})^2$, $(0.2\,S_{2,\mathrm{max}})^2$ and $(0.2\,S_{2,\mathrm{max}})^2$ on the diagonal. 
     c. The process noise covariance matrix $\mathbf Q_k$: diagonal and constant in time at 1% of the storage capacities.
-    d. The observation noise covariance matrix $\mathbf R_k = [\sigma_{y^*_k}^2]$: time-varying, following directly from the observation uncertainty (@sec-study-area-ssm).
+    d. The observation noise covariance matrix $\mathbf R_k = [\sigma_{v^*,k}^2]$: time-varying, following directly from the observation uncertainty (@sec-study-area-ssm).
 2. Compute the a priori error covariance matrix $\mathbf P_k^-$, using the state transition matrix $\mathbf A_k$ (the Jacobian of the RHS $\mathbf{f} = [f_1, f_2, f_3]^T$  of the governing ODEs from @eq-state-space). As in @sec-calibration, $\mathbf A_k$ is obtained via forward finite differences with step size $h$. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$:
     $$
     \mathbf A_k = \left [

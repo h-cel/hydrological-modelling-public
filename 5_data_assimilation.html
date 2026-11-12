@@ -257,59 +257,63 @@ window.Quarto = {
 <p><span id="eq-da-obs-matrix"><span class="math display">\[
 \mathbf H = \left [ \displaystyle \frac{100}{S_{\mathrm{max}}} ~~~ 0 ~~~ 0 \right ]
 \tag{8.1}\]</span></span></p>
-<p>so that <span class="math inline">\(\mathbf{Hx}(t)\)</span> is the model equivalent of the observation. To account for the difference between <span class="math inline">\(\mathbf{Hx}(t)\)</span> (calibrated model) and <span class="math inline">\(y(t)\)</span>, a bias correction is applied by rescaling using the first two statistical moments.</p>
+<p>so that <span class="math inline">\(\mathbf{Hx}(t)\)</span> is the model equivalent of the observation. To account for the difference between <span class="math inline">\(\mathbf{Hx}(t)\)</span> (calibrated model) and <span class="math inline">\(y(t)\)</span>, a bias correction is applied by rescaling using the first two statistical moments</p>
 <p><span id="eq-da-bias-correction"><span class="math display">\[
 y^*(t) = \frac{\sigma_{\mathbf{Hx}}}{\sigma_y} \left ( y(t) - \bar y \right ) + \overline{\mathbf{Hx}}
 \tag{8.2}\]</span></span></p>
-<p><span class="math inline">\(y^*(t)\)</span> values that are outside of the physically meaningful range can be disregarded. Also rescale the observation uncertainty <span class="math inline">\(\sigma_y\)</span> accordingly.</p>
+<p>where <span class="math inline">\(\overline{\ldots}\)</span> and <span class="math inline">\(\sigma_{\ldots}\)</span> denote the mean and standard deviation, respectively.</p>
+<p><span class="math inline">\(y^*(t)\)</span> values that are outside of the physically meaningful range can be disregarded. Also rescale the observation uncertainty <span class="math inline">\(\sigma_v(t)\)</span> (<a href="0_study_area_and_data.html#sec-study-area-ssm" class="quarto-xref"><span>Section 3.4</span></a>) accordingly to <span class="math inline">\(\sigma_{v^*}(t)\)</span>.</p>
 </section>
 <section id="data-assimilation-with-the-extended-kalman-filter-ekf" class="level3" data-number="8.1.2">
 <h3 data-number="8.1.2" class="anchored" data-anchor-id="data-assimilation-with-the-extended-kalman-filter-ekf"><span class="header-section-number">8.1.2</span> Data assimilation with the extended Kalman filter (EKF)</h3>
-<p>The state and observation vector at time step <span class="math inline">\(k\)</span> are <span class="math inline">\(\hat{\mathbf x}_k = [S_k, S_{1,k}, S_{2,k}]^T\)</span> and <span class="math inline">\(\mathbf y_k = [y^*_k]\)</span>, so that, unlike <span class="math inline">\(S\)</span>, neither <span class="math inline">\(S_1\)</span> nor <span class="math inline">\(S_2\)</span> are directly observed. Since <span class="math inline">\(\mathbf H\)</span> (<a href="#eq-da-obs-matrix" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>) is already linear, only the (non-linear) rainfall-runoff model itself needs to be linearised for the EKF-application. Note that the filter only starts distinguishing an a priori from an a posteriori estimate from the second time step onwards, since the first time step is used to initialise it:</p>
+<p>The state and observation vector at time step <span class="math inline">\(k\)</span> are <span class="math inline">\(\hat{\mathbf x}_k = [\hat S_k, \hat S_{1,k}, \hat S_{2,k}]^T\)</span> and <span class="math inline">\(\mathbf y_k = [y^*_k]\)</span>, so that, unlike <span class="math inline">\(S\)</span>, neither <span class="math inline">\(S_1\)</span> nor <span class="math inline">\(S_2\)</span> are directly observed. Since <span class="math inline">\(\mathbf H\)</span> (<a href="#eq-da-obs-matrix" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>) is already linear, only the (non-linear) rainfall-runoff model itself needs to be linearised for the EKF-application. Note that the filter only starts distinguishing an a priori from an a posteriori estimate from the second time step onwards, since the first time step is used to initialise it:</p>
 <ol type="1">
-<li><p>Initialise the state vector and error matrices.</p>
+<li>Initialise the state vector and error matrices.
 <ol type="a">
 <li>The a posteriori state estimate <span class="math inline">\(\hat{\mathbf x}_1^+\)</span>: the initial conditions used for the calibrated model (<a href="3_model_calibration.html" class="quarto-xref"><span>Chapter 6</span></a>).</li>
 <li>The (initial) error covariance matrix <span class="math inline">\(\mathbf P_1^+\)</span> starts with the values <span class="math inline">\((0.2\,S_{\mathrm{max}})^2\)</span>, <span class="math inline">\((0.2\,S_{2,\mathrm{max}})^2\)</span> and <span class="math inline">\((0.2\,S_{2,\mathrm{max}})^2\)</span> on the diagonal.</li>
-<li>The process noise covariance matrix <span class="math inline">\(\mathbf Q_k\)</span>: diagonal and constant in time at 1% of the storage capacities.</li>
-<li>The observation noise covariance matrix <span class="math inline">\(\mathbf R_k = [\sigma_{y^*_k}^2]\)</span>: time-varying, following directly from the observation uncertainty (<a href="0_study_area_and_data.html#sec-study-area-ssm" class="quarto-xref"><span>Section 3.4</span></a>).</li>
+<li>The process noise covariance matrix <span class="math inline">\(\mathbf Q_k\)</span>: diagonal and constant in time, with the values <span class="math inline">\((0.01\,S_{\mathrm{max}})^2\)</span>, <span class="math inline">\((0.01\,S_{2,\mathrm{max}})^2\)</span> and <span class="math inline">\((0.01\,S_{2,\mathrm{max}})^2\)</span> on the diagonal.</li>
+<li>The observation noise covariance matrix <span class="math inline">\(\mathbf R_k = [\sigma_{v^*,k}^2]\)</span>: time-varying, following directly from the observation uncertainty (<a href="0_study_area_and_data.html#sec-study-area-ssm" class="quarto-xref"><span>Section 3.4</span></a>).</li>
 </ol></li>
-<li><p>Compute the a priori error covariance matrix <span class="math inline">\(\mathbf P_k^-\)</span>, using the state transition matrix <span class="math inline">\(\mathbf A_k\)</span> (the Jacobian of the RHS <span class="math inline">\(\mathbf{f} = [f_1, f_2, f_3]^T\)</span> of the governing ODEs from <a href="2_model_implementation.html#eq-state-space" class="quarto-xref">Equation&nbsp;<span>5.12</span></a>). As in <a href="3_model_calibration.html" class="quarto-xref"><span>Chapter 6</span></a>, <span class="math inline">\(\mathbf A_k\)</span> is obtained via forward finite differences with step size <span class="math inline">\(h\)</span>. With <span class="math inline">\(S' = S+h\)</span>, <span class="math inline">\(S_1' = S_1+h\)</span> and <span class="math inline">\(S_2' = S_2+h\)</span>: <span class="math display">\[
-\mathbf A_k = \left [
+<li>Propagate the state vector in time by running the model for one time step (<a href="2_model_implementation.html#eq-forward-map" class="quarto-xref">Equation&nbsp;<span>5.13</span></a>): <span class="math display">\[
+\hat{\mathbf x}_k^- = \mathcal M(\hat{\mathbf x}_{k-1}^+, \mathbf f_{k-1})
+\]</span></li>
+<li>Compute the state transition matrix <span class="math inline">\(\mathbf A_{k-1}\)</span>, i.e.&nbsp;the Jacobian of the function <span class="math inline">\(\mathcal M = [\mathcal M_1, \mathcal M_2, \mathcal M_3]^T\)</span> with respect to the state, evaluated at <span class="math inline">\(\hat{\mathbf x}_{k-1}^+\)</span>, written as <span class="math inline">\([S, S_1, S_2]^T\)</span> below for brevity. As in <a href="3_model_calibration.html" class="quarto-xref"><span>Chapter 6</span></a>, <span class="math inline">\(\mathbf A_{k-1}\)</span> is obtained via forward finite differences with step size <span class="math inline">\(h\)</span>, i.e.&nbsp;by perturbing one state variable at a time and running the model for one time step. With <span class="math inline">\(S' = S+h\)</span>, <span class="math inline">\(S_1' = S_1+h\)</span> and <span class="math inline">\(S_2' = S_2+h\)</span>, and omitting the forcing <span class="math inline">\(\mathbf f_{k-1}\)</span> as argument for brevity: <span class="math display">\[
+\mathbf A_{k-1} = \left [
 \begin{array}{lll}
-\displaystyle \frac{f_1(S',S_1,S_2) - f_1(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_1(S',S_1,S_2) - \mathcal M_1(S,S_1,S_2)}{h}
 &amp;
-\displaystyle \frac{f_1(S,S_1',S_2) - f_1(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_1(S,S_1',S_2) - \mathcal M_1(S,S_1,S_2)}{h}
 &amp;
-\displaystyle \frac{f_1(S,S_1,S_2') - f_1(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_1(S,S_1,S_2') - \mathcal M_1(S,S_1,S_2)}{h}
 \\
-\displaystyle \frac{f_2(S',S_1,S_2) - f_2(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_2(S',S_1,S_2) - \mathcal M_2(S,S_1,S_2)}{h}
 &amp;
-\displaystyle \frac{f_2(S,S_1',S_2) - f_2(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_2(S,S_1',S_2) - \mathcal M_2(S,S_1,S_2)}{h}
 &amp;
-\displaystyle \frac{f_2(S,S_1,S_2') - f_2(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_2(S,S_1,S_2') - \mathcal M_2(S,S_1,S_2)}{h}
 \\
-\displaystyle \frac{f_3(S',S_1,S_2) - f_3(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_3(S',S_1,S_2) - \mathcal M_3(S,S_1,S_2)}{h}
 &amp;
-\displaystyle \frac{f_3(S,S_1',S_2) - f_3(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_3(S,S_1',S_2) - \mathcal M_3(S,S_1,S_2)}{h}
 &amp;
-\displaystyle \frac{f_3(S,S_1,S_2') - f_3(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_3(S,S_1,S_2') - \mathcal M_3(S,S_1,S_2)}{h}
 \end{array}
 \right ]
-\]</span>.</p></li>
-<li><p>The a prior error covariance matrix is computed as: <span class="math display">\[\mathbf P_k^- = \mathbf A_{k-1} \mathbf P_{k-1}^+ \mathbf A_{k-1}^T + \mathbf Q_{k-1}
-\]</span></p></li>
-<li><p>If an observation is available, update the state vector and error covariance, with <span class="math inline">\(\mathbf K_k\)</span> the Kalman gain and <span class="math inline">\((\mathbf y_k - \mathbf H \hat{\mathbf x}_k^-)\)</span> the innovation: <span id="eq-da-update"><span class="math display">\[
+\]</span></li>
+<li>Compute the a priori error covariance matrix: <span class="math display">\[\mathbf P_k^- = \mathbf A_{k-1} \mathbf P_{k-1}^+ \mathbf A_{k-1}^T + \mathbf Q_{k-1}
+\]</span></li>
+<li>If an observation is available, update the state vector and error covariance, with <span class="math inline">\(\mathbf K_k\)</span> the Kalman gain and <span class="math inline">\((\mathbf y_k - \mathbf H \hat{\mathbf x}_k^-)\)</span> the innovation: <span id="eq-da-update"><span class="math display">\[
 \left \{
 \begin{aligned}
-\mathbf K_k &amp;= \mathbf P_k^- \mathbf H^\mathrm{T} \left [ \mathbf H \mathbf P_k^- \mathbf H^\mathrm{T} + \mathbf R_k \right ]^{-1} \\
+\mathbf K_k &amp;= \mathbf P_k^- \mathbf H^T \left [ \mathbf H \mathbf P_k^- \mathbf H^T + \mathbf R_k \right ]^{-1} \\
 \hat{\mathbf x}_k^+ &amp;= \hat{\mathbf x}_k^- + \mathbf K_k \left ( \mathbf y_k - \mathbf H \hat{\mathbf x}_k^- \right ) \\
 \mathbf P_k^+ &amp;= \left [ \mathbf I - \mathbf K_k \mathbf H \right ] \mathbf P_k^-
 \end{aligned}
 \right .
-  \tag{8.3}\]</span></span></p></li>
-<li><p>Otherwise, there is no update: <span class="math inline">\(\hat{\mathbf x}_k^+ = \hat{\mathbf x}_k^-\)</span> and <span class="math inline">\(\mathbf P_k^+ = \mathbf P_k^-\)</span>.</p></li>
-<li><p>Repeat steps 2 to 5 for each time step.</p></li>
+  \tag{8.3}\]</span></span></li>
+<li>Otherwise, there is no update: <span class="math inline">\(\hat{\mathbf x}_k^+ = \hat{\mathbf x}_k^-\)</span> and <span class="math inline">\(\mathbf P_k^+ = \mathbf P_k^-\)</span>.</li>
+<li>Repeat steps 2 to 6 for each time step.</li>
 </ol>
 <p>Implement the above, and use it to assimilate the satellite soil moisture observations into the calibrated hydrological model. Evaluate and discuss the impact of the assimilation on both the updated model states and the resulting discharge, using relevant metrics and figures.</p>
 <div class="callout callout-style-default callout-tip callout-titled">

@@ -25,18 +25,18 @@ $y^*(t)$ values that are outside of the physically meaningful range can be disre
 
 ### Data assimilation with the extended Kalman filter (EKF)
 
-The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [S_k, S_{1,k}, S_{2,k}]^T$ and $\mathbf y_k = [y^*_k]$, so that, unlike $S$, neither $S_1$ nor $S_2$ are directly observed. Since $\mathbf H$ (@eq-da-obs-matrix) is already linear, only the (non-linear) rainfall-runoff model itself needs to be linearised for the EKF-application. Note that the filter only starts distinguishing an a priori from an a posteriori estimate from the second time step onwards, since the first time step is used to initialise it:
+The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [\hat S_k, \hat S_{1,k}, \hat S_{2,k}]^T$ and $\mathbf y_k = [y^*_k]$, so that, unlike $S$, neither $S_1$ nor $S_2$ are directly observed. Since $\mathbf H$ (@eq-da-obs-matrix) is already linear, only the (non-linear) rainfall-runoff model itself needs to be linearised for the EKF-application. Note that the filter only starts distinguishing an a priori from an a posteriori estimate from the second time step onwards, since the first time step is used to initialise it:
 
 1. Initialise the state vector and error matrices.
     a. The a posteriori state estimate $\hat{\mathbf x}_1^+$: the initial conditions used for the calibrated model (@sec-calibration).
     b. The (initial) error covariance matrix $\mathbf P_1^+$ starts with the values $(0.2\,S_{\mathrm{max}})^2$, $(0.2\,S_{2,\mathrm{max}})^2$ and $(0.2\,S_{2,\mathrm{max}})^2$ on the diagonal. 
-    c. The process noise covariance matrix $\mathbf Q_k$: diagonal and constant in time at 1% of the storage capacities.
+    c. The process noise covariance matrix $\mathbf Q_k$: diagonal and constant in time, with the values $(0.01\,S_{\mathrm{max}})^2$, $(0.01\,S_{2,\mathrm{max}})^2$ and $(0.01\,S_{2,\mathrm{max}})^2$ on the diagonal.
     d. The observation noise covariance matrix $\mathbf R_k = [\sigma_{v^*,k}^2]$: time-varying, following directly from the observation uncertainty (@sec-study-area-ssm).
 2. Propagate the state vector in time by running the model for one time step (@eq-forward-map):
     $$
     \hat{\mathbf x}_k^- = \mathcal M(\hat{\mathbf x}_{k-1}^+, \mathbf f_{k-1})
     $$
-3. Compute the state transition matrix $\mathbf A_{k-1}$, i.e. the Jacobian of the function $\mathcal M = [\mathcal M_1, \mathcal M_2, \mathcal M_3]^T$ with respect to the state, evaluated at $\hat{\mathbf x}_{k-1}^+$. As in @sec-calibration, $\mathbf A_{k-1}$ is obtained via forward finite differences with step size $h$, i.e. by perturbing one state variable at a time and running the model for one time step. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$, and omitting the forcing $\mathbf f_{k-1}$ as argument for brevity:
+3. Compute the state transition matrix $\mathbf A_{k-1}$, i.e. the Jacobian of the function $\mathcal M = [\mathcal M_1, \mathcal M_2, \mathcal M_3]^T$ with respect to the state, evaluated at $\hat{\mathbf x}_{k-1}^+$, written as $[S, S_1, S_2]^T$ below for brevity. As in @sec-calibration, $\mathbf A_{k-1}$ is obtained via forward finite differences with step size $h$, i.e. by perturbing one state variable at a time and running the model for one time step. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$, and omitting the forcing $\mathbf f_{k-1}$ as argument for brevity:
     $$
     \mathbf A_{k-1} = \left [
     \begin{array}{lll}
@@ -67,7 +67,7 @@ The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [S_k,
     $$
     \left \{
     \begin{aligned}
-    \mathbf K_k &= \mathbf P_k^- \mathbf H^\mathrm{T} \left [ \mathbf H \mathbf P_k^- \mathbf H^\mathrm{T} + \mathbf R_k \right ]^{-1} \\
+    \mathbf K_k &= \mathbf P_k^- \mathbf H^T \left [ \mathbf H \mathbf P_k^- \mathbf H^T + \mathbf R_k \right ]^{-1} \\
     \hat{\mathbf x}_k^+ &= \hat{\mathbf x}_k^- + \mathbf K_k \left ( \mathbf y_k - \mathbf H \hat{\mathbf x}_k^- \right ) \\
     \mathbf P_k^+ &= \left [ \mathbf I - \mathbf K_k \mathbf H \right ] \mathbf P_k^-
     \end{aligned}

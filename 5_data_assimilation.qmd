@@ -32,35 +32,38 @@ The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [S_k,
     b. The (initial) error covariance matrix $\mathbf P_1^+$ starts with the values $(0.2\,S_{\mathrm{max}})^2$, $(0.2\,S_{2,\mathrm{max}})^2$ and $(0.2\,S_{2,\mathrm{max}})^2$ on the diagonal. 
     c. The process noise covariance matrix $\mathbf Q_k$: diagonal and constant in time at 1% of the storage capacities.
     d. The observation noise covariance matrix $\mathbf R_k = [\sigma_{v^*,k}^2]$: time-varying, following directly from the observation uncertainty (@sec-study-area-ssm).
-2. Compute the a priori error covariance matrix $\mathbf P_k^-$, using the state transition matrix $\mathbf A_k$ (the Jacobian of the RHS $\mathbf{f} = [f_1, f_2, f_3]^T$  of the governing ODEs from @eq-state-space). As in @sec-calibration, $\mathbf A_k$ is obtained via forward finite differences with step size $h$. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$:
+2. Propagate the state vector in time by running the model for one time step (@eq-forward-map):
     $$
-    \mathbf A_k = \left [
+    \hat{\mathbf x}_k^- = \mathcal M(\hat{\mathbf x}_{k-1}^+, \mathbf f_{k-1})
+    $$
+3. Compute the state transition matrix $\mathbf A_{k-1}$, i.e. the Jacobian of the function $\mathcal M = [\mathcal M_1, \mathcal M_2, \mathcal M_3]^T$ with respect to the state, evaluated at $\hat{\mathbf x}_{k-1}^+$. As in @sec-calibration, $\mathbf A_{k-1}$ is obtained via forward finite differences with step size $h$, i.e. by perturbing one state variable at a time and running the model for one time step. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$, and omitting the forcing $\mathbf f_{k-1}$ as argument for brevity:
+    $$
+    \mathbf A_{k-1} = \left [
     \begin{array}{lll}
-    \displaystyle \frac{f_1(S',S_1,S_2) - f_1(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_1(S',S_1,S_2) - \mathcal M_1(S,S_1,S_2)}{h}
     &
-    \displaystyle \frac{f_1(S,S_1',S_2) - f_1(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_1(S,S_1',S_2) - \mathcal M_1(S,S_1,S_2)}{h}
     &
-    \displaystyle \frac{f_1(S,S_1,S_2') - f_1(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_1(S,S_1,S_2') - \mathcal M_1(S,S_1,S_2)}{h}
     \\
-    \displaystyle \frac{f_2(S',S_1,S_2) - f_2(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_2(S',S_1,S_2) - \mathcal M_2(S,S_1,S_2)}{h}
     &
-    \displaystyle \frac{f_2(S,S_1',S_2) - f_2(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_2(S,S_1',S_2) - \mathcal M_2(S,S_1,S_2)}{h}
     &
-    \displaystyle \frac{f_2(S,S_1,S_2') - f_2(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_2(S,S_1,S_2') - \mathcal M_2(S,S_1,S_2)}{h}
     \\
-    \displaystyle \frac{f_3(S',S_1,S_2) - f_3(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_3(S',S_1,S_2) - \mathcal M_3(S,S_1,S_2)}{h}
     &
-    \displaystyle \frac{f_3(S,S_1',S_2) - f_3(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_3(S,S_1',S_2) - \mathcal M_3(S,S_1,S_2)}{h}
     &
-    \displaystyle \frac{f_3(S,S_1,S_2') - f_3(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_3(S,S_1,S_2') - \mathcal M_3(S,S_1,S_2)}{h}
     \end{array}
     \right ]
-    $$. 
-    
-3. The a prior error covariance matrix is computed as:
+    $$
+4. Compute the a priori error covariance matrix:
     $$\mathbf P_k^- = \mathbf A_{k-1} \mathbf P_{k-1}^+ \mathbf A_{k-1}^T + \mathbf Q_{k-1}
     $$
-4. If an observation is available, update the state vector and error covariance, with $\mathbf K_k$ the Kalman gain and $(\mathbf y_k - \mathbf H \hat{\mathbf x}_k^-)$ the innovation:
+5. If an observation is available, update the state vector and error covariance, with $\mathbf K_k$ the Kalman gain and $(\mathbf y_k - \mathbf H \hat{\mathbf x}_k^-)$ the innovation:
     $$
     \left \{
     \begin{aligned}
@@ -70,8 +73,8 @@ The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [S_k,
     \end{aligned}
     \right .
     $$ {#eq-da-update}
-5. Otherwise, there is no update: $\hat{\mathbf x}_k^+ = \hat{\mathbf x}_k^-$ and $\mathbf P_k^+ = \mathbf P_k^-$.
-6. Repeat steps 2 to 5 for each time step.
+6. Otherwise, there is no update: $\hat{\mathbf x}_k^+ = \hat{\mathbf x}_k^-$ and $\mathbf P_k^+ = \mathbf P_k^-$.
+7. Repeat steps 2 to 6 for each time step.
 
 Implement the above, and use it to assimilate the satellite soil moisture observations into the calibrated hydrological model. Evaluate and discuss the impact of the assimilation on both the updated model states and the resulting discharge, using relevant metrics and figures.
 

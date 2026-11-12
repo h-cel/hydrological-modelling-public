@@ -119,9 +119,10 @@ $$ {#eq-state-space}
 
 with $\mathcal{f}$ a non-linear function, $\mathbf{x} = [S, S_1, S_2]^T$ the state vector, $\mathbf{f} = [P, E_p]^T$ the forcing vector, and $\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T$ the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme^[For more background info on numerical methods for ODEs, see your [bachelor course on differential equations](https://studiekiezer.ugent.be/2025/studiefiche/en/I002428)]:
 $$
-\mathbf{x}(t+\Delta t) = \mathbf{x}(t) + \mathcal{f}(\mathbf{x}(t), \mathbf{f}(t), \mathbf{p})\Delta t
-$$
-The time step $\Delta t$ is set to 1 day, which is the same as the time step of the forcing data. 
+\mathbf{x}_k = \mathcal{M}(\mathbf{x}_{k-1}, \mathbf{f}_{k-1}) = \mathbf{x}_{k-1} + \mathcal{f}(\mathbf{x}_{k-1}, \mathbf{f}_{k-1}, \mathbf{p})\Delta t
+$$ {#eq-forward-map}
+
+with $\mathbf{x}_k = \mathbf{x}(k\Delta t)$ the state at time step $k$, and $\mathcal{M}$ the function which advances the state by one time step. As the parameters $\mathbf{p}$ are fixed, they are not written as an argument of $\mathcal{M}$. The time step $\Delta t$ is set to 1 day, which is the same as the time step of the forcing data. 
 
 With all of the information above, implement the model based on @eq-soil-reservoir to @eq-discharge. As a start, run it with the uncalibrated parameter values given in @tbl-parameters. Compare the simulated discharge with the observed discharge (see @sec-study-area-forcings-discharge). Discuss the performance using relevant figures and metrics. 
 

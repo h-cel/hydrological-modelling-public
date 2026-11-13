@@ -90,7 +90,7 @@ The part of the effective precipitation reaching $S_2$ is:
 
 $$
 P_2(t) = \alpha\frac{S(t)}{S_{\mathrm{max}}}P_{\mathrm{exc}}(t)
-$$
+$$ {#eq-precip-to-fast-reservoir}
 
 with $\alpha$ [-] a dimensionless model parameter. $P_1$ is then calculated as the remaining part of the effective precipitation using @eq-partitioning-excess-precipitation.
 

@@ -402,29 +402,29 @@ Q_{\mathrm{p}}(t)=Q_{\mathrm{p,max}}\left(1-e^{-\beta\frac{S(t)}{S_{\mathrm{max}
 <p><span class="math inline">\(P_{\mathrm{exc}}\)</span> is again partitioned between <span class="math inline">\(S_2\)</span> and <span class="math inline">\(S_1\)</span>: <span id="eq-partitioning-excess-precipitation"><span class="math display">\[
 P_{\mathrm{exc}}(t) = P_1(t) + P_2(t)
 \tag{5.8}\]</span></span> The part of the effective precipitation reaching <span class="math inline">\(S_2\)</span> is:</p>
-<p><span class="math display">\[
+<p><span id="eq-precip-to-fast-reservoir"><span class="math display">\[
 P_2(t) = \alpha\frac{S(t)}{S_{\mathrm{max}}}P_{\mathrm{exc}}(t)
-\]</span></p>
+\tag{5.9}\]</span></span></p>
 <p>with <span class="math inline">\(\alpha\)</span> [-] a dimensionless model parameter. <span class="math inline">\(P_1\)</span> is then calculated as the remaining part of the effective precipitation using <a href="#eq-partitioning-excess-precipitation" class="quarto-xref">Equation&nbsp;<span>5.8</span></a>.</p>
 <p><span class="math inline">\(S_2\)</span> is considered as a non-linear reservoir, so that its outflow <span class="math inline">\(Q_2\)</span> [mm/d] can be calculated using:</p>
 <p><span id="eq-fast-reacting-outflow"><span class="math display">\[
 Q_2(t) = \kappa_2\left(\frac{S_2(t)}{S_{2,\mathrm{max}}}\right)^\gamma
-\tag{5.9}\]</span></span></p>
+\tag{5.10}\]</span></span></p>
 <p>with <span class="math inline">\(S_{2,\mathrm{max}}\)</span> [mm] the storage capacity of the fast reacting reservoir, <span class="math inline">\(\kappa_2\)</span> [mm/d] the maximum outflow rate, and <span class="math inline">\(\gamma\)</span> [-] a dimensionless model parameter.</p>
 <p><span class="math inline">\(S_1\)</span> on the other hand is considered as a linear reservoir, so the outflow <span class="math inline">\(Q_1\)</span> [mm/d] is given by: <span id="eq-slow-reacting-outflow"><span class="math display">\[
 Q_1(t) = \kappa_1 S_1(t)
-\tag{5.10}\]</span></span></p>
+\tag{5.11}\]</span></span></p>
 <p>where <span class="math inline">\(\kappa_1\)</span> [1/d] the reciprocal of the residence time. The total discharge <span class="math inline">\(Q\)</span> [mm/d] is then calculated as the sum of the outflow from the fast and slow reacting reservoir: <span id="eq-discharge"><span class="math display">\[
 Q(t) = Q_1(t) + Q_2(t)
-\tag{5.11}\]</span></span></p>
+\tag{5.12}\]</span></span></p>
 <p><a href="#eq-soil-reservoir" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>, <a href="#eq-fast-reacting-reservoir" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, and <a href="#eq-slow-reacting-reservoir" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> can be denoted as a general non-linear, continuous-time state-space model: <span id="eq-state-space"><span class="math display">\[
 \frac{d\mathbf{x}}{dt} = \mathcal{f}(\mathbf{x}, \mathbf{{f}}, \mathbf{p})
-\tag{5.12}\]</span></span></p>
+\tag{5.13}\]</span></span></p>
 <p>with <span class="math inline">\(\mathcal{f}\)</span> a non-linear function, <span class="math inline">\(\mathbf{x} = [S, S_1, S_2]^T\)</span> the state vector, <span class="math inline">\(\mathbf{f} = [P, E_p]^T\)</span> the forcing vector, and <span class="math inline">\(\mathbf{p} = [\lambda, S_{\mathrm{max}}, b, \alpha, Q_{\mathrm{p,max}}, \beta, \gamma, S_{2,\mathrm{max}}, \kappa_2, \kappa_1]^T\)</span> the parameter vector. For this exercise, the model will be implemented in discrete time using a simple forward Euler scheme<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>: <span id="eq-forward-map"><span class="math display">\[
 \mathbf{x}_k = \mathcal{M}(\mathbf{x}_{k-1}, \mathbf{f}_{k-1}) = \mathbf{x}_{k-1} + \mathcal{f}(\mathbf{x}_{k-1}, \mathbf{f}_{k-1}, \mathbf{p})\Delta t
-\tag{5.13}\]</span></span></p>
+\tag{5.14}\]</span></span></p>
 <p>with <span class="math inline">\(\mathbf{x}_k = \mathbf{x}(k\Delta t)\)</span> the state at time step <span class="math inline">\(k\)</span>, and <span class="math inline">\(\mathcal{M}\)</span> the function which advances the state by one time step. As the parameters <span class="math inline">\(\mathbf{p}\)</span> are fixed, they are not written as an argument of <span class="math inline">\(\mathcal{M}\)</span>. The time step <span class="math inline">\(\Delta t\)</span> is set to 1 day, which is the same as the time step of the forcing data.</p>
-<p>With all of the information above, implement the model based on <a href="#eq-soil-reservoir" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> to <a href="#eq-discharge" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>. As a start, run it with the uncalibrated parameter values given in <a href="#tbl-parameters" class="quarto-xref">Table&nbsp;<span>5.1</span></a>. Compare the simulated discharge with the observed discharge (see <a href="0_study_area_and_data.html#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a>). Discuss the performance using relevant figures and metrics.</p>
+<p>With all of the information above, implement the model based on <a href="#eq-soil-reservoir" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> to <a href="#eq-discharge" class="quarto-xref">Equation&nbsp;<span>5.12</span></a>. As a start, run it with the uncalibrated parameter values given in <a href="#tbl-parameters" class="quarto-xref">Table&nbsp;<span>5.1</span></a>. Compare the simulated discharge with the observed discharge (see <a href="0_study_area_and_data.html#sec-study-area-forcings-discharge" class="quarto-xref"><span>Section 3.3</span></a>). Discuss the performance using relevant figures and metrics.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

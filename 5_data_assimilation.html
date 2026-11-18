@@ -279,25 +279,26 @@ y^*(t) = \frac{\sigma_{\mathbf{Hx}}}{\sigma_y} \left ( y(t) - \bar y \right ) + 
 \hat{\mathbf x}_k^- = \mathcal M(\hat{\mathbf x}_{k-1}^+, \mathbf f_{k-1})
 \]</span></li>
 <li>Compute the state transition matrix <span class="math inline">\(\mathbf A_{k-1}\)</span>, i.e.&nbsp;the Jacobian of the function <span class="math inline">\(\mathcal M = [\mathcal M_1, \mathcal M_2, \mathcal M_3]^T\)</span> with respect to the state, evaluated at <span class="math inline">\(\hat{\mathbf x}_{k-1}^+\)</span>, written as <span class="math inline">\([S, S_1, S_2]^T\)</span> below for brevity. As in <a href="3_model_calibration.html" class="quarto-xref"><span>Chapter 6</span></a>, <span class="math inline">\(\mathbf A_{k-1}\)</span> is obtained via forward finite differences with step size <span class="math inline">\(h\)</span>, i.e.&nbsp;by perturbing one state variable at a time and running the model for one time step. With <span class="math inline">\(S' = S+h\)</span>, <span class="math inline">\(S_1' = S_1+h\)</span> and <span class="math inline">\(S_2' = S_2+h\)</span>, and omitting the forcing <span class="math inline">\(\mathbf f_{k-1}\)</span> as argument for brevity: <span class="math display">\[
-\mathbf A_{k-1} = \left [
+\mathbf A_{k-1} =
+\left [
 \begin{array}{lll}
-\displaystyle \frac{\mathcal M_1(S',S_1,S_2) - \mathcal M_1(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_1([S',S_1,S_2]^T) - \mathcal M_1(\hat{\mathbf x}_{k-1}^+)}{h}
 &amp;
-\displaystyle \frac{\mathcal M_1(S,S_1',S_2) - \mathcal M_1(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_1([S,S_1',S_2]^T) - \mathcal M_1(\hat{\mathbf x}_{k-1}^+)}{h}
 &amp;
-\displaystyle \frac{\mathcal M_1(S,S_1,S_2') - \mathcal M_1(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_1([S,S_1,S_2']^T) - \mathcal M_1(\hat{\mathbf x}_{k-1}^+)}{h}
 \\
-\displaystyle \frac{\mathcal M_2(S',S_1,S_2) - \mathcal M_2(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_2([S',S_1,S_2]^T) - \mathcal M_2(\hat{\mathbf x}_{k-1}^+)}{h}
 &amp;
-\displaystyle \frac{\mathcal M_2(S,S_1',S_2) - \mathcal M_2(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_2([S,S_1',S_2]^T) - \mathcal M_2(\hat{\mathbf x}_{k-1}^+)}{h}
 &amp;
-\displaystyle \frac{\mathcal M_2(S,S_1,S_2') - \mathcal M_2(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_2([S,S_1,S_2']^T) - \mathcal M_2(\hat{\mathbf x}_{k-1}^+)}{h}
 \\
-\displaystyle \frac{\mathcal M_3(S',S_1,S_2) - \mathcal M_3(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_3([S',S_1,S_2]^T) - \mathcal M_3(\hat{\mathbf x}_{k-1}^+)}{h}
 &amp;
-\displaystyle \frac{\mathcal M_3(S,S_1',S_2) - \mathcal M_3(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_3([S,S_1',S_2]^T) - \mathcal M_3(\hat{\mathbf x}_{k-1}^+)}{h}
 &amp;
-\displaystyle \frac{\mathcal M_3(S,S_1,S_2') - \mathcal M_3(S,S_1,S_2)}{h}
+\displaystyle \frac{\mathcal M_3([S,S_1,S_2']^T) - \mathcal M_3(\hat{\mathbf x}_{k-1}^+)}{h}
 \end{array}
 \right ]
 \]</span></li>

@@ -38,25 +38,26 @@ The state and observation vector at time step $k$ are $\hat{\mathbf x}_k = [\hat
     $$
 3. Compute the state transition matrix $\mathbf A_{k-1}$, i.e. the Jacobian of the function $\mathcal M = [\mathcal M_1, \mathcal M_2, \mathcal M_3]^T$ with respect to the state, evaluated at $\hat{\mathbf x}_{k-1}^+$, written as $[S, S_1, S_2]^T$ below for brevity. As in @sec-calibration, $\mathbf A_{k-1}$ is obtained via forward finite differences with step size $h$, i.e. by perturbing one state variable at a time and running the model for one time step. With $S' = S+h$, $S_1' = S_1+h$ and $S_2' = S_2+h$, and omitting the forcing $\mathbf f_{k-1}$ as argument for brevity:
     $$
-    \mathbf A_{k-1} = \left [
+    \mathbf A_{k-1} = 
+    \left [
     \begin{array}{lll}
-    \displaystyle \frac{\mathcal M_1(S',S_1,S_2) - \mathcal M_1(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_1([S',S_1,S_2]^T) - \mathcal M_1(\hat{\mathbf x}_{k-1}^+)}{h}
     &
-    \displaystyle \frac{\mathcal M_1(S,S_1',S_2) - \mathcal M_1(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_1([S,S_1',S_2]^T) - \mathcal M_1(\hat{\mathbf x}_{k-1}^+)}{h}
     &
-    \displaystyle \frac{\mathcal M_1(S,S_1,S_2') - \mathcal M_1(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_1([S,S_1,S_2']^T) - \mathcal M_1(\hat{\mathbf x}_{k-1}^+)}{h}
     \\
-    \displaystyle \frac{\mathcal M_2(S',S_1,S_2) - \mathcal M_2(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_2([S',S_1,S_2]^T) - \mathcal M_2(\hat{\mathbf x}_{k-1}^+)}{h}
     &
-    \displaystyle \frac{\mathcal M_2(S,S_1',S_2) - \mathcal M_2(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_2([S,S_1',S_2]^T) - \mathcal M_2(\hat{\mathbf x}_{k-1}^+)}{h}
     &
-    \displaystyle \frac{\mathcal M_2(S,S_1,S_2') - \mathcal M_2(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_2([S,S_1,S_2']^T) - \mathcal M_2(\hat{\mathbf x}_{k-1}^+)}{h}
     \\
-    \displaystyle \frac{\mathcal M_3(S',S_1,S_2) - \mathcal M_3(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_3([S',S_1,S_2]^T) - \mathcal M_3(\hat{\mathbf x}_{k-1}^+)}{h}
     &
-    \displaystyle \frac{\mathcal M_3(S,S_1',S_2) - \mathcal M_3(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_3([S,S_1',S_2]^T) - \mathcal M_3(\hat{\mathbf x}_{k-1}^+)}{h}
     &
-    \displaystyle \frac{\mathcal M_3(S,S_1,S_2') - \mathcal M_3(S,S_1,S_2)}{h}
+    \displaystyle \frac{\mathcal M_3([S,S_1,S_2']^T) - \mathcal M_3(\hat{\mathbf x}_{k-1}^+)}{h}
     \end{array}
     \right ]
     $$

@@ -438,8 +438,21 @@ Tip
 <p>Some general tips and recommendations:</p>
 <ul>
 <li>Implement the model in a separate file <code>src/hydromod/model.py</code> as a function. You need to be able to reuse the model in the following exercises.</li>
-<li>Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period.</li>
-<li>Take into account the physical limitations of the state variables.</li>
+<li>Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period. To advance the model one timestep (<span class="math inline">\(k-1 \rightarrow k\)</span>), following structure of functions is recommended:
+<ol type="1">
+<li><code>calculate_fluxes</code>: calculate the fluxes based (i.e.&nbsp;all arrows in <a href="#fig-model-concept" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>) on the current state and forcing</li>
+<li><code>limit_fluxes</code>: limit the fluxes based on the physical limitations of the state variables (see physical limitations below)</li>
+<li><code>update_state</code>: update the state variables using <a href="#eq-forward-map" class="quarto-xref">Equation&nbsp;<span>5.14</span></a> with the right-hand side of the ODE <span class="math inline">\(\mathcal{f}\)</span> based on the limited fluxes</li>
+</ol></li>
+<li>Take into account the physical limitations of the state variables:
+<ul>
+<li>None of the state variables can be negative, so limit outgoing fluxes to prevent overdraining.</li>
+<li>Both <span class="math inline">\(S\)</span> and <span class="math inline">\(S_2\)</span> are limited by their maximum storage. <span class="math inline">\(S_1\)</span> is a linear reservoir and is therefore not limited by a maximum storage <span class="citation" data-cites="clark2008">(<a href="references.html#ref-clark2008" role="doc-biblioref">Clark et al. 2008</a>)</span>. To prevent <span class="math inline">\(S\)</span> and <span class="math inline">\(S_2\)</span> from overflowing:
+<ul>
+<li>If <span class="math inline">\(P_{in}\)</span> would overflow <span class="math inline">\(S\)</span>, direct the excess to <span class="math inline">\(P_{exc}\)</span>. Reuse <span class="math inline">\(\alpha S/S_{max}\)</span> from <a href="#eq-precip-to-fast-reservoir" class="quarto-xref">Equation&nbsp;<span>5.9</span></a> to partition the excess precipitation between <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>.</li>
+<li>If <span class="math inline">\(P_2\)</span> would overflow <span class="math inline">\(S_2\)</span>, direct the excess to <span class="math inline">\(Q_2\)</span>.</li>
+</ul></li>
+</ul></li>
 <li>Take into account the impact of initialisation of the state variables</li>
 <li>Not a single figure or metric can summarise the model performance. Nevertheless, some metrics and/or figures are (partially) linked to each other.</li>
 </ul>
@@ -455,7 +468,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The forward Euler scheme presented above is the simplest available numerical method to solve the ODEs. <a href="https://docs.scipy.org/doc/scipy/index.html"><code>SciPy</code></a> offers more advanced numerical time integration methods in <code>scipy.integrate.solve_ivp</code>. Investigate how the choice of time integration method affects the model outcome.</p>
+<p>The forward Euler scheme presented above is the simplest available numerical method to solve the ODEs. Its main disadvantage is that is forces the manual limiting of fluxes to prevent overflowing or overdraining of reservoirs. <a href="https://docs.scipy.org/doc/scipy/index.html"><code>SciPy</code></a> offers more advanced numerical time integration methods in <code>scipy.integrate.solve_ivp</code> with adaptive timestepping, which avoids the need for manual limiting. Investigate how the choice of time integration method affects the model outcome.</p>
 </div>
 </div>
 </section>
@@ -464,6 +477,9 @@ Tip
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-clark2008" class="csl-entry" role="listitem">
+Clark, Martyn P., Andrew G. Slater, David E. Rupp, et al. 2008. <span>“Framework for Understanding Structural Errors (FUSE): A Modular Framework to Diagnose Differences Between Hydrological Models.”</span> <em>Water Resources Research</em> 44 (12). <a href="https://doi.org/10.1029/2007WR006735">https://doi.org/10.1029/2007WR006735</a>.
+</div>
 <div id="ref-fenicia2008" class="csl-entry" role="listitem">
 Fenicia, Fabrizio, Hubert H. G. Savenije, Patrick Matgen, and Laurent Pfister. 2008. <span>“Understanding Catchment Behavior Through Stepwise Model Concept Improvement.”</span> <em>Water Resources Research</em> 44 (1). <a href="https://doi.org/10.1029/2006WR005563">https://doi.org/10.1029/2006WR005563</a>.
 </div>

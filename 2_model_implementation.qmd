@@ -131,7 +131,7 @@ With all of the information above, implement the model based on @eq-soil-reservo
 Some general tips and recommendations:
 
 - Implement the model in a separate file `src/hydromod/model.py` as a function. You need to be able to reuse the model in the following exercises.
-- Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period. To advance the model, one timestep, following structure of functions is recommended:
+- Make sure you can run the model one time step at a time. A for-loop can then be used to run the model for the entire time period. To advance the model one timestep ($k-1 \rightarrow k$), following structure of functions is recommended:
     1. `calculate_fluxes`: calculate the fluxes based (i.e. all arrows in @fig-model-concept) on the current state and forcing
     2. `limit_fluxes`: limit the fluxes based on the physical limitations of the state variables (see physical limitations below)
     3. `update_state`: update the state variables using @eq-forward-map with the right-hand side of the ODE $\mathcal{f}$ based on the limited fluxes
@@ -139,7 +139,7 @@ Some general tips and recommendations:
     - None of the state variables can be negative, so limit outgoing fluxes to prevent overdraining.
     - Both $S$ and $S_2$ are limited by their maximum storage. $S_1$ is a linear reservoir and is therefore not limited by a maximum storage [@clark2008]. To prevent $S$ and $S_2$ from overflowing:
         - If $P_{in}$ would overflow $S$, direct the excess to $P_{exc}$. Reuse $\alpha S/S_{max}$ from @eq-precip-to-fast-reservoir to partition the excess precipitation between $P_1$ and $P_2$.
-        - If $P_2$ would overflow $S_2$, direct the excess to $Q$.
+        - If $P_2$ would overflow $S_2$, direct the excess to $Q_2$.
 - Take into account the impact of initialisation of the state variables
 - Not a single figure or metric can summarise the model performance. Nevertheless, some metrics and/or figures are (partially) linked to each other.
 
